@@ -585,7 +585,7 @@ function moveStep(dt){
   const len=Math.hypot(ix,iz); if(len>1){ ix/=len; iz/=len; }
   const sp = 3.1 * speedMul();
   const sin=Math.sin(player.yaw), cos=Math.cos(player.yaw);
-  const wx = (ix*cos - iz*sin), wz = (ix*sin + iz*cos);
+  const wx = (ix*cos + iz*sin), wz = (-ix*sin + iz*cos);
   player.pos.x += wx*sp*dt; player.pos.z += wz*sp*dt;
   player.pos.x = THREE.MathUtils.clamp(player.pos.x, -ROOM.x+0.45, ROOM.x-0.45);
   player.pos.z = THREE.MathUtils.clamp(player.pos.z, -ROOM.z+0.45, ROOM.z-0.45);
