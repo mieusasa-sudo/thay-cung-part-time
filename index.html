@@ -509,7 +509,17 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
         <div class="sect-note" style="margin-top:0">Đã đi: <b id="walk-today" style="color:var(--gold);font-size:16px">0 m</b> hôm nay · Tổng cả đời: <b id="walk-total">0 m</b></div>
         <div class="sect-note">🍃 Linh khí du hành: <b id="walk-spirit" style="color:var(--green)">0%</b> — đi bộ nạp linh khí, linh khí càng cao lần quét tới càng dễ ra ma xịn (tối đa ×2,5 tỉ lệ ma Quý trở lên). Đứng yên lâu linh khí tụt dần, ngồi nhà quét là thiệt nhất!</div>
         <div class="walk-bar"><div id="walk-spirit-fill" style="width:0%"></div></div>
-        <div id="walk-milestones"></div>
+        <button class="rank-head" id="walk-ms-toggle" aria-expanded="false" aria-controls="walk-ms-body" style="margin-top:10px">
+          <span class="sect-title">🎯 CÁC MỐC DU HÀNH</span>
+          <span class="rank-head-cur" id="walk-ms-next"></span>
+          <span class="rank-head-hint" id="walk-ms-hint">ấn để xem thêm</span>
+          <span class="rank-arrow">⌄</span>
+        </button>
+        <div class="rank-body" id="walk-ms-body">
+          <div class="rank-body-inner">
+            <div id="walk-milestones"></div>
+          </div>
+        </div>
       </div>
       <div id="map"></div>
       <div id="map-msg" class="hidden"></div>
@@ -6965,6 +6975,8 @@ function renderWalkCard(){
     row.innerHTML=`<span>${done?"✅":"🎯"} Mốc ${fmtDist(ms.m)}</span><span class="${done?"done":""}">${done?"Đã nhận":"+"+ms.merit+" công đức"+(ms.tal?" + bùa "+TALISMANS[ms.tal].name:"")}</span>`;
     msEl.appendChild(row);
   }
+  const nxEl=$("walk-ms-next");
+  if(nxEl){ const nx=WALK_MILESTONES.find(ms=>!(S.walk.milestones.includes(ms.m)||S.walk.today>=ms.m)); nxEl.textContent=nx?("Tiếp: "+fmtDist(nx.m)):"Đủ mốc 🎉"; }
 }
 /* Nhãn linh khí ở màn quét: cao = xanh lá, thấp (đứng yên lâu) = xám nhắc đi bộ */
 let _spiritTagVal=-1;
@@ -6995,6 +7007,13 @@ $("shop-toggle").addEventListener("click",()=>{
   const card=$("shop-card"), open=card.classList.toggle("open");
   $("shop-toggle").setAttribute("aria-expanded",open?"true":"false");
   $("shop-head-hint").textContent=open?"chạm để thu gọn":"chạm để xem";
+  sfx.tap();
+});
+/* Mốc du hành ở Khu Phố: thu gọn mặc định, chạm hàng tiêu đề để xem thêm */
+$("walk-ms-toggle").addEventListener("click",()=>{
+  const card=$("walk-card"), open=card.classList.toggle("open");
+  $("walk-ms-toggle").setAttribute("aria-expanded",open?"true":"false");
+  $("walk-ms-hint").textContent=open?"chạm để thu gọn":"ấn để xem thêm";
   sfx.tap();
 });
 /* Hồ Lô: mục riêng thu gọn như Cấp Bậc — chạm hàng tiêu đề để xổ/thu quầy bán hồ lô */
