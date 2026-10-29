@@ -232,6 +232,32 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 .switch.on{background:var(--green)}
 .switch::after{content:"";position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .15s}
 .switch.on::after{left:28px}
+/* ===== CÀI ĐẶT — style đá nứt viền đồng (theo mẫu Nhiên gửi 29/10) ===== */
+#modal-settings{background:rgba(0,0,0,.85)}
+#modal-settings .modal-box{position:relative;background:
+  radial-gradient(circle at 50% 44%,transparent 50px,rgba(216,140,70,.055) 51px,rgba(216,140,70,.055) 54px,transparent 55px),
+  radial-gradient(circle at 50% 44%,rgba(216,140,70,.05) 0 40px,transparent 41px),
+  radial-gradient(120% 90% at 50% 0%,#241a10 0%,#171008 45%,#0b0705 100%);
+  border:2px solid #7c4a26;border-radius:14px;padding:22px 18px 18px;max-width:400px;
+  box-shadow:0 0 0 1px #201105,0 0 38px rgba(255,90,30,.16),inset 0 0 0 2px rgba(216,140,70,.30),inset 0 0 0 6px #0d0805,inset 0 0 0 7px rgba(216,140,70,.20),inset 0 0 70px rgba(0,0,0,.8)}
+#modal-settings .orn{position:absolute;width:26px;height:26px;pointer-events:none;opacity:.9}
+#modal-settings .orn.tl{top:7px;left:7px;border-top:2px solid #d88c46;border-left:2px solid #d88c46;border-top-left-radius:9px}
+#modal-settings .orn.tr{top:7px;right:7px;border-top:2px solid #d88c46;border-right:2px solid #d88c46;border-top-right-radius:9px}
+#modal-settings .orn.bl{bottom:7px;left:7px;border-bottom:2px solid #d88c46;border-left:2px solid #d88c46;border-bottom-left-radius:9px}
+#modal-settings .orn.br{bottom:7px;right:7px;border-bottom:2px solid #d88c46;border-right:2px solid #d88c46;border-bottom-right-radius:9px}
+#modal-settings .modal-box h2{font-family:'Playfair Display',Georgia,serif;font-size:25px;font-weight:800;letter-spacing:1px;color:#f2a950;text-shadow:0 0 16px rgba(255,130,40,.35),0 2px 3px #000;margin-bottom:6px}
+#modal-settings .set-row{color:#f3c491;font-size:16px;padding:14px 2px;border-bottom:1px solid rgba(216,140,70,.22)}
+#modal-settings .set-row small{color:#b0825f!important}
+#modal-settings .switch{width:58px;height:32px;background:linear-gradient(180deg,#251a10,#150e07);border:1px solid #6e4a2f;box-shadow:inset 0 2px 6px rgba(0,0,0,.85)}
+#modal-settings .switch::after{top:3px;left:3px;width:24px;height:24px;background:radial-gradient(circle at 35% 30%,#f9e7c0,#c89b5a 55%,#8a5f27);box-shadow:0 1px 3px rgba(0,0,0,.7),inset 0 0 3px rgba(0,0,0,.45)}
+#modal-settings .switch.on{background:linear-gradient(180deg,#3fe0a0,#159a66);border-color:#2bd98f;box-shadow:0 0 14px rgba(50,220,150,.45),inset 0 2px 4px rgba(0,0,0,.35)}
+#modal-settings .switch.on::after{left:29px}
+#modal-settings #btn-wipe{background:linear-gradient(180deg,#42170f,#1e0a05);color:#ffb59d;border:1px solid #8a4630;border-radius:10px;box-shadow:inset 0 1px 0 rgba(255,180,140,.25),0 3px 8px rgba(0,0,0,.6);font-family:'Playfair Display',Georgia,serif;letter-spacing:1px;text-shadow:0 1px 2px #000}
+#modal-settings #sw-3d{font-size:15px;font-weight:700;text-shadow:0 0 10px currentColor}
+#modal-settings .note{color:#bd8a5f;font-size:12.5px;text-align:center;margin-top:12px}
+#modal-settings #btn-settings-close{margin-top:14px;padding:16px;font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:800;letter-spacing:3px;color:#47230a;background:linear-gradient(180deg,#ffedb0 0%,#ffc94d 38%,#f59b1d 62%,#d97a10 100%);border:1px solid #ffe1a0;border-radius:12px;box-shadow:0 0 26px rgba(255,166,30,.5),inset 0 1px 0 #fff8dd,inset 0 -3px 8px rgba(146,74,0,.55);text-shadow:0 1px 0 rgba(255,240,200,.6)}
+#modal-settings #btn-settings-close:active{transform:translateY(2px)}
+
 /* kết quả */
 #result-emoji{font-size:64px;text-align:center;margin:10px 0}
 #result-title{text-align:center;font-size:22px;font-weight:900;color:var(--gold);margin-bottom:6px}
@@ -479,11 +505,12 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
   <!-- ===== MODAL CÀI ĐẶT ===== -->
   <div class="modal" id="modal-settings">
     <div class="modal-box">
+      <i class="orn tl"></i><i class="orn tr"></i><i class="orn bl"></i><i class="orn br"></i>
       <h2>⚙️ Cài đặt</h2>
       <div class="set-row"><span>🔊 Âm thanh</span><button class="switch on" id="sw-sound"></button></div>
       <div class="set-row"><span>🖥️ Chế độ mô phỏng <br><small style="color:var(--dim)">(không cần camera/GPS thật)</small></span><button class="switch" id="sw-sim"></button></div>
       <div class="set-row"><span>🗑️ Xóa dữ liệu chơi</span><button class="btn small danger" id="btn-wipe" style="width:auto;margin:0;padding:8px 14px">Xóa</button></div>
-      <div class="set-row"><span>👻 Ma 3D</span><span id="sw-3d" style="color:var(--dim);font-size:13px">…</span></div>
+      <div class="set-row"><span>👻 Ma 3D&nbsp;&nbsp;📱 Máy 3D</span><span id="sw-3d">…</span></div>
       <div class="note">Thầy Cúng Partime <b id="game-ver" style="color:var(--gold)">v3.0</b> · lưu trên máy của bạn</div>
       <button class="btn" id="btn-settings-close" style="margin-top:12px">Xong</button>
     </div>
