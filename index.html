@@ -38,21 +38,21 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 /* ---------- màn chính ---------- */
 #screen-home{container-type:size;background-color:#060303}
 #screen-home::before{content:"";position:absolute;inset:0;z-index:0;background-image:url(assets/home-bg.jpg);background-size:cover;background-position:center;filter:blur(22px) brightness(.5);-webkit-filter:blur(22px) brightness(.5);transform:scale(1.15)}
-.home-ui{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:100%;height:179.17cqw;
-  z-index:1;font-size:8px;font-size:1.7917cqw;background-image:url(assets/home-bg.jpg);background-size:cover;background-position:center;background-repeat:no-repeat}
+.home-ui{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:100%;height:179.13cqw;
+  z-index:1;font-size:8px;font-size:1.7913cqw;background-image:url(assets/home-bg.jpg);background-size:cover;background-position:center;background-repeat:no-repeat}
 #home-mascot{display:none}
 #screen-home .title,#screen-home .subtitle{display:none}
 .merit-box{position:absolute;inset:0;margin:0;padding:0;background:none;border:none;border-radius:0;box-shadow:none;pointer-events:none}
 .merit-label{display:none}
-.merit-num{position:absolute;left:51%;top:54.5%;transform:translate(-50%,-50%);
+.merit-num{position:absolute;left:51%;top:53.9%;transform:translate(-50%,-50%);
   font-size:5.8em;font-weight:900;color:#ffcf4d;line-height:1;white-space:nowrap;
   text-shadow:0 0 18px rgba(255,180,40,.75),0 2px 3px #000}
-.rank-name{position:absolute;left:46.9%;top:59.9%;transform:translateY(-50%);margin:0;white-space:nowrap}
+.rank-name{position:absolute;left:47.6%;top:59.2%;transform:translateY(-50%);margin:0;white-space:nowrap}
 #home-rank{color:#ff8a3c;font-size:2.54em;font-weight:800;text-shadow:0 0 10px rgba(255,110,40,.55),0 1px 3px #000}
-#btn-start{position:absolute;left:4%;right:2%;top:66%;height:8.5%;width:auto;margin:0;padding:0;
+#btn-start{position:absolute;left:4%;right:2%;top:65.5%;height:8%;width:auto;margin:0;padding:0;
   font-size:0;color:transparent;background:transparent;border:none;border-radius:12px;box-shadow:none;cursor:pointer}
 #btn-start:active{transform:none;box-shadow:none;background:rgba(255,215,110,.14)}
-.home-row{position:absolute;left:4%;right:2%;top:75.4%;height:7.5%;display:flex;gap:2.5%}
+.home-row{position:absolute;left:4%;right:2%;top:75.2%;height:7.6%;display:flex;gap:2.5%}
 .home-row .btn{flex:1;height:100%;margin:0;padding:0;font-size:0;color:transparent;
   background:transparent;border:none;border-radius:12px;box-shadow:none;cursor:pointer}
 .home-row .btn:active{transform:none;background:rgba(255,215,110,.12)}
@@ -66,6 +66,13 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 #scan-hint{background:rgba(0,0,0,.55);border:1px solid rgba(245,197,66,.4);border-radius:12px;
   padding:8px 12px;font-size:13px;color:var(--gold2)}
 #gps-tag{display:inline-block;margin-top:6px;font-size:11px;padding:2px 10px;border-radius:999px;background:rgba(90,200,250,.15);color:var(--blue);border:1px solid rgba(90,200,250,.5)}
+#spirit-tag{display:inline-block;margin-top:6px;margin-left:6px;font-size:11px;padding:2px 10px;border-radius:999px;background:rgba(74,222,128,.13);color:var(--green);border:1px solid rgba(74,222,128,.5)}
+#spirit-tag.low{color:var(--dim);border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.06)}
+.walk-bar{height:10px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden;margin:6px 0}
+.walk-bar>div{height:100%;background:linear-gradient(90deg,#2fbf71,#7be495);border-radius:99px}
+.walk-ms{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:5px 2px;border-bottom:1px dashed rgba(245,197,66,.18)}
+.walk-ms:last-child{border-bottom:none}
+.walk-ms .done{color:var(--green);font-weight:800}
 #scan-bottom{position:absolute;left:0;right:0;bottom:0;padding:14px 16px calc(16px + env(safe-area-inset-bottom));
   display:flex;gap:10px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.75))}
 #scan-bottom .btn{margin:0}
@@ -139,14 +146,26 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 .rank-head-cur{margin-left:auto;font-weight:800;color:var(--gold);font-size:14.5px;white-space:nowrap}
 .rank-head-hint{font-size:11px;color:var(--dim);white-space:nowrap}
 .rank-arrow{font-size:15px;color:var(--gold2);line-height:1;transition:transform .35s ease}
-#rank-card.open .rank-arrow{transform:rotate(180deg)}
+.card.open .rank-arrow{transform:rotate(180deg)}
 .rank-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s ease}
-#rank-card.open .rank-body{grid-template-rows:1fr}
+.card.open .rank-body{grid-template-rows:1fr}
 .rank-body-inner{overflow:hidden;min-height:0}
 .rank-body-inner>*:first-child{margin-top:10px}
 @media (prefers-reduced-motion: reduce){ .rank-body,.rank-arrow{transition:none} }
-#shop-msg{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:13.5px;line-height:1.45;background:rgba(90,200,250,.12);border:1px solid rgba(90,200,250,.4)}
-#shop-msg.err{background:rgba(255,90,90,.12);border-color:rgba(255,90,90,.45)}
+#shop-msg,#gourd-msg{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:13.5px;line-height:1.45;background:rgba(90,200,250,.12);border:1px solid rgba(90,200,250,.4)}
+#shop-msg.err,#gourd-msg.err{background:rgba(255,90,90,.12);border-color:rgba(255,90,90,.45)}
+/* hồ lô chứa ma */
+.gourd-slots{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}
+.gourd-slot{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;background:rgba(255,255,255,.05);border:1px dashed rgba(245,197,66,.4)}
+.gourd-slot.full{border-style:solid;background:rgba(245,197,66,.13)}
+.gourd-item{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid rgba(245,197,66,.25);border-radius:14px;margin:8px 0;background:rgba(255,255,255,.03)}
+.gourd-item canvas{width:56px;height:56px;flex:0 0 56px}
+.gourd-item .ginfo{flex:1;min-width:0}
+.gourd-item .gname{font-weight:800;color:var(--gold2);font-size:15px}
+.gourd-item .gmeta{font-size:12px;color:var(--dim);line-height:1.45;margin-top:2px}
+.gourd-item button{background:rgba(255,90,90,.16);border:1px solid rgba(255,90,90,.55);color:#ffb3b3;border-radius:10px;padding:8px 12px;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap}
+.gourd-item button.armed{background:var(--red);color:#fff}
+#pending-card{border-color:#ff9f43;background:rgba(255,140,40,.10)}
 /* đồng hồ ma bỏ chạy (màn bắt) */
 #escape-wrap{position:relative;height:20px;background:rgba(255,255,255,.10);border-radius:99px;overflow:hidden;margin:6px 10px 0}
 #escape-fill{height:100%;width:100%;background:linear-gradient(90deg,#ffb13d,#ff7b2e);border-radius:99px;transition:width .2s linear}
@@ -164,10 +183,11 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 @keyframes warnPulse{from{transform:translateX(-50%) scale(1)}to{transform:translateX(-50%) scale(1.06)}}
 #btn-suppress{border:2px solid #ff5252!important}
 #btn-suppress:disabled{opacity:.45;border-color:rgba(255,255,255,.25)!important}
-/* nút vào Chợ Âm Phủ / Khu Phố ở màn chính */
-.home-row2{position:absolute;left:4%;right:2%;top:84.3%;height:6.6%;display:flex;gap:2.5%}
-.home-row2 .nav2{flex:1;height:100%;margin:0;padding:0 6px;font-size:2.05em;font-weight:800;letter-spacing:.5px;color:#ffd9a0;background:rgba(24,10,8,.82);border:1.5px solid rgba(245,197,66,.75);border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.55);cursor:pointer}
-.home-row2 .nav2:active{background:rgba(90,40,10,.85)}
+/* nút vào Chợ Âm Phủ / Khu Phố ở màn chính — ảnh menu mới đã vẽ sẵn 2 nút này,
+   nên ở đây chỉ là vùng bấm trong suốt đè đúng lên nút trong ảnh (như hàng Sổ Ma / Cài đặt) */
+.home-row2{position:absolute;left:4%;right:2%;top:84%;height:7.3%;display:flex;gap:2.5%}
+.home-row2 .nav2{flex:1;height:100%;margin:0;padding:0;font-size:0;color:transparent;background:transparent;border:none;border-radius:12px;box-shadow:none;cursor:pointer}
+.home-row2 .nav2:active{transform:none;background:rgba(255,215,110,.12)}
 /* Chợ Âm Phủ */
 .market-title{color:#ff5a3c;text-shadow:0 0 16px rgba(255,80,40,.55),0 2px 4px #000}
 .merit-card{border-color:rgba(255,120,60,.5);background:rgba(80,25,10,.35)}
@@ -187,7 +207,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 .area-detail{margin-top:8px;border-top:1px dashed rgba(245,197,66,.3);padding-top:8px;font-size:13px;line-height:1.6;display:none}
 .area-item.open .area-detail{display:block}
 /* hồ lô */
-#gourd-needle-info{text-align:center;color:var(--dim);font-size:13px;margin-top:6px}
+#gourd-needle-info,#fish-info{text-align:center;color:var(--dim);font-size:13px;margin-top:6px;line-height:1.55}
 /* ---------- sổ ma ---------- */
 .book-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .book-cell{background:var(--panel);border:1px solid rgba(245,197,66,.25);border-radius:14px;
@@ -280,6 +300,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
       <div id="scan-hint">👻 Lia camera quanh nhà tìm ma!<br><span style="font-size:12px">Thấy ma thì chạm vào để bắt!</span></div>
       <canvas id="radar" width="120" height="120" style="width:84px;height:84px;border-radius:50%;border:2px solid rgba(90,200,250,.5);background:rgba(10,20,40,.55)"></canvas>
       <span id="gps-tag">📍 đang lấy GPS…</span>
+      <span id="spirit-tag" title="Đi bộ để nạp linh khí — linh khí cao thì dễ quét ra ma xịn">🍃 Linh khí: 0%</span>
     </div>
     <div id="scan-bottom">
       <button class="btn small ghost" id="btn-scan-back" style="flex:0 0 92px">✕ Thoát</button>
@@ -306,8 +327,32 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
     <div class="wrap">
       <h1 class="title" style="font-size:26px">📖 SỔ MA</h1>
       <div class="subtitle" id="book-progress">Đã thu phục 0 / 15 loài</div>
+      <button class="btn" id="btn-book-gourd" style="margin:4px 0 10px">🫙 HỒ LÔ CHỨA MA · <span id="book-gourd-count">0/5</span></button>
       <div class="book-grid" id="book-grid"></div>
       <button class="btn ghost" id="btn-book-back" style="margin-top:16px">← Quay lại</button>
+    </div>
+  </div>
+
+  <!-- ===== HỒ LÔ CHỨA MA ===== -->
+  <div class="screen" id="screen-gourd">
+    <div class="wrap">
+      <h1 class="title" style="font-size:26px">🫙 HỒ LÔ CHỨA MA</h1>
+      <div class="subtitle" id="gourd-progress">Đang chứa 0 / 5 con</div>
+      <div class="card" id="pending-card" style="display:none">
+        <div class="sect-title">⏳ MA ĐANG CHỜ CHỖ</div>
+        <div id="pending-info" style="font-size:14px;line-height:1.55"></div>
+        <div class="row" style="margin-top:10px">
+          <button class="btn small" id="btn-pending-keep" style="flex:1;margin:0">🫙 Giữ vào hồ lô</button>
+          <button class="btn small ghost" id="btn-pending-release" style="flex:1;margin:0">🌬️ Thả đi</button>
+        </div>
+        <div class="sect-note">Hồ lô đầy thì nút Giữ chưa bấm được — thả bớt 1 con bên dưới (hoặc mua thêm hồ lô ở Chợ Âm Phủ) rồi quay lại giữ.</div>
+      </div>
+      <div class="gourd-slots" id="gourd-slots"></div>
+      <div id="gourd-list"></div>
+      <div class="card">
+        <div class="sect-note" style="margin:0">Mỗi con ma chiếm đúng <b>1 hồ lô</b>. Ma Thường giữ cũng tốn một chỗ như ma xịn — hồ lô chật thì cân nhắc <b>thả bớt ma Thường</b> để dành chỗ. Thả ma không được thêm công đức, nhưng Sổ Ma vẫn ghi nhận loài đã thu phục. Hết chỗ thì qua <b>Chợ Âm Phủ</b> mua thêm hồ lô.</div>
+      </div>
+      <button class="btn ghost" id="btn-gourd-back" style="margin-top:16px">← Quay lại</button>
     </div>
   </div>
 
@@ -315,13 +360,13 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
   <div class="screen" id="screen-market">
     <div class="wrap">
       <h1 class="title market-title">🏮 CHỢ ÂM PHỦ 🏮</h1>
-      <div class="subtitle">Quầy đổi bùa &amp; bảng cấp bậc — chợ chỉ họp khi có thầy cúng ghé</div>
+      <div class="subtitle">Tiệm Linh Phù, hồ lô &amp; cấp bậc — chợ chỉ họp khi có thầy cúng ghé</div>
       <div class="card merit-card">
         <div class="sect-note" style="margin:0">💰 Công đức khả dụng: <b id="market-merit" style="color:var(--gold);font-size:17px">0</b><br>⭐ Tổng tích lũy cả đời: <b id="market-total">0</b> · Cấp hiện tại: <b id="market-rank" style="color:var(--gold2)">—</b></div>
       </div>
       <div class="card" id="rank-card">
         <button class="rank-head" id="rank-toggle" aria-expanded="false" aria-controls="rank-body">
-          <span class="sect-title">🏅 CẤP BẬC &amp; QUYỀN LỢI</span>
+          <span class="sect-title">🏅 CẤP BẬC</span>
           <span class="rank-head-cur" id="rank-head-cur">—</span>
           <span class="rank-head-hint" id="rank-head-hint">chạm để xem</span>
           <span class="rank-arrow" aria-hidden="true">▾</span>
@@ -335,10 +380,34 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
         </div>
       </div>
       <div class="card" id="shop-card">
-        <h3 class="sect-title">🔖 QUẦY ĐỔI BÙA</h3>
-        <div class="sect-note">Số dư khả dụng: <b id="shop-balance" style="color:var(--gold)">0</b> công đức · Kho chứa tối đa <b id="shop-cap">5</b> lá mỗi loại ở cấp hiện tại. Đổi là có bùa ngay, khỏi chờ hồi.</div>
-        <div id="shop-list"></div>
-        <div id="shop-msg" class="hidden"></div>
+        <button class="rank-head" id="shop-toggle" aria-expanded="false" aria-controls="shop-body">
+          <span class="sect-title">🔖 TIỆM LINH PHÙ</span>
+          <span class="rank-head-cur" id="shop-head-cur">—</span>
+          <span class="rank-head-hint" id="shop-head-hint">chạm để xem</span>
+          <span class="rank-arrow" aria-hidden="true">▾</span>
+        </button>
+        <div class="rank-body" id="shop-body">
+          <div class="rank-body-inner">
+            <div class="sect-note">Số dư khả dụng: <b id="shop-balance" style="color:var(--gold)">0</b> công đức · Kho chứa tối đa <b id="shop-cap">5</b> lá mỗi loại ở cấp hiện tại. Đổi là có bùa ngay, khỏi chờ hồi.</div>
+            <div id="shop-list"></div>
+            <div id="shop-msg" class="hidden"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="gourd-card">
+        <button class="rank-head" id="gourd-toggle" aria-expanded="false" aria-controls="gourd-body">
+          <span class="sect-title">🫙 HỒ LÔ CHỨA MA</span>
+          <span class="rank-head-cur" id="gourd-head-cur">—</span>
+          <span class="rank-head-hint" id="gourd-head-hint">chạm để xem</span>
+          <span class="rank-arrow" aria-hidden="true">▾</span>
+        </button>
+        <div class="rank-body" id="gourd-body">
+          <div class="rank-body-inner">
+            <div class="sect-note">Mỗi con ma thu phục được chứa trong <b>1 hồ lô riêng</b> — tân thủ khởi đầu có <b>5 hồ lô</b>. Đang chứa <b id="gourd-used" style="color:var(--gold)">0</b> / <b id="gourd-cap" style="color:var(--gold)">5</b> con. Hồ lô đầy là không giữ thêm được con nào: hoặc thả bớt ma (nhất là ma Thường) trong mục Hồ Lô ở Sổ Ma, hoặc mua thêm hồ lô tại đây (tối đa <b id="gourd-max">12</b> cái).</div>
+            <div id="gourd-shop-row"></div>
+            <div id="gourd-msg" class="hidden"></div>
+          </div>
+        </div>
       </div>
       <button class="btn ghost" id="btn-market-back" style="margin-top:16px">← Quay lại</button>
     </div>
@@ -349,6 +418,13 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
     <div class="wrap">
       <h1 class="title" style="font-size:26px">🏘️ KHU PHỐ</h1>
       <div class="subtitle" id="street-now">📍 Đang xác định khu vực…</div>
+      <div class="card" id="walk-card">
+        <h3 class="sect-title">🚶 DU HÀNH HÔM NAY</h3>
+        <div class="sect-note" style="margin-top:0">Đã đi: <b id="walk-today" style="color:var(--gold);font-size:16px">0 m</b> hôm nay · Tổng cả đời: <b id="walk-total">0 m</b></div>
+        <div class="sect-note">🍃 Linh khí du hành: <b id="walk-spirit" style="color:var(--green)">0%</b> — đi bộ nạp linh khí, linh khí càng cao lần quét tới càng dễ ra ma xịn (tối đa ×2,5 tỉ lệ ma Quý trở lên). Đứng yên lâu linh khí tụt dần, ngồi nhà quét là thiệt nhất!</div>
+        <div class="walk-bar"><div id="walk-spirit-fill" style="width:0%"></div></div>
+        <div id="walk-milestones"></div>
+      </div>
       <div id="map"></div>
       <div id="map-msg" class="hidden"></div>
       <button class="btn" id="btn-locate" style="margin-top:10px">📍 Vị trí của tôi</button>
@@ -4461,9 +4537,9 @@ const RARITY = {
   thuong:     { name:"Thường",      css:"rare-thuong",     merit:10,  weight:58, dist:[5,25],  trace:"tron",   color:"#b9c2cc" },
   hiem:       { name:"Hiếm",        css:"rare-hiem",       merit:25,  weight:25, dist:[15,40], trace:"tron",   color:"#5ac8fa" },
   quy:        { name:"Quý",         css:"rare-quy",        merit:60,  weight:11, dist:[25,50], trace:"tamgiac",color:"#c77dff" },
-  huyenthoai: { name:"Huyền Thoại", css:"rare-huyenthoai", merit:150, weight:4.5,dist:[35,60], trace:"vuong",  color:"#ffb703" },
-  thanthoai:  { name:"Thần Thoại",  css:"rare-thanthoai",  merit:400, weight:1.5,dist:[45,60], trace:"vuong",  color:"#ff5a5a" },
-  toannang:   { name:"Toàn Năng",   css:"rare-toannang",   merit:800, weight:0.8,dist:[50,70], trace:"vuong",  color:"#ffe45a" },
+  huyenthoai: { name:"Huyền Thoại", css:"rare-huyenthoai", merit:150, weight:4.5,dist:[35,60], trace:"sao",    color:"#ffb703" },
+  thanthoai:  { name:"Thần Thoại",  css:"rare-thanthoai",  merit:400, weight:1.5,dist:[45,60], trace:"sao",    color:"#ff5a5a" },
+  toannang:   { name:"Toàn Năng",   css:"rare-toannang",   merit:800, weight:0.8,dist:[50,70], trace:"sao",    color:"#ffe45a" },
 };
 const RANKS = [
   [100,"Tiểu Đạo Đồng"],[400,"Đạo Sĩ"],[1000,"Pháp Sư"],[2500,"Thiên Sư"],[Infinity,"Đại Thiên Sư"]
@@ -4484,8 +4560,73 @@ function rankIndexFor(meritTotal){
   return RANKS.length-1;
 }
 function rankPerks(meritTotal){ return RANK_PERKS[rankIndexFor(meritTotal)]; }
-/* Giá đổi bùa bằng công đức khả dụng (ma Thường siêu độ được 10 công đức) */
-const TALISMAN_PRICES = { minhlo:30, dinthan:30, tulinh:100 };
+/* Giá đổi bùa bằng công đức khả dụng (ma Thường siêu độ được 10 công đức).
+   Bộ linh phù MỚI: 5 loại, mỗi loại một vai rõ ràng — soi đường vẽ ấn, khóa ma,
+   câu thêm giờ, nhân công đức, và bùa cứu mạng đắt nhất quầy. */
+const TALISMAN_PRICES = { danlo:90, dinhthan:120, anhon:150, tulinh:300, kimthan:450 };
+/* HỒ LÔ CHỨA MA: mỗi con ma thu phục chiếm đúng 1 hồ lô. Tân thủ khởi đầu chỉ có
+   5 hồ lô — bắt được ma Thường mà hồ lô sắp đầy là phải cân nhắc giữ hay thả.
+   Mua thêm hồ lô ở Chợ Âm Phủ bằng công đức khả dụng, tối đa 12 cái. */
+const GOURD_BASE_SLOTS = 5, GOURD_MAX_SLOTS = 12, GOURD_PRICE = 750;
+/* Số hồ lô người chơi sở hữu (kẹp trong [5, 12]; save cũ chưa có trường này → 5) */
+function gourdCapacity(s){
+  const n=(s&&typeof s.gourdSlots==="number"&&isFinite(s.gourdSlots))?Math.floor(s.gourdSlots):GOURD_BASE_SLOTS;
+  return Math.max(GOURD_BASE_SLOTS, Math.min(GOURD_MAX_SLOTS, n));
+}
+/* Số hồ lô còn trống = sức chứa − số ma đang chứa */
+function gourdFree(s){
+  const used=(s&&Array.isArray(s.collection))?s.collection.length:0;
+  return gourdCapacity(s)-used;
+}
+/* ---- CHỐNG REROLL + KHUYẾN KHÍCH RA NGOÀI ----
+   Triết lý: app để người chơi CHỊU RA NGOÀI đi bắt ma, không ngồi nhà quay xổ số.
+   - Ma đã quét ra thì GẮN với vị trí quét (lưu trong save): thoát ra quét lại cùng
+     chỗ vẫn gặp đúng con đó, không random lại.
+   - Thoát giữa chừng khi đang bắt (bỏ cuộc / hết giờ / vùng thoát…) = con ma đó
+     chạy mất luôn, không roll lại được.
+   - Chỉ có ma MỚI khi đợt cũ đã xử lý xong VÀ người chơi đã đi xa khỏi điểm spawn
+     cũ ≥ SPAWN_MOVE_M mét, hoặc đã chờ đủ SPAWN_COOLDOWN_MS. Đứng yên một chỗ
+     quét hoài = không có gì mới.
+   - Đi bộ nạp LINH KHÍ DU HÀNH: linh khí càng cao, lần quét tới càng dễ ra ma xịn;
+     đứng yên lâu linh khí tụt dần về 0 — ngồi nhà quét là thiệt nhất. */
+const SPAWN_MOVE_M = 120;                 // phải đi xa bấy nhiêu mét khỏi điểm spawn cũ
+const SPAWN_COOLDOWN_MS = 5*60*1000;      // …hoặc chờ đủ 5 phút sau khi đợt cũ xử lý xong
+const SPAWN_EXPIRE_MS = 10*60*1000;       // spawn lưu quá 10 phút thì coi như ma đã đi mất
+/* Cổng spawn mới: ok=true thì được spawn đợt ma mới tại (lat,lon) lúc nowMs.
+   needM = còn phải đi thêm bao nhiêu mét; needS = còn phải chờ bao nhiêu giây (đi đường nào cũng được). */
+function spawnGate(hunt, lat, lon, nowMs){
+  if(!hunt||!hunt.anchor) return { ok:true, needM:0, needS:0 };
+  let d=0;
+  if(lat!=null&&lon!=null&&hunt.anchor) d=haversineM(hunt.anchor.lat,hunt.anchor.lon,lat,lon);
+  const needM=Math.max(0, Math.ceil(SPAWN_MOVE_M-d));
+  let needS=0;
+  if(typeof hunt.resolvedAt==="number") needS=Math.max(0, Math.ceil((SPAWN_COOLDOWN_MS-(nowMs-hunt.resolvedAt))/1000));
+  return { ok: needM<=0||needS<=0, needM, needS };
+}
+/* Linh khí tại thời điểm nowMs: giá trị đã lưu trừ phần hao hụt vì đứng yên
+   (hao hết 100 điểm sau ~8 phút không di chuyển). */
+const SPIRIT_PER_M = 0.1;                          // đi 10m được +1 linh khí
+const SPIRIT_DECAY_PER_S = 100/(8*60);             // đứng yên: hao ~0,21 điểm/giây
+function spiritAt(walk, nowMs){
+  if(!walk) return 0;
+  const base=(typeof walk.spirit==="number"&&walk.spirit>0)?walk.spirit:0;
+  const el=Math.max(0,(nowMs-(walk.spiritAt||nowMs))/1000);
+  return Math.max(0, Math.min(100, base - el*SPIRIT_DECAY_PER_S));
+}
+/* Hệ số nhân tỉ lệ ma Quý trở lên theo linh khí: 0 → ×1 (như cũ), 100 → ×2,5 */
+function spiritBoost(spirit){ return 1 + (Math.max(0,Math.min(100,spirit))/100)*1.5; }
+/* Mốc quãng đường ĐI BỘ TRONG NGÀY: đạt mốc là thưởng công đức (+ bùa ở mốc cao) */
+const WALK_MILESTONES = [
+  { m:500,  merit:30 },
+  { m:1000, merit:80,  tal:"danlo" },
+  { m:2000, merit:150, tal:"dinhthan" },
+  { m:3500, merit:250, tal:"tulinh" },
+  { m:5000, merit:400, tal:"kimthan" },
+];
+function fmtDist(m){
+  if(m>=1000) return (Math.round(m/100)/10).toLocaleString("vi-VN")+" km";
+  return Math.round(m)+" m";
+}
 /* ĐỘ KHÓ PHA SIÊU ĐỘ — ma vùng vẫy theo độ hiếm:
    pulseEvery/pulseAmt: mỗi pulseEvery giây, tiến trình bị giật lùi pulseAmt% (0 = không giãy)
    release: tốc độ tụt tiến trình (%/giây) khi buông nút giữ (cơ bản cũ là 16)
@@ -4493,15 +4634,56 @@ const TALISMAN_PRICES = { minhlo:30, dinthan:30, tulinh:100 };
    quá hạn mất breakoutLoss% tiến trình; trấn áp kịp thì ma bị trấn calmS giây */
 const STRUGGLE = {
   thuong:     { pulseEvery:0,   pulseAmt:0,  release:16, breakoutEvery:null,       breakoutLoss:0,  calmS:0 },
-  hiem:       { pulseEvery:2.8, pulseAmt:3,  release:20, breakoutEvery:null,       breakoutLoss:0,  calmS:0 },
-  quy:        { pulseEvery:2.2, pulseAmt:5,  release:26, breakoutEvery:[4,7],      breakoutLoss:18, calmS:3 },
-  huyenthoai: { pulseEvery:1.8, pulseAmt:7,  release:32, breakoutEvery:[3.5,6],    breakoutLoss:24, calmS:3 },
-  thanthoai:  { pulseEvery:1.5, pulseAmt:9,  release:38, breakoutEvery:[3,5],      breakoutLoss:30, calmS:4 },
-  toannang:   { pulseEvery:1.3, pulseAmt:11, release:44, breakoutEvery:[2.5,4.5],  breakoutLoss:35, calmS:4 },
+  hiem:       { pulseEvery:2.6, pulseAmt:4,  release:20, breakoutEvery:null,       breakoutLoss:0,  calmS:0 },
+  quy:        { pulseEvery:2.0, pulseAmt:6,  release:26, breakoutEvery:[3.5,6],    breakoutLoss:18, calmS:3 },
+  huyenthoai: { pulseEvery:1.6, pulseAmt:9,  release:32, breakoutEvery:[3,5],      breakoutLoss:24, calmS:3 },
+  thanthoai:  { pulseEvery:1.5, pulseAmt:9,  release:38, breakoutEvery:[2.5,4.5],  breakoutLoss:30, calmS:4 },
+  toannang:   { pulseEvery:1.4, pulseAmt:8,  release:44, breakoutEvery:[2,4],      breakoutLoss:30, calmS:4 },
 };
-/* Đồng hồ ma bỏ chạy cho CẢ lượt bắt (giây). Số của spec (90/75/60/50/45/40) đã nới nhẹ
-   ở các bậc hiếm vì cộng dồn kết ấn 15–20s + chém hồ lô + siêu độ có vùng vẫy thì 40s là không đủ. */
-const ESCAPE_LIMITS = { thuong:90, hiem:80, quy:70, huyenthoai:60, thanthoai:55, toannang:50 };
+/* Đồng hồ ma bỏ chạy cho CẢ lượt bắt (giây): ma Thường 30s, ma càng xịn càng ít giờ —
+   phải kết ấn nhanh tay, chém hồ lô gọn và giữ thanh siêu độ thật chắc. Bùa đóng băng
+   đồng hồ (dán bùa +3s) là đường gỡ khi đuối ở các bậc hiếm. */
+const ESCAPE_LIMITS = { thuong:30, hiem:27, quy:24, huyenthoai:22, thanthoai:21, toannang:21 };
+/* ĐỘ KHÓ KẾT ẤN theo độ hiếm: time = giây được vẽ (bùa Định Thân +5s), tol = độ lệch
+   cho phép khi chấm điểm (càng nhỏ càng khắt khe), need = % khớp tối thiểu để qua ải.
+   Hình ấn bốc ngẫu nhiên trong SEAL_POOLS của từng bậc (ở ngay dưới). */
+const KETAN = {
+  thuong:     { time:12, tol:0.085, need:65 },
+  hiem:       { time:11, tol:0.080, need:70 },
+  quy:        { time:10, tol:0.075, need:76 },
+  huyenthoai: { time:9,  tol:0.070, need:82 },
+  thanthoai:  { time:8,  tol:0.065, need:87 },
+  toannang:   { time:7,  tol:0.058, need:90 },
+};
+/* KHO HÌNH ẤN theo độ hiếm: mỗi lượt bắt bốc NGẪU NHIÊN 1 hình trong kho của bậc đó —
+   không còn cảnh ma nào cũng vẽ một hình như ma nào. Ma càng xịn kho càng nhiều hình khó
+   (xoắn ốc, tia chớp, đồng hồ cát…). RARITY[].trace chỉ còn là hình mặc định dự phòng. */
+const SEAL_POOLS = {
+  thuong:     ["tron","vuong","thap","kimcuong"],
+  hiem:       ["tron","vuong","kimcuong","ngugiac","thap"],
+  quy:        ["tamgiac","lucgiac","chop","dongho","kimcuong"],
+  huyenthoai: ["sao","lucgiac","dongho","xoanoc","chop"],
+  thanthoai:  ["sao","chop","xoanoc","dongho"],
+  toannang:   ["sao","xoanoc","chop","lucgiac"],
+};
+const SEAL_NAMES = { tron:"Vòng Tròn", vuong:"Hình Vuông", tamgiac:"Tam Giác", sao:"Ngôi Sao",
+  kimcuong:"Kim Cương", ngugiac:"Ngũ Giác", lucgiac:"Lục Giác", thap:"Chữ Thập",
+  chop:"Tia Chớp", dongho:"Đồng Hồ Cát", xoanoc:"Xoắn Ốc" };
+/* MINIGAME SIÊU ĐỘ kiểu thanh câu cá Stardew Valley, độ khó theo độ hiếm:
+   barH = chiều cao thanh xanh (tỉ lệ theo cột), fishSpeed = tốc độ bơi của ma (tỉ lệ cột/giây),
+   retarget = [min,max] giây giữa mỗi lần ma đổi hướng bơi, dartChance = tỉ lệ cú "phóng" tăng tốc,
+   gain/drain = % tiến trình tăng mỗi giây khi đè trúng ma / tụt mỗi giây khi để lệch.
+   Tiến trình bắt đầu ở 25%, đầy 100% là siêu độ xong, tụt về 0% là ma vùng thoát.
+   Kèm theo: ma GIÃY giật lùi tiến trình theo nhịp và (Quý trở lên) thỉnh thoảng VÙNG THOÁT
+   đòi bấm trấn áp bằng bùa — xem bảng STRUGGLE, đã nối vào vòng lặp minigame này. */
+const FISH = {
+  thuong:     { barH:0.32, fishSpeed:0.42, retarget:[0.8,1.5],  dartChance:0.06, gain:22, drain:14 },
+  hiem:       { barH:0.29, fishSpeed:0.52, retarget:[0.7,1.3],  dartChance:0.14, gain:22, drain:16 },
+  quy:        { barH:0.26, fishSpeed:0.64, retarget:[0.6,1.15], dartChance:0.22, gain:21, drain:19 },
+  huyenthoai: { barH:0.23, fishSpeed:0.74, retarget:[0.5,1.0],  dartChance:0.30, gain:21, drain:22 },
+  thanthoai:  { barH:0.22, fishSpeed:0.80, retarget:[0.45,0.85],dartChance:0.36, gain:20, drain:23 },
+  toannang:   { barH:0.19, fishSpeed:0.84, retarget:[0.4,0.8],  dartChance:0.42, gain:21, drain:23 },
+};
 /* ---- THỐNG KÊ KHU VỰC SĂN MA ---- */
 function round2(x){ return Math.round(x*100)/100; } // chỉ lưu tọa độ mức khu vực (2 chữ số thập phân)
 /* Ghi 1 con ma vào khu vực: areas là mảng bản ghi trong save; trả về mảng mới */
@@ -4523,9 +4705,11 @@ function applyAreaCapture(areas, area, speciesId, nowMs){
   return list;
 }
 const TALISMANS = {
-  minhlo:  { name:"Minh Lộ",   icon:"🔦", desc:"Hiện rõ đường kết ấn, dễ vẽ theo hơn." },
-  dinthan: { name:"Định Thân", icon:"🧷", desc:"Ma đứng yên, thời gian kết ấn +5s (15s → 20s)." },
-  tulinh:  { name:"Tụ Linh",   icon:"💠", desc:"+50% điểm công đức khi siêu độ thành công." },
+  danlo:   { name:"Dẫn Lộ",   icon:"🔦", desc:"Hiện rõ đường kết ấn phát sáng, dễ vẽ theo hơn." },
+  dinhthan:{ name:"Định Thân", icon:"📌", desc:"Ma đứng yên khi kết ấn, +5s giờ vẽ ấn, ma bơi chậm hơn 25% ở pha siêu độ." },
+  anhon:   { name:"An Hồn",   icon:"🕯️", desc:"Dán vào là ma dịu lại: +10 giây đồng hồ ma thoát trong lượt bắt này." },
+  tulinh:  { name:"Tụ Linh",  icon:"💠", desc:"+50% điểm công đức khi siêu độ thành công." },
+  kimthan: { name:"Kim Thân", icon:"🛡️", desc:"Bùa cứu mạng: lượt bắt này nếu siêu độ tụt về 0% hoặc hết giờ thoát, bùa tự cháy để cứu 1 lần (hồi tiến trình 40% / +10s). Mỗi lượt chỉ cứu 1 lần." },
 };
 const MAX_TALISMAN = 5, TALISMAN_REGEN_S = 60;
 
@@ -4668,9 +4852,30 @@ function meritFor(sp, tulinh){ return Math.round((sp.merit||RARITY[sp.rarity].me
 /* đường kết ấn chuẩn hoá 0..1 theo độ hiếm */
 function tracePathPoints(kind){
   const pts=[];
+  /* đa giác khép kín: nội suy từng cạnh nối các đỉnh (đỉnh cuối nối về đỉnh đầu) */
+  const poly=(v,per)=>{ for(let s=0;s<v.length;s++){ const A=v[s], B=v[(s+1)%v.length];
+    for(let i=0;i<per;i++){ const t=i/per; pts.push([A[0]+(B[0]-A[0])*t, A[1]+(B[1]-A[1])*t]); } } };
+  /* đỉnh đa giác đều n cạnh, bán kính r, xoay rot radian */
+  const ring=(n,r,rot)=>{ const v=[]; for(let k=0;k<n;k++){ const a=(rot||0)+k*Math.PI*2/n; v.push([0.5+r*Math.cos(a),0.5+r*Math.sin(a)]); } return v; };
   if(kind==="tron"){ for(let i=0;i<=64;i++){ const a=i/64*Math.PI*2; pts.push([0.5+0.38*Math.cos(a),0.5+0.38*Math.sin(a)]); } }
   else if(kind==="tamgiac"){ const v=[[0.5,0.1],[0.88,0.78],[0.12,0.78],[0.5,0.1]];
     for(let s=0;s<3;s++) for(let i=0;i<22;i++){ const t=i/22; pts.push([v[s][0]+(v[s+1][0]-v[s][0])*t, v[s][1]+(v[s+1][1]-v[s][1])*t]); } }
+  else if(kind==="sao"){ /* ngôi sao 5 cánh vẽ liền một nét (nối đỉnh 0→2→4→1→3→0) — ấn khó cho ma xịn */
+    const V=[]; for(let k=0;k<5;k++){ const a=-Math.PI/2+k*Math.PI*2/5; V.push([0.5+0.37*Math.cos(a),0.5+0.37*Math.sin(a)]); }
+    const order=[0,2,4,1,3,0];
+    for(let s=0;s<5;s++){ const A=V[order[s]], B=V[order[s+1]];
+      for(let i=0;i<18;i++){ const t=i/18; pts.push([A[0]+(B[0]-A[0])*t, A[1]+(B[1]-A[1])*t]); } } }
+  else if(kind==="kimcuong"){ poly([[0.5,0.07],[0.93,0.5],[0.5,0.93],[0.07,0.5]],20); }
+  else if(kind==="ngugiac"){ poly(ring(5,0.4,-Math.PI/2),20); }
+  else if(kind==="lucgiac"){ poly(ring(6,0.4,0),16); }
+  else if(kind==="thap"){ /* ấn chữ thập: đường viền dấu cộng khép kín, vẽ liền một nét */
+    poly([[0.38,0.07],[0.62,0.07],[0.62,0.38],[0.93,0.38],[0.93,0.62],[0.62,0.62],[0.62,0.93],[0.38,0.93],[0.38,0.62],[0.07,0.62],[0.07,0.38],[0.38,0.38]],9); }
+  else if(kind==="chop"){ /* ấn tia chớp: viền tia sét khép kín */
+    poly([[0.58,0.05],[0.26,0.54],[0.45,0.54],[0.34,0.95],[0.74,0.41],[0.54,0.41]],16); }
+  else if(kind==="dongho"){ /* ấn đồng hồ cát: hai tam giác chụm đầu (0→1→2→3→về 0) */
+    poly([[0.13,0.09],[0.87,0.09],[0.13,0.91],[0.87,0.91]],22); }
+  else if(kind==="xoanoc"){ /* ấn xoắn ốc: một nét xoáy từ tâm ra ngoài, gần 3 vòng */
+    for(let i=0;i<=110;i++){ const t=i/110, a=t*Math.PI*5.5, r=0.04+0.36*t; pts.push([0.5+r*Math.cos(a),0.5+r*Math.sin(a)]); } }
   else { const v=[[0.14,0.14],[0.86,0.14],[0.86,0.86],[0.14,0.86],[0.14,0.14]];
     for(let s=0;s<4;s++) for(let i=0;i<18;i++){ const t=i/18; pts.push([v[s][0]+(v[s+1][0]-v[s][0])*t, v[s][1]+(v[s+1][1]-v[s][1])*t]); } }
   return pts;
@@ -4706,7 +4911,16 @@ function regenTalismans(counts, last, nowMs, perks){
   return {counts:c,last:l};
 }
 function defaultSave(){
-  return { merit:0, meritTotal:0, book:{}, tal:{minhlo:2,dinthan:2,tulinh:2}, talLast:{}, areas:[],
+  return { merit:0, meritTotal:0, book:{}, tal:{danlo:2,dinhthan:2,anhon:1,tulinh:1,kimthan:0}, talLast:{}, areas:[],
+           gourdSlots:GOURD_BASE_SLOTS, collection:[], pendingGhost:null,
+           /* CHỐNG REROLL: spawn đang hoạt động gắn với vị trí quét, lưu vào save.
+              hunt.active = [{id,heading,pitch,dist,place,mood,tuoi,spawnT}] — thoát ra
+              quét lại cùng chỗ vẫn gặp ĐÚNG những con này. hunt.anchor = điểm đã spawn
+              đợt gần nhất; hunt.resolvedAt = lúc đợt ma gần nhất được xử lý xong. */
+           hunt:{ active:[], anchor:null, resolvedAt:null },
+           /* ĐI BỘ DU HÀNH: quãng đường GPS tích lũy (mét) — tổng cả đời + hôm nay,
+              mốc thưởng hôm nay đã nhận, và LINH KHÍ (0–100) nạp bằng đi bộ, tụt dần khi đứng yên */
+           walk:{ total:0, today:0, day:"", milestones:[], spirit:0, spiritAt:0, lastLat:null, lastLon:null },
            settings:{sound:true, sim:false}, loc:"nha", warned:false };
 }
 function loadSave(store){
@@ -4720,6 +4934,37 @@ function loadSave(store){
     if(typeof p.meritTotal!=="number"||!(p.meritTotal>=0)) s.meritTotal=(typeof p.merit==="number"&&p.merit>=0)?p.merit:0;
     if(typeof s.merit!=="number"||!(s.merit>=0)) s.merit=0;
     if(!Array.isArray(s.areas)) s.areas=[]; // save cũ tự có mảng khu vực rỗng, không phá save
+    /* migrate bộ linh phù MỚI: chuẩn hoá kho bùa theo đúng 5 loại hiện tại;
+       bùa cũ Minh Lộ → Dẫn Lộ, Định Thân (dinthan) → Định Thân (dinhthan) giữ nguyên số lá */
+    const legacyTal={ minhlo:"danlo", dinthan:"dinhthan" };
+    const oldTal=(p.tal&&typeof p.tal==="object")?p.tal:{};
+    const newTal={...defaultSave().tal};
+    for(const k of Object.keys(TALISMANS)){
+      if(typeof oldTal[k]==="number"&&oldTal[k]>=0) newTal[k]=Math.floor(oldTal[k]);
+    }
+    for(const ok of Object.keys(legacyTal)){
+      const nk=legacyTal[ok];
+      if(typeof oldTal[ok]==="number"&&oldTal[ok]>=0&&typeof oldTal[nk]!=="number") newTal[nk]=Math.floor(oldTal[ok]);
+    }
+    s.tal=newTal;
+    if(!s.talLast||typeof s.talLast!=="object") s.talLast={};
+    /* migrate HỒ LÔ: save cũ chưa có → tân thủ 5 hồ lô, chưa chứa con nào, không ma chờ */
+    s.gourdSlots=gourdCapacity(s);
+    if(!Array.isArray(s.collection)) s.collection=[];
+    s.collection=s.collection.filter(e=>e&&typeof e.id==="string"&&SPECIES_BY_ID[e.id]);
+    if(s.collection.length>GOURD_MAX_SLOTS) s.collection=s.collection.slice(0,GOURD_MAX_SLOTS);
+    if(!(s.pendingGhost&&typeof s.pendingGhost.id==="string"&&SPECIES_BY_ID[s.pendingGhost.id])) s.pendingGhost=null;
+    /* migrate CHỐNG REROLL + ĐI BỘ: save cũ chưa có 2 khối này → dùng mặc định rỗng */
+    const dh=defaultSave().hunt;
+    s.hunt={...dh,...(s.hunt&&typeof s.hunt==="object"?s.hunt:{})};
+    if(!Array.isArray(s.hunt.active)) s.hunt.active=[];
+    s.hunt.active=s.hunt.active.filter(e=>e&&typeof e.id==="string"&&SPECIES_BY_ID[e.id]);
+    if(!(s.hunt.anchor&&typeof s.hunt.anchor.lat==="number"&&typeof s.hunt.anchor.lon==="number")) s.hunt.anchor=null;
+    if(typeof s.hunt.resolvedAt!=="number") s.hunt.resolvedAt=null;
+    const dw=defaultSave().walk;
+    s.walk={...dw,...(s.walk&&typeof s.walk==="object"?s.walk:{})};
+    if(!Array.isArray(s.walk.milestones)) s.walk.milestones=[];
+    for(const kk of ["total","today","spirit"]) if(typeof s.walk[kk]!=="number"||!(s.walk[kk]>=0)) s.walk[kk]=0;
     /* Dọn 2 khu vực MẪU từng bị nạp nhầm vào bản test (Quận 7 — nhà bạn / Quận 8 —
        siêu thị): đó chỉ là ví dụ minh họa cách tính, không phải ma người chơi đã
        bắt. Hai key này chỉ có thể sinh ra từ dữ liệu mẫu (key thật do Nominatim
@@ -4752,6 +4997,71 @@ const SAFE_STORE=(()=>{ try{ const t="__tc_probe"; localStorage.setItem(t,"1"); 
 } })();
 let S = loadSave(SAFE_STORE);          // state đã lưu
 function persist(){ try{ SAFE_STORE.setItem("daosibatma_v1", JSON.stringify(S)); }catch(e){} }
+
+/* ---------------- ĐI BỘ DU HÀNH (GPS + linh khí + mốc thưởng) ---------------- */
+function walkDayKey(ts){
+  const d=new Date(ts||Date.now());
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+/* Sang ngày mới → quãng đường hôm nay và mốc thưởng làm lại từ đầu (tổng cả đời giữ nguyên) */
+function ensureWalkDay(){
+  const k=walkDayKey();
+  if(S.walk.day!==k){ S.walk.day=k; S.walk.today=0; S.walk.milestones=[]; }
+}
+function spiritNow(){ return spiritAt(S.walk, Date.now()); }
+/* Ghi nhận đã di chuyển tới (lat,lon): cộng quãng đường thật (lọc nhiễu GPS <2m
+   và nhảy vọt >120m/lần cập nhật), nạp linh khí, kiểm tra mốc thưởng trong ngày.
+   Dùng chung cho GPS thật (màn quét + bản đồ) và vị trí mô phỏng trôi dạt. */
+let _lastPersistMove=0;
+function trackMove(lat,lon){
+  if(lat==null||lon==null||!isFinite(lat)||!isFinite(lon)) return;
+  ensureWalkDay();
+  const w=S.walk;
+  if(w.lastLat!=null&&w.lastLon!=null){
+    const d=haversineM(w.lastLat,w.lastLon,lat,lon);
+    if(d>=2&&d<=120){
+      w.today+=d; w.total+=d;
+      w.spirit=Math.min(100, spiritNow()+d*SPIRIT_PER_M); w.spiritAt=Date.now();
+      grantWalkMilestones();
+      if($("screen-street")&&$("screen-street").classList.contains("on")) renderWalkCard();
+      paintSpiritTag();
+    }
+  }
+  w.lastLat=lat; w.lastLon=lon;
+  const now=Date.now();
+  if(now-_lastPersistMove>4000){ _lastPersistMove=now; persist(); }
+}
+function grantWalkMilestones(){
+  ensureWalkDay();
+  const perks=rankPerks(S.meritTotal);
+  for(const ms of WALK_MILESTONES){
+    if(S.walk.today>=ms.m&&!S.walk.milestones.includes(ms.m)){
+      S.walk.milestones.push(ms.m);
+      S.merit+=ms.merit; S.meritTotal=(S.meritTotal||0)+ms.merit;
+      let gift="";
+      if(ms.tal){
+        if((S.tal[ms.tal]||0)<perks.cap){ S.tal[ms.tal]=(S.tal[ms.tal]||0)+1; gift=` + 1 lá bùa ${TALISMANS[ms.tal].name}`; }
+        else gift=` (kho bùa ${TALISMANS[ms.tal].name} đã đầy nên thôi)`;
+      }
+      persist(); refreshHome();
+      toast(`🚶🎉 Đạt mốc đi bộ hôm nay: ${fmtDist(ms.m)}! Thưởng +${ms.merit} công đức${gift}. Đi tiếp nào — linh khí đang cao, dễ gặp ma xịn lắm!`,4200);
+      if(navigator.vibrate) navigator.vibrate([40,40,40]);
+      try{ sfx.chime(); }catch(e){}
+    }
+  }
+}
+/* Vị trí MÔ PHỎNG tự trôi dạt như người đang đi bộ (~2,2 m/giây, hướng đổi chậm):
+   vừa thỏa điều kiện "đi xa điểm spawn cũ" của cơ chế chống reroll, vừa tích
+   quãng đường + linh khí như đi thật — để test trên PC không cần GPS. */
+let _simHeading=40;
+setInterval(()=>{
+  if(!S.settings||!S.settings.sim) return;
+  _simHeading+= (Math.random()*36-18);
+  const p=destPoint(simPos.lat,simPos.lon,_simHeading,2.2);
+  simPos={lat:p.lat,lon:p.lon};
+  trackMove(simPos.lat,simPos.lon);
+  if($("screen-street")&&$("screen-street").classList.contains("on")&&mapObj) onMapPos(simPos.lat,simPos.lon,30);
+},1000);
 
 /* ---------------- ÂM THANH (WebAudio tự tổng hợp) ---------------- */
 let AC=null;
@@ -4973,7 +5283,7 @@ function drawGhost(ctx, sp, x, y, size, t, silhouette){
 }
 
 /* ---------------- CHUYỂN MÀN HÌNH ---------------- */
-const screens=["screen-home","screen-scan","screen-catch","screen-book","screen-result","screen-market","screen-street"];
+const screens=["screen-home","screen-scan","screen-catch","screen-book","screen-result","screen-market","screen-street","screen-gourd"];
 function show(id){
   for(const s of screens) $(s).classList.toggle("on", s===id);
   if(id!=="screen-scan") stopCamera();
@@ -5021,7 +5331,7 @@ function startGPS(){
   let got=false;
   watchId=navigator.geolocation.watchPosition(
     p=>{ got=true; gpsOK=true; simPos={lat:p.coords.latitude,lon:p.coords.longitude};
-         gpsLabel="GPS ✓"; paintGpsTag(); },
+         gpsLabel="GPS ✓"; paintGpsTag(); trackMove(simPos.lat,simPos.lon); },
     e=>{ if(!got){ gpsOK=false; gpsLabel="không GPS"; paintGpsTag(); } },
     {enableHighAccuracy:true, timeout:9000, maximumAge:30000}
   );
@@ -5084,7 +5394,9 @@ function pickHuntSpecies(){
   const present=new Set(aliveGhosts().map(g=>g.sp.id));
   let pool=SPECIES.filter(s=>!present.has(s.id));
   if(!pool.length) pool=SPECIES;
-  const mult=rankPerks(S.meritTotal).rareMult; // quyền lợi cấp: ma Quý trở lên dễ gặp hơn
+  /* quyền lợi cấp × LINH KHÍ DU HÀNH: vừa đi bộ nhiều mà quét thì ma Quý trở lên
+     dễ xuất hiện hơn hẳn; ngồi yên linh khí về 0 thì chỉ còn hệ số cấp như cũ */
+  const mult=rankPerks(S.meritTotal).rareMult*spiritBoost(spiritNow());
   const wOf=s=>(s.rarity==="quy"||s.rarity==="huyenthoai"||s.rarity==="thanthoai"||s.rarity==="toannang")
     ? RARITY[s.rarity].weight*mult : RARITY[s.rarity].weight;
   const total=pool.reduce((a,s)=>a+wOf(s),0);
@@ -5112,25 +5424,62 @@ function spawnOne(awayFrom){
   // tải trước model 3D ngay khi ma xuất hiện, không đợi tới lúc lia camera tới mới tải
   if(sp.model3d && window.Ghost3D && Ghost3D.preload) Ghost3D.preload(sp.id);
 }
+/* ===== SPAWN GẮN VỊ TRÍ — CHỐNG REROLL =====
+   Một "đợt ma" được spawn tại một điểm neo (vị trí người chơi lúc quét) và LƯU
+   VÀO SAVE. Thoát ra quét lại cùng chỗ → khôi phục đúng đợt đó. Đợt ma chỉ được
+   thay mới khi đã xử lý xong hết VÀ đã đi xa điểm neo ≥120m hoặc chờ đủ 5 phút. */
+function serializeGhost(g){
+  return { id:g.sp.id, heading:g.heading, pitch:g.pitch, dist:g.dist, place:g.place,
+           mood:g.mood, tuoi:g.tuoi, spawnT:g.spawnT };
+}
+/* Đồng bộ danh sách ma đang sống vào save; đợt ma về 0 con → ghi giờ xử lý xong */
+function syncHuntSave(){
+  const alive=ghosts.filter(g=>!g.caught&&!g._fled);
+  S.hunt.active=alive.map(serializeGhost);
+  if(!alive.length&&S.hunt.anchor&&!S.hunt.resolvedAt) S.hunt.resolvedAt=Date.now();
+  persist();
+}
+/* Xử lý xong 1 con (bắt được / bỏ cuộc giữa chừng / đuổi đi…): gỡ nó khỏi spawn
+   đang lưu — con này mất luôn, quét lại cùng chỗ cũng không gặp lại. */
+function consumeHuntSpawn(g){
+  if(!g) return;
+  S.hunt.active=(S.hunt.active||[]).filter(e=>!(e.id===g.sp.id&&e.spawnT===g.spawnT));
+  if(!S.hunt.active.length&&S.hunt.anchor&&!S.hunt.resolvedAt) S.hunt.resolvedAt=Date.now();
+  persist();
+}
+/* Khôi phục đợt ma đã lưu trong save (chưa hết hạn 10 phút). Trả về số con khôi phục. */
+function restoreHunt(){
+  const now=Date.now();
+  const saved=(S.hunt&&Array.isArray(S.hunt.active))?S.hunt.active:[];
+  const fresh=saved.filter(e=>e&&SPECIES_BY_ID[e.id]&&(now-(e.spawnT||0))<SPAWN_EXPIRE_MS);
+  if(fresh.length<saved.length){
+    S.hunt.active=fresh;
+    if(!fresh.length&&S.hunt.anchor&&!S.hunt.resolvedAt) S.hunt.resolvedAt=now;
+    persist();
+  }
+  ghosts=fresh.map(e=>({ sp:SPECIES_BY_ID[e.id], heading:e.heading||0, pitch:e.pitch||0, dist:e.dist||3,
+    place:e.place||"", mood:e.mood||GHOST_MOODS[3], tuoi:e.tuoi||100,
+    phase:Math.random()*7, caught:false, spawnT:e.spawnT||now }));
+  for(const g of ghosts) if(g.sp.model3d&&window.Ghost3D&&Ghost3D.preload) Ghost3D.preload(g.sp.id);
+  return ghosts.length;
+}
+function huntGate(){ return spawnGate(S.hunt, simPos.lat, simPos.lon, Date.now()); }
+function gateHintText(gate){
+  return `Chỗ này vừa quét sạch ma rồi — ma mới chỉ xuất hiện khi bạn ĐI XA thêm ~${gate.needM}m nữa, hoặc chờ ~${Math.ceil(gate.needS/60)} phút. Ra ngoài đi một vòng đi, sẵn nạp 🍃 linh khí cho dễ ra ma xịn!`;
+}
 function doSpawn(){
   ghosts=[];
   for(let i=0;i<MAX_GHOSTS;i++) spawnOne();
+  /* neo đợt ma này vào vị trí quét hiện tại và lưu vào save (chống reroll) */
+  S.hunt.anchor={lat:simPos.lat, lon:simPos.lon};
+  S.hunt.anchorAt=Date.now();
+  S.hunt.resolvedAt=null;
+  syncHuntSave();
   lastSpawn=Date.now();
-}
-/* khi bắt xong 1 con: bù con mới ở hướng khác, buộc người chơi di chuyển */
-function refillGhosts(){
-  const alive=ghosts.filter(g=>!g.caught).length;
-  if(alive<MAX_GHOSTS){
-    setTimeout(()=>{
-      if(document.querySelector('.screen.on').id!=="screen-scan") return;
-      const alive2=ghosts.filter(g=>!g.caught).length;
-      if(alive2<MAX_GHOSTS) spawnOne(LOOK.heading);
-    }, 2500);
-  }
 }
 /* cơ chế ma chạy trốn: quá 75s không bắt -> đổi chỗ hoặc chạy mất + mờ camera */
 const GHOST_TIMEOUT = 75000;
-let topupPending=false; // đang có 1 hẹn giờ bù ma chờ chạy hay chưa
+let _gateCheckAt=0; // mốc lần cuối kiểm tra cổng spawn mới trong lúc quét
 function checkGhostTimeout(){
   const now = Date.now();
   // dọn ma thừa nếu có: giữ tối đa MAX_GHOSTS con chưa bắt
@@ -5151,6 +5500,7 @@ function checkGhostTimeout(){
         g.dist = Math.round(spot.dist()*10)/10;
         g.place = spot.place;
         g.spawnT = now;
+        syncHuntSave(); // chỗ nấp mới cũng phải lưu — thoát ra vào lại vẫn là chính nó
         toast("👻 " + g.sp.name + " đã đổi chỗ nấp!");
       } else {
         // chạy trốn
@@ -5164,23 +5514,25 @@ function checkGhostTimeout(){
   const before = ghosts.length;
   ghosts = ghosts.filter(g => !g._fled);
   if(fled || ghosts.length < before){
+    syncHuntSave(); // ma chạy mất là mất luôn khỏi save — không roll lại được
     // mờ camera
     document.getElementById("scan-blur").classList.add("on");
     document.getElementById("btn-fixlens").classList.remove("hidden");
     sfx.fail();
   }
-  // bù ma mới nếu thiếu — CHỈ đặt 1 hẹn giờ tại một thời điểm và kiểm tra lại số ma
-  // khi timer chạy. Hàm này được gọi MỖI FRAME từ scanLoop: bản cũ đặt setTimeout
-  // vô điều kiện mỗi frame → hàng trăm timer chồng nhau, cùng spawnOne sau 2s
-  // → spawn vượt quá MAX_GHOSTS (8-10 con), kể cả sau khi bấm SỬA ỐNG KÍNH.
-  const alive = ghosts.filter(g=>!g.caught).length;
-  if(alive < MAX_GHOSTS && !topupPending && document.querySelector('.screen.on').id === "screen-scan"){
-    topupPending = true;
-    setTimeout(()=>{
-      topupPending = false;
-      if(document.querySelector('.screen.on').id!=="screen-scan") return;
-      if(ghosts.filter(g=>!g.caught).length < MAX_GHOSTS) spawnOne(LOOK.heading);
-    }, 2000);
+  /* CHỐNG REROLL: KHÔNG còn "bù ma mới" tại chỗ nữa. Đợt ma xử lý xong hết thì
+     chỉ khi người chơi đi đủ xa khỏi điểm neo (≥120m) hoặc chờ đủ 5 phút mới có
+     đợt ma mới — kiểm tra mỗi ~1,2s trong lúc đang quét, đủ điều kiện là spawn
+     ngay để thưởng cho người chịu đi bộ. */
+  const aliveNow = ghosts.filter(g=>!g.caught).length;
+  if(aliveNow===0 && document.querySelector('.screen.on').id === "screen-scan"){
+    if(now-(_gateCheckAt||0)>1200){
+      _gateCheckAt=now;
+      if(huntGate().ok){
+        doSpawn();
+        toast("📍 Đi đủ xa / chờ đủ lâu rồi — một đợt ma MỚI xuất hiện quanh đây!",3200);
+      }
+    }
   }
 }
 async function enterScan(){
@@ -5191,7 +5543,16 @@ async function enterScan(){
   $("cam-video").style.display=S.settings.sim?"none":"block";
   startCamera(); startGPS();
   if(!S.settings.sim) await ensureOrientation(); // PC mô phỏng: kéo để lia, không cần cảm biến
-  doSpawn();
+  /* CHỐNG REROLL: ưu tiên khôi phục đúng đợt ma đã lưu ở chỗ này; chỉ khi không
+     còn con nào đang chờ và cổng di chuyển/thời gian đã mở mới spawn đợt mới. */
+  const restored=restoreHunt();
+  if(restored>0){
+    setTimeout(()=>toast(`👻 Vẫn là ${restored} con ma ban nãy quanh đây đó — ma đã quét ra là gắn với chỗ này, thoát ra quét lại cũng không đổi con khác đâu. Xử lý nốt đi!`,3800),700);
+  } else {
+    const gate=huntGate();
+    if(gate.ok) doSpawn();
+    else setTimeout(()=>toast("🌫️ "+gateHintText(gate),4200),700);
+  }
   sizeScanCanvases();
   cancelAnimationFrame(scanRAF); scanLoop();
   if(S.settings.sim||!LOOK.ok) setTimeout(()=>toast("Kéo để lia camera tìm ma 👻",2600),600);
@@ -5282,7 +5643,10 @@ function scanLoop(){
   // gợi ý
   const left=ghosts.filter(g=>!g.caught).length;
   let hint;
-  if(left===0) hint=`🎉 Hết ma rồi! Bấm SỬA ỐNG KÍNH để tìm đợt mới.`;
+  if(left===0){ const gate=huntGate();
+    hint=gate.ok?`🎉 Hết ma quanh đây rồi — đang gọi đợt ma mới…`
+      :`🌫️ Chỗ này đã quét sạch ma. Đi thêm ~${gate.needM}m nữa (hoặc chờ ~${Math.ceil(gate.needS/60)} phút) ma mới sẽ xuất hiện — đi bộ còn nạp 🍃 linh khí, dễ ra ma xịn!`;
+  }
   else if(visible>0) hint=`👻 Thấy ${visible} ma! Chạm vào để bắt!`;
   else{
     let dir="";
@@ -5301,6 +5665,7 @@ function scanLoop(){
     hint=`👻 Còn ${left} ma trong nhà — lia camera ${dir||"tìm đi"}!`;
   }
   $("scan-hint").innerHTML=hint+`<br><span style="font-size:12px">${S.settings.sim||!LOOK.ok?"Kéo để lia camera · ":""}Thấy ma thì chạm vào để bắt!</span>`;
+  paintSpiritTag();
   drawRadar(t);
   if(window.Ghost3D) Ghost3D.render("scan",w,h,t);
   scanRAF=requestAnimationFrame(scanLoop);
@@ -5364,14 +5729,29 @@ let lookDrag=null;
     for(const g of ghosts){
       if(g.caught||g._hx==null) continue;
       const dx=x-g._hx, dy=y-g._hy;
-      if(dx*dx+dy*dy<g._hs*g._hs){ sfx.pop(); g.caught=true; refillGhosts(); enterCatch(g); return; }
+      if(dx*dx+dy*dy<g._hs*g._hs){ sfx.pop(); g.caught=true; enterCatch(g); return; }
     }
   };
   c.addEventListener("pointerup",up);
   c.addEventListener("pointercancel",()=>{ lookDrag=null; });
 })();
 $("btn-fixlens").addEventListener("click",()=>{ sfx.tap(); document.getElementById("scan-blur").classList.remove("on");
-    document.getElementById("btn-fixlens").classList.add("hidden"); doSpawn(); toast("🔧 Đã sửa ống kính! Ma đã đổi chỗ nấp rồi đó! 👻"); });
+    document.getElementById("btn-fixlens").classList.add("hidden");
+    /* Sửa ống kính KHÔNG roll ma mới: còn ma cũ thì vẫn là chúng nó (chỉ đổi chỗ
+       nấp cho đỡ chán), hết ma thì vẫn phải qua cổng đi xa / chờ đủ mới có đợt mới. */
+    if(aliveGhosts().length>0){
+      for(const g of ghosts){ if(g.caught) continue;
+        const spot=HUNT_SPOTS[Math.floor(Math.random()*HUNT_SPOTS.length)];
+        g.heading=Math.round(Math.random()*360); g.pitch=Math.round(spot.pitch());
+        g.dist=Math.round(spot.dist()*10)/10; g.place=spot.place; g.spawnT=Date.now();
+      }
+      syncHuntSave();
+      toast("🔧 Đã sửa ống kính! Nhưng quanh đây vẫn là mấy con ma cũ chưa xử lý — quét lại không ra con khác đâu, bắt nốt đi! 👻",3400);
+    } else {
+      const gate=huntGate();
+      if(gate.ok){ doSpawn(); toast("🔧 Đã sửa ống kính! Một đợt ma mới xuất hiện quanh đây 👻"); }
+      else toast("🔧 Đã sửa ống kính! Nhưng "+gateHintText(gate),4200);
+    } });
 $("btn-scan-back").addEventListener("click",()=>{ sfx.tap(); cancelAnimationFrame(scanRAF); stopGPS(); stopOrientation(); if(window.Ghost3D) Ghost3D.clear("scan"); show("screen-home"); refreshHome(); });
 
 /*__UI3_START__*/
@@ -5387,11 +5767,15 @@ function regenNow(){
 function enterCatch(g){
   cancelAnimationFrame(scanRAF);
   if(window.Ghost3D) Ghost3D.clear("scan");
+  /* CHỐNG REROLL: đã nhận kèo bắt con này thì nó bị gỡ khỏi spawn đang lưu NGAY —
+     thoát giữa chừng (bỏ cuộc, hết giờ, vùng thoát, tắt app…) là nó chạy mất luôn,
+     không có đường quay lại roll con khác ở cùng chỗ. */
+  consumeHuntSpawn(g);
   regenNow();
   const sp=SPECIES_BY_ID[g.sp.id];
   CS={ ghost:g, sp,
        quote:sp.quotes[Math.floor(Math.random()*sp.quotes.length)],
-       buffs:{minhlo:false,dinthan:false,tulinh:false},
+       buffs:Object.fromEntries(Object.keys(TALISMANS).map(k=>[k,false])), kimthanUsed:false,
        step:"tran", startT:0,
        path:[], user:[], drawing:false,
        needle:0, zoneC:0, zoneW:50, misses:0,
@@ -5446,7 +5830,14 @@ function setCatchStep(step){
       btn.addEventListener("click",()=>{ sfx.pop();
         if(S.tal[k]>0&&!CS.buffs[k]){ S.tal[k]--; CS.buffs[k]=true;
           CS.freezeT=(CS.freezeT||0)+3; // dùng bùa trong lượt bắt → đồng hồ ma thoát đóng băng 3 giây
-          toast("❄️ Dán bùa "+t.name+" — đồng hồ ma thoát đóng băng 3 giây!",1800);
+          if(k==="anhon"){ // An Hồn: ma dịu lại → cộng thẳng 10s vào đồng hồ ma thoát của lượt này
+            CS.escapeLeft+=10; CS.escapeTotal+=10;
+            toast("🕯️ Dán bùa An Hồn — ma dịu lại, +10 giây đồng hồ thoát (và đóng băng 3 giây)!",2200);
+          } else if(k==="kimthan"){
+            toast("🛡️ Đã dán Kim Thân — bùa sẽ tự cháy cứu bạn 1 lần nếu siêu độ thất bại hoặc hết giờ!",2200);
+          } else {
+            toast("❄️ Dán bùa "+t.name+" — đồng hồ ma thoát đóng băng 3 giây!",1800);
+          }
           persist(); setCatchStep("bua"); } });
       div.appendChild(btn); B.appendChild(div);
     }
@@ -5461,23 +5852,32 @@ function setCatchStep(step){
     B.appendChild(info);
   } else if(step==="sieudo"){
     $("chant-wrap").classList.remove("hidden");
-    /* khởi tạo trạng thái vùng vẫy cho pha siêu độ (vào lại pha = làm lại từ đầu) */
-    const cfg=STRUGGLE[CS.sp.rarity]||STRUGGLE.thuong;
-    CS.chant=0; CS.chantPeak=0; CS.calmT=0; CS.shakeT=0; CS.breakoutLeft=0;
-    CS.pulseT=cfg.pulseEvery||0;
-    CS.breakoutT=cfg.breakoutEvery? cfg.breakoutEvery[0]+Math.random()*(cfg.breakoutEvery[1]-cfg.breakoutEvery[0]) : 0;
+    /* Minigame THANH KÉO kiểu câu cá Stardew Valley (vào lại pha = làm lại từ đầu):
+       giữ nút → thanh xanh bay lên, buông → trọng lực kéo xuống. Đè thanh lên con ma
+       đang bơi lên xuống trong cột thì tiến trình tăng, lệch thì tụt;
+       đầy 100% là siêu độ xong, tụt về 0% là ma vùng thoát. */
+    CS.chant=25; CS.chantPeak=25; CS.holding=false; CS.breakoutLeft=0; CS.calmT=0; CS.shakeT=0;
+    CS.barY=0.30; CS.barVel=0;
+    CS.fishY=0.5; CS.fishVel=0; CS.fishTgt=0.3+Math.random()*0.4; CS.fishT=0.6; CS.fishBurst=0; CS.fishIn=false; CS.fishTime=0;
+    /* nhịp ma giãy + lịch vùng thoát (bảng STRUGGLE) cho pha này */
+    const scfgS=STRUGGLE[CS.sp.rarity]||STRUGGLE.thuong;
+    CS.pulseT=0;
+    CS.breakoutT=scfgS.breakoutEvery? scfgS.breakoutEvery[0]+Math.random()*(scfgS.breakoutEvery[1]-scfgS.breakoutEvery[0]) : 0;
     $("breakout-warn").classList.add("hidden");
+    const info=document.createElement("div"); info.id="fish-info";
+    info.innerHTML=`🎣 <b>GIỮ</b> nút bên dưới (hoặc giữ tay trên màn hình) để nâng <b style="color:var(--green)">thanh xanh</b>, buông ra thanh sẽ rơi xuống. Đè thanh lên 👻 trong cột bên phải cho <b>tiến trình siêu độ</b> đầy 100% — để tụt về 0% là ma vùng thoát đó!`+(scfgS.breakoutEvery?`<br>⚠️ Ma bậc này còn hay <b>VÙNG THOÁT</b>: thấy cảnh báo đỏ thì bấm nút <b>TRẤN ÁP</b> bằng bùa ngay, chậm tay là mất tiến trình!`:"");
+    B.appendChild(info);
     const b=document.createElement("button");
-    b.className="btn"; b.textContent="🙏 GIỮ ĐỂ SIÊU ĐỘ"; b.style.fontSize="20px"; b.style.padding="20px";
-    b.style.userSelect="none"; b.style.webkitUserSelect="none";
+    b.className="btn"; b.textContent="🎣 GIỮ ĐỂ NÂNG THANH"; b.style.fontSize="20px"; b.style.padding="20px";
+    b.style.userSelect="none"; b.style.webkitUserSelect="none"; b.style.touchAction="none";
     b.addEventListener("pointerdown",e=>{ e.preventDefault(); CS.holding=true; });
     const stop=()=>{ CS.holding=false; };
     b.addEventListener("pointerup",stop); b.addEventListener("pointerleave",stop); b.addEventListener("pointercancel",stop);
     B.appendChild(b);
-    /* nút trấn áp bằng bùa — chỉ bấm được khi ma đang vùng thoát (ma Quý trở lên) */
-    if(cfg.breakoutEvery){
+    /* nút trấn áp vùng thoát — chỉ bậc có breakoutEvery mới cần (Quý trở lên) */
+    if(scfgS.breakoutEvery){
       const sb=document.createElement("button");
-      sb.className="btn ghost"; sb.id="btn-suppress"; sb.style.fontSize="16px"; sb.style.padding="13px";
+      sb.id="btn-suppress"; sb.className="btn danger"; sb.type="button";
       sb.addEventListener("click",()=>suppressGhost());
       B.appendChild(sb);
       paintSuppressBtn();
@@ -5490,11 +5890,17 @@ function paintBuffs(){
   $("catch-sub").innerHTML=CS.subBase+(on.length?` <span class="badge" style="color:var(--green);border-color:var(--green)">Bùa: ${on.join(" · ")}</span>`:"");
 }
 function startKetan(){
-  const kind=RARITY[CS.sp.rarity].trace;
+  /* bốc NGẪU NHIÊN 1 hình ấn trong kho của bậc ma này — mỗi lượt một hình khác nhau */
+  const pool=SEAL_POOLS[CS.sp.rarity]||[RARITY[CS.sp.rarity].trace];
+  const kind=pool[Math.floor(Math.random()*pool.length)];
+  CS.sealKind=kind; CS.sealName=SEAL_NAMES[kind]||"";
   CS.path=tracePathPoints(kind);
   CS.user=[]; CS.drawing=false;
   setCatchStep("ketan");
 }
+/* đường path bo góc (dùng cho cột minigame siêu độ) */
+function rrPath(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
 /* vẽ vòng bát quái phát sáng */
 function drawBagua(ctx,cx,cy,R,t){
   ctx.save();
@@ -5550,6 +5956,13 @@ function tickEscape(dt){
     if(sec!==CS._panicSec){ CS._panicSec=sec; if(navigator.vibrate) navigator.vibrate(25); }
   } else scr.classList.remove("panic");
   if(CS.escapeLeft<=0){
+    /* Kim Thân Phù cứu mạng: hết giờ thoát lần đầu → bùa tự cháy, +10s làm lại */
+    if(CS.buffs&&CS.buffs.kimthan&&!CS.kimthanUsed){
+      CS.kimthanUsed=true; CS.escapeLeft=10;
+      toast("🛡️ Kim Thân Phù tự cháy — cứu một mạng! +10 giây, ráng lên!",2600);
+      if(navigator.vibrate) navigator.vibrate([50,40,50]);
+      return true;
+    }
     showResult(false,"Ma thoát rồi!","Hết giờ — "+CS.sp.name+" vùng thoát khỏi linh trận và biến mất. Lượt này không bắt được nó, nhưng không sao, cứ quét tiếp sẽ gặp lại thôi!");
     return false;
   }
@@ -5576,7 +5989,8 @@ function catchLoop(){
   }
   else if(CS.step==="ketan"){
     const R=Math.min(w,h)*0.36, el=(performance.now()-CS.startT)/1000;
-    const limit=CS.buffs.dinthan?20:15, left=Math.max(0,limit-el);
+    const kc=KETAN[CS.sp.rarity]||KETAN.thuong;
+    const limit=kc.time+(CS.buffs.dinhthan?5:0), left=Math.max(0,limit-el);
     $("timer-fill").style.width=(left/limit*100)+"%";
     $("timer-fill").style.background=left<5?"var(--red)":"";
     if(left<=0){ sfx.fail(); showResult(false,"Ma chạy mất!","Hết giờ kết ấn, "+CS.sp.name+" thoát khỏi linh trận."); return; }
@@ -5584,14 +5998,14 @@ function catchLoop(){
     // đường kết ấn
     const P=CS.path.map(([px,py])=>[cx+(px-0.5)*2*R, cy+(py-0.5)*2*R]);
     ctx.save(); ctx.lineCap="round"; ctx.lineJoin="round";
-    if(CS.buffs.minhlo){ ctx.shadowColor="#f5c542"; ctx.shadowBlur=16;
+    if(CS.buffs.danlo){ ctx.shadowColor="#f5c542"; ctx.shadowBlur=16;
       ctx.strokeStyle="#ffe9a8"; ctx.lineWidth=10; }
     else { ctx.setLineDash([8,10]); ctx.strokeStyle="rgba(255,255,255,.35)"; ctx.lineWidth=6; }
     ctx.beginPath(); P.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y)); ctx.stroke();
     ctx.restore();
     // ma nhỏ ở góc (đứng yên nếu có Định Thân)
-    if(!(window.Ghost3D&&Ghost3D.place("catch",CS.sp.id,w-56,66,52,CS.buffs.dinthan?t*0.2:t)))
-      drawGhost(ctx,CS.sp,w-56,66,52,CS.buffs.dinthan?t*0.2:t,false);
+    if(!(window.Ghost3D&&Ghost3D.place("catch",CS.sp.id,w-56,66,52,CS.buffs.dinhthan?t*0.2:t)))
+      drawGhost(ctx,CS.sp,w-56,66,52,CS.buffs.dinhthan?t*0.2:t,false);
     // nét vẽ của người chơi
     if(CS.user.length>1){
       ctx.save(); ctx.strokeStyle="#5ac8fa"; ctx.lineWidth=9; ctx.lineCap="round";
@@ -5599,10 +6013,10 @@ function catchLoop(){
       ctx.beginPath();
       CS.user.forEach(([ux,uy],i)=>{ const x=cx+(ux-0.5)*2*R, y=cy+(uy-0.5)*2*R; i?ctx.lineTo(x,y):ctx.moveTo(x,y); });
       ctx.stroke(); ctx.restore();
-      const sc=scoreTrace(CS.path,CS.user,0.09);
-      $("catch-sub").innerHTML=`Vẽ đè lên vệt sáng! Khớp: <b style="color:${sc>=60?"var(--green)":"var(--gold)"}">${sc}%</b> (cần ≥60%) · còn ${Math.ceil(left)}s`;
+      const sc=scoreTrace(CS.path,CS.user,kc.tol);
+      $("catch-sub").innerHTML=`Ấn ${CS.sealName||""} — vẽ đè lên vệt sáng! Khớp: <b style="color:${sc>=kc.need?"var(--green)":"var(--gold)"}">${sc}%</b> (cần ≥${kc.need}%) · còn ${Math.ceil(left)}s`;
     } else {
-      $("catch-sub").textContent=`Dùng ngón tay vẽ đè lên vệt sáng! Còn ${Math.ceil(left)}s`;
+      $("catch-sub").textContent=`Kết ấn ${CS.sealName||""}: dùng ngón tay vẽ đè lên vệt sáng (cần khớp ≥${kc.need}%)! Còn ${Math.ceil(left)}s`;
     }
   }
   else if(CS.step==="holo"){
@@ -5636,63 +6050,93 @@ function catchLoop(){
     $("catch-sub").innerHTML=`Vuốt chém trúng ma <b style="color:var(--green)">${CS.hits}/3</b> lần để thu vào hồ lô! · Trượt: <b style="color:var(--red)">${CS.misses}/5</b>`;
   }
   else if(CS.step==="sieudo"){
-    const cfg=STRUGGLE[CS.sp.rarity]||STRUGGLE.thuong;
-    /* --- vùng vẫy: xung giật lùi theo nhịp (tăng dần theo độ hiếm) --- */
+    const cfg=FISH[CS.sp.rarity]||FISH.thuong;
+    CS.fishTime+=dt;
+    /* --- ma GIÃY + VÙNG THOÁT (bảng STRUGGLE): đang bị trấn áp (calmT) thì hiền hẳn;
+       hết trấn áp, cứ mỗi pulseEvery giây ma giãy 1 cú giật lùi tiến trình và phóng vọt đi;
+       Quý trở lên còn thỉnh thoảng VÙNG THOÁT: cửa sổ 1,5s để bấm TRẤN ÁP bằng bùa,
+       quá hạn mất breakoutLoss% tiến trình. --- */
+    const scfg=STRUGGLE[CS.sp.rarity]||STRUGGLE.thuong;
     if(CS.calmT>0) CS.calmT-=dt;
-    if(CS.shakeT>0) CS.shakeT-=dt;
-    if(cfg.pulseEvery&&CS.calmT<=0&&!(CS.breakoutLeft>0)){
-      CS.pulseT-=dt;
-      if(CS.pulseT<=0){
-        CS.pulseT=cfg.pulseEvery;
-        if(CS.chant>0){ CS.chant=Math.max(0,CS.chant-cfg.pulseAmt); CS.shakeT=Math.max(CS.shakeT,0.25); }
+    if(scfg.pulseEvery>0&&CS.calmT<=0){
+      CS.pulseT+=dt;
+      if(CS.pulseT>=scfg.pulseEvery){ CS.pulseT=0;
+        CS.chant=Math.max(0,CS.chant-scfg.pulseAmt); CS.fishBurst=0.35;
+        if(navigator.vibrate) navigator.vibrate(20);
       }
     }
-    /* --- cú vùng thoát (Quý trở lên): cửa sổ 1,5s để bấm trấn áp --- */
-    if(cfg.breakoutEvery&&CS.calmT<=0){
-      if(!(CS.breakoutLeft>0)){
-        CS.breakoutT-=dt;
-        if(CS.breakoutT<=0){
-          CS.breakoutLeft=1.5;
-          $("breakout-warn").classList.remove("hidden");
-          if(navigator.vibrate) navigator.vibrate(90);
-          sfx.fail();
-          paintSuppressBtn();
+    if(scfg.breakoutEvery&&CS.calmT<=0){
+      if(CS.breakoutLeft>0){
+        CS.breakoutLeft-=dt;
+        if(CS.breakoutLeft<=0){ CS.breakoutLeft=0;
+          CS.chant=Math.max(0,CS.chant-scfg.breakoutLoss);
+          CS.breakoutT=scfg.breakoutEvery[0]+Math.random()*(scfg.breakoutEvery[1]-scfg.breakoutEvery[0]);
+          $("breakout-warn").classList.add("hidden"); paintSuppressBtn();
+          toast("💥 Ma vùng thoát thành công — mất "+scfg.breakoutLoss+"% tiến trình!",1800);
         }
       } else {
-        CS.breakoutLeft-=dt;
-        if(CS.breakoutLeft<=0){
-          CS.breakoutLeft=0;
-          $("breakout-warn").classList.add("hidden");
-          CS.chant=Math.max(0,CS.chant-cfg.breakoutLoss);
-          CS.shakeT=0.45;
-          if(navigator.vibrate) navigator.vibrate([60,40,60]);
-          toast("💥 Ma vùng thoát thành công! Mất "+cfg.breakoutLoss+"% tiến trình siêu độ!",1900);
-          CS.breakoutT=cfg.breakoutEvery[0]+Math.random()*(cfg.breakoutEvery[1]-cfg.breakoutEvery[0]);
-          paintSuppressBtn();
+        CS.breakoutT-=dt;
+        if(CS.breakoutT<=0){ CS.breakoutLeft=1.5;
+          $("breakout-warn").classList.remove("hidden"); paintSuppressBtn();
+          sfx.fail(); if(navigator.vibrate) navigator.vibrate([60,40,60]);
         }
       }
     }
-    /* --- niệm / buông: buông tay tụt nhanh hơn ở ma hiếm --- */
-    if(CS.holding){ CS.chant=Math.min(100,CS.chant+34*dt); if(Math.random()<0.1) sfx.tick(); }
-    else CS.chant=Math.max(0,CS.chant-cfg.release*dt);
+    /* --- con ma bơi lên/xuống trong cột: nhắm tới vị trí ngẫu nhiên rồi đổi ý liên tục;
+       ma càng hiếm bơi càng nhanh và hay "phóng" tăng tốc bất ngờ. Bùa Định Thân: ma bơi chậm 25%.
+       Đang bị trấn áp sau cú trấn áp thành công: ma bơi chậm còn 45%. --- */
+    const spd=cfg.fishSpeed*(CS.buffs.dinhthan?0.75:1)*(CS.calmT>0?0.45:1);
+    CS.fishT-=dt;
+    const fdx=CS.fishTgt-CS.fishY;
+    if(CS.fishT<=0||Math.abs(fdx)<0.03){
+      CS.fishTgt=0.06+Math.random()*0.88;
+      CS.fishT=cfg.retarget[0]+Math.random()*(cfg.retarget[1]-cfg.retarget[0]);
+      CS.fishBurst=(Math.random()<cfg.dartChance)?0.35:0;
+    }
+    if(CS.fishBurst>0) CS.fishBurst-=dt;
+    /* ma bơi CÓ QUÁN TÍNH: vận tốc rượt theo hướng bơi mong muốn thay vì đảo chiều tức thì,
+       nên người chơi đoán được đà và đón đầu được (đúng cảm giác cá Stardew) */
+    const wantV=Math.max(-1,Math.min(1,fdx*4))*spd*(CS.fishBurst>0?1.75:1);
+    CS.fishVel+=(wantV-CS.fishVel)*Math.min(1,5*dt);
+    CS.fishY+=CS.fishVel*dt;
+    if(CS.fishY<0.02){ CS.fishY=0.02; CS.fishVel=Math.abs(CS.fishVel)*0.3; }
+    if(CS.fishY>0.98){ CS.fishY=0.98; CS.fishVel=-Math.abs(CS.fishVel)*0.3; }
+    /* --- thanh xanh của người chơi: giữ = bay lên có gia tốc, buông = trọng lực kéo xuống,
+       có ma sát và nảy nhẹ ở hai đầu cột (đúng chất thanh câu cá Stardew) --- */
+    CS.barVel+=(CS.holding?3.8:-2.6)*dt;
+    CS.barVel*=Math.pow(0.25,dt);
+    CS.barVel=Math.max(-1.85,Math.min(1.85,CS.barVel));
+    CS.barY+=CS.barVel*dt;
+    if(CS.barY<0){ CS.barY=0; CS.barVel=Math.abs(CS.barVel)*0.35; }
+    if(CS.barY>1-cfg.barH){ CS.barY=1-cfg.barH; CS.barVel=-Math.abs(CS.barVel)*0.35; }
+    /* --- tiến trình siêu độ: ma nằm trong thanh thì tăng, ngoài thanh thì tụt --- */
+    CS.fishIn=CS.fishY>=CS.barY&&CS.fishY<=CS.barY+cfg.barH;
+    if(CS.fishIn){ CS.chant=Math.min(100,CS.chant+cfg.gain*dt); if(Math.random()<0.12) sfx.tick(); }
+    else if(CS.fishTime>1.5) CS.chant=Math.max(0,CS.chant-cfg.drain*dt); // 1,5s đầu pha: ân hạn, chưa tụt
     CS.chantPeak=Math.max(CS.chantPeak,CS.chant);
     $("chant-fill").style.width=CS.chant+"%";
-    $("chant-fill").style.background=(CS.breakoutLeft>0)?"linear-gradient(90deg,#ff3b3b,#ff7b2e)":"";
-    /* bị giãy về 0 sau khi đã niệm được kha khá → siêu độ lại từ đầu, KHÔNG mất ma */
-    if(CS.chant<=0&&CS.chantPeak>=25){
-      toast("💨 Ma giãy sập tiến trình! Siêu độ lại từ đầu — con ma vẫn còn trong hồ lô, đừng lo!",2600);
-      setCatchStep("sieudo");
-      return;
+    $("chant-fill").style.background=CS.fishIn?"linear-gradient(90deg,#2fbf71,#7be495)":"linear-gradient(90deg,#ff7b2e,#ff3b3b)";
+    if(CS.chant>=100){ sieuDoXong(); return; }
+    if(CS.chant<=0&&CS.fishTime>1.5){
+      /* Kim Thân Phù cứu mạng: tiến trình về 0 lần đầu → bùa tự cháy, hồi 40% */
+      if(CS.buffs.kimthan&&!CS.kimthanUsed){
+        CS.kimthanUsed=true; CS.chant=40; CS.fishTime=0; CS.chantPeak=Math.max(CS.chantPeak,40);
+        $("chant-fill").style.width="40%";
+        toast("🛡️ Kim Thân Phù tự cháy — cứu một mạng! Tiến trình hồi về 40%, giữ chắc tay vào!",2600);
+        if(navigator.vibrate) navigator.vibrate([50,40,50]);
+      } else {
+        sfx.fail();
+        showResult(false,"Ma vùng thoát rồi!","Tiến trình siêu độ tụt về 0 — "+CS.sp.name+" vùng khỏi vòng trấn và biến mất. Lần sau cố giữ con ma nằm trong thanh xanh lâu hơn nhé!");
+        return;
+      }
     }
     const rise=Math.min(1,CS.chant/100);
     // hào quang siêu độ
     const g=ctx.createRadialGradient(cx,cy,10,cx,cy,Math.min(w,h)*0.55);
     g.addColorStop(0,`rgba(245,197,66,${0.12+rise*0.25})`); g.addColorStop(1,"transparent");
     ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
-    /* ma rung/giật khi đang giãy hoặc đang vùng thoát */
-    const struggling=(CS.breakoutLeft>0)||CS.shakeT>0;
-    const jx=struggling?(Math.random()-0.5)*(CS.breakoutLeft>0?20:26*CS.shakeT):0;
-    const jy=struggling?(Math.random()-0.5)*(CS.breakoutLeft>0?14:18*CS.shakeT):0;
+    // ma lớn ở giữa sân: rung nhẹ khi đang bị thanh đè trúng, càng niệm càng bay lên
+    const jx=CS.fishIn?(Math.random()-0.5)*6:0, jy=CS.fishIn?(Math.random()-0.5)*5:0;
     if(!(window.Ghost3D&&Ghost3D.place("catch",CS.sp.id,cx+jx,cy-rise*h*0.18+jy,110,t)))
       drawGhost(ctx,CS.sp,cx+jx,cy-rise*h*0.18+jy,110,t,false);
     // hạt sáng bay lên
@@ -5700,10 +6144,28 @@ function catchLoop(){
     for(let i=0;i<24;i++){ const px=(i*97+t*40)%w, py=h-((i*53+t*70)%(h+40))+20;
       ctx.globalAlpha=0.25+0.55*rise; ctx.beginPath(); ctx.arc(px,py,2.5,0,7); ctx.fill(); }
     ctx.globalAlpha=1;
-    if(CS.breakoutLeft>0) $("catch-sub").textContent="⚠️ MA ĐANG VÙNG THOÁT — bấm TRẤN ÁP bằng bùa NGAY ("+CS.breakoutLeft.toFixed(1)+"s)!";
-    else if(CS.calmT>0) $("catch-sub").textContent="🧧 Ma đang bị trấn áp ("+Math.ceil(CS.calmT)+"s) — niệm tiếp đi!";
-    else $("catch-sub").textContent=CS.holding?"Đang niệm… giữ vững!":"GIỮ nút SIÊU ĐỘ để niệm (thanh tím đầy là xong)";
-    if(CS.chant>=100){ sieuDoXong(); return; }
+    /* --- cột minigame bên phải: rãnh tối + thanh xanh + con ma --- */
+    const tw=46, th=h*0.64, tx=w-tw-16, ty=h*0.13;
+    const yOf=p=>ty+th-p*th; // p: 0 = đáy cột, 1 = đỉnh cột
+    ctx.save();
+    ctx.fillStyle="rgba(4,10,18,.78)"; ctx.strokeStyle="rgba(245,197,66,.55)"; ctx.lineWidth=2;
+    rrPath(ctx,tx,ty,tw,th,12); ctx.fill(); ctx.stroke();
+    const barPxH=cfg.barH*th, barTop=yOf(CS.barY+cfg.barH);
+    ctx.fillStyle=CS.fishIn?"rgba(74,222,128,.92)":"rgba(74,222,128,.45)";
+    ctx.shadowColor="#4ade80"; ctx.shadowBlur=CS.fishIn?16:5;
+    rrPath(ctx,tx+4,barTop,tw-8,barPxH,8); ctx.fill();
+    ctx.shadowBlur=0;
+    const fy=yOf(CS.fishY);
+    ctx.font="26px serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.shadowColor=CS.fishIn?"#4ade80":"#ff5a5a"; ctx.shadowBlur=12;
+    ctx.fillText("\u{1F47B}",tx+tw/2,fy);
+    ctx.shadowBlur=0;
+    ctx.fillStyle="#ffe9a8"; ctx.font="bold 12px sans-serif";
+    ctx.fillText(Math.floor(CS.chant)+"%",tx+tw/2,ty-9);
+    ctx.restore();
+    $("catch-sub").textContent=CS.fishIn
+      ? "\u{1F3A3} Đang đè trúng ma — tiến trình tăng! ("+Math.floor(CS.chant)+"%)"
+      : "\u{1F3A3} Ma ngoài thanh — tiến trình đang tụt! Đưa thanh xanh đè lên con ma đi ("+Math.floor(CS.chant)+"%)";
   }
   if(window.Ghost3D) Ghost3D.render("catch",w,h,t);
   catchRAF=requestAnimationFrame(catchLoop);
@@ -5726,11 +6188,20 @@ function catchLoop(){
   const up=e=>{
     if(!CS||CS.step!=="ketan"||!CS.drawing) return;
     CS.drawing=false;
-    const sc=scoreTrace(CS.path,CS.user,0.09);
-    if(sc>=60){ sfx.chime(); setCatchStep("holo"); }
-    else { sfx.fail(); toast("Chỉ khớp "+sc+"%, cần ≥60%! Vẽ lại nào.",2200); CS.user=[]; }
+    const kc=KETAN[CS.sp.rarity]||KETAN.thuong;
+    const sc=scoreTrace(CS.path,CS.user,kc.tol);
+    if(sc>=kc.need){ sfx.chime(); setCatchStep("holo"); }
+    else { sfx.fail(); toast("Chỉ khớp "+sc+"%, cần ≥"+kc.need+"%! Vẽ lại nào.",2200); CS.user=[]; }
   };
   c.addEventListener("pointerup",up); c.addEventListener("pointercancel",()=>{ if(CS) CS.drawing=false; });
+})();
+/* giữ tay trên màn hình cũng nâng được thanh (pha siêu độ kiểu câu cá) */
+(function(){
+  const c=$("catch-canvas");
+  c.addEventListener("pointerdown",e=>{ if(CS&&CS.step==="sieudo") CS.holding=true; });
+  const off=()=>{ if(CS&&CS.step==="sieudo") CS.holding=false; };
+  c.addEventListener("pointerup",off); c.addEventListener("pointercancel",off);
+  window.addEventListener("pointerup",off);
 })();
 /* vuốt chém bùa: quẹt trúng ma 3 lần để thu vào hồ lô */
 let slashPts=[], slashFx=[];
@@ -5802,12 +6273,12 @@ function drawSlash(ctx){
     ctx.stroke(); ctx.restore();
   }
 }
-/* Nút trấn áp trong pha siêu độ: tiêu 1 lá bùa (ưu tiên Minh Lộ → Định Thân → Tụ Linh;
+/* Nút trấn áp trong pha siêu độ: tiêu 1 lá bùa (ưu tiên lá rẻ trước theo thứ tự bộ bùa;
    bùa Tụ Linh đã kích hoạt trước đó vẫn giữ nguyên hệ số nhân công đức — CS.buffs không đổi).
    Trấn áp kịp: giữ nguyên tiến trình, ma bị trấn vài giây, đồng hồ thoát đóng băng 3 giây. */
 function paintSuppressBtn(){
   const sb=$("btn-suppress"); if(!sb||!CS) return;
-  const total=(S.tal.minhlo||0)+(S.tal.dinthan||0)+(S.tal.tulinh||0);
+  const total=Object.keys(TALISMANS).reduce((a,k)=>a+(S.tal[k]||0),0);
   const active=CS.breakoutLeft>0;
   sb.disabled=!active;
   sb.textContent=active
@@ -5817,7 +6288,7 @@ function paintSuppressBtn(){
 function suppressGhost(){
   if(!CS||CS.step!=="sieudo"||!(CS.breakoutLeft>0)) return;
   const cfg=STRUGGLE[CS.sp.rarity]||STRUGGLE.thuong;
-  const order=["minhlo","dinthan","tulinh"];
+  const order=Object.keys(TALISMANS); // trấn áp tiêu lá rẻ trước (thứ tự khai báo = giá tăng dần)
   const k=order.find(x=>(S.tal[x]||0)>0);
   if(!k){ toast("😱 Hết bùa rồi — không trấn áp được! Cố giữ niệm chờ ma qua cơn vùng thoát…",2200); return; }
   S.tal[k]--; persist();
@@ -5839,23 +6310,47 @@ function sieuDoXong(){
   S.merit+=m;
   S.meritTotal=(S.meritTotal||0)+m; // tổng tích lũy cả đời — quyết định cấp bậc, tiêu không tụt cấp
   S.book[CS.sp.id]=(S.book[CS.sp.id]||0)+1;
+  const isNew=S.book[CS.sp.id]===1;
+  /* HỒ LÔ: con ma vừa thu phục chiếm 1 hồ lô. Còn hồ lô trống → thu vào ngay.
+     Hồ lô ĐẦY → ma thành "ma chờ chỗ" (S.pendingGhost): người chơi phải chọn
+     THẢ nó đi, hoặc thả bớt 1 con trong hồ lô / mua thêm hồ lô rồi giữ nó lại.
+     Ma Thường cũng tốn 1 hồ lô như ma xịn — đây là chỗ phải cân não giữ/thả. */
+  const entry={id:CS.sp.id, at:Date.now()};
+  /* ma chờ chỗ từ lượt trước mà giờ đã có hồ lô trống → thu vào luôn, khỏi kẹt */
+  if(S.pendingGhost && gourdFree(S)>0){ S.collection.push(S.pendingGhost); S.pendingGhost=null; }
+  const held=gourdFree(S)>0 && !S.pendingGhost;
+  if(held){ S.collection.push(entry); }
+  else if(!S.pendingGhost){ S.pendingGhost=entry; }
   persist();
   /* ghi con ma vào KHU VỰC đã chốt lúc bắt đầu lượt bắt */
   if(CS.areaPromise){
     const spId=CS.sp.id;
     CS.areaPromise.then(a=>{ if(a){ S.areas=applyAreaCapture(S.areas,a,spId,Date.now()); persist(); } });
   }
-  const isNew=S.book[CS.sp.id]===1;
-  showResult(true,"SIÊU ĐỘ THÀNH CÔNG!",
-    `${isNew?"🎊 Loài mới trong Sổ Ma! ":""}${CS.sp.name} đã được siêu độ.<br>Công đức ${isNew?"lần đầu":""}+${m}`,
-    m);
+  if(held){
+    showResult(true,"SIÊU ĐỘ THÀNH CÔNG!",
+      `${isNew?"🎊 Loài mới trong Sổ Ma! ":""}${CS.sp.name} đã được siêu độ.<br>Công đức ${isNew?"lần đầu":""}+${m}<br>🫙 Đã thu vào hồ lô — đang chứa <b>${S.collection.length}/${gourdCapacity(S)}</b> con.`,
+      m, [{label:"🫙 XEM HỒ LÔ",cls:"ghost",fn:()=>{ renderGourd(); show("screen-gourd"); }}]);
+  } else {
+    showResult(true,"BẮT ĐƯỢC… NHƯNG HỒ LÔ ĐÃ ĐẦY! 😖",
+      `${isNew?"🎊 Loài mới trong Sổ Ma! ":""}${CS.sp.name} đã được siêu độ, công đức +${m} vẫn tính đủ.<br>Nhưng ${gourdCapacity(S)} hồ lô đều có ma rồi (mỗi con 1 hồ lô) — <b>${CS.sp.name}</b> đang <b>chờ chỗ</b>: mở Hồ Lô để <b>thả bớt 1 con</b> (ma Thường giữ cũng tốn chỗ như ma xịn đó) hoặc qua Chợ mua thêm hồ lô, rồi giữ nó lại. Không thì thả nó đi luôn.`,
+      m, [
+        {label:"🫙 MỞ HỒ LÔ — XẾP CHỖ",cls:"",fn:()=>{ renderGourd(); show("screen-gourd"); }},
+        {label:"🌬️ THẢ "+CS.sp.name.toUpperCase()+" ĐI",cls:"ghost",fn:()=>{ S.pendingGhost=null; persist(); toast("🌬️ Đã thả "+CS.sp.name+" đi. Công đức và Sổ Ma vẫn giữ nguyên.",2600); enterScan(); }},
+      ]);
+  }
 }
 /* ---------------- MÀN KẾT QUẢ ---------------- */
-function showResult(ok,title,desc,merit){
+function showResult(ok,title,desc,merit,extraBtns){
   cancelAnimationFrame(catchRAF);
   $("screen-catch").classList.remove("panic");
   $("breakout-warn").classList.add("hidden");
   if(window.Ghost3D) Ghost3D.clear("catch");
+  /* CHỐNG REROLL: lượt bắt kết thúc mà không thu phục được (bỏ cuộc, đuổi đi,
+     hết giờ, vùng thoát…) = con ma đó chạy mất LUÔN — gỡ khỏi spawn đang lưu,
+     quét lại cùng chỗ cũng không gặp lại nó nữa. */
+  if(!ok && CS && CS.ghost && !CS._resolved){ CS._resolved=true; consumeHuntSpawn(CS.ghost); }
+  if(ok && CS) CS._resolved=true;
   show("screen-result");
   $("result-emoji").textContent=ok?"🎉":"💨";
   $("result-title").textContent=title;
@@ -5867,6 +6362,7 @@ function showResult(ok,title,desc,merit){
   const mk=(label,cls,fn)=>{ const b=document.createElement("button");
     b.className="btn "+cls; b.textContent=label;
     b.addEventListener("click",()=>{sfx.tap();fn();}); B.appendChild(b); };
+  if(Array.isArray(extraBtns)) for(const eb of extraBtns) mk(eb.label,eb.cls||"",eb.fn);
   mk("🔍 QUÉT TIẾP","",()=>enterScan());
   mk("📖 XEM SỔ MA","ghost",()=>{ renderBook(); show("screen-book"); });
 }
@@ -5898,6 +6394,8 @@ function renderRankShop(){
   const total=S.meritTotal||0, idx=rankIndexFor(total), perks=RANK_PERKS[idx];
   /* Hàng tiêu đề thu gọn luôn hiện tên cấp hiện tại, kể cả khi bảng đang thu */
   const headCur=$("rank-head-cur"); if(headCur) headCur.textContent=RANKS[idx][1];
+  /* Hàng tiêu đề Tiệm Linh Phù luôn hiện số dư công đức khả dụng */
+  const shopCur=$("shop-head-cur"); if(shopCur) shopCur.textContent=S.merit.toLocaleString("vi-VN")+" công đức";
   /* bảng 5 cấp */
   const tbl=$("rank-table"); tbl.innerHTML="";
   RANKS.forEach(([limit,name],i)=>{
@@ -5952,6 +6450,115 @@ function renderRankShopKeepMsg(){
   renderRankShop();
   if(txt) shopMsg(txt,err);
 }
+/* ---------------- HỒ LÔ CHỨA MA ---------------- */
+function gourdMsg(text,isErr){
+  const m=$("gourd-msg"); if(!m) return;
+  m.textContent=text; m.classList.remove("hidden"); m.classList.toggle("err",!!isErr);
+}
+function renderGourdShop(){
+  const cap=gourdCapacity(S), used=(S.collection||[]).length;
+  const headCur=$("gourd-head-cur"); if(headCur) headCur.textContent=used+"/"+cap+" con";
+  const uEl=$("gourd-used"); if(uEl) uEl.textContent=used;
+  const cEl=$("gourd-cap"); if(cEl) cEl.textContent=cap;
+  const mEl=$("gourd-max"); if(mEl) mEl.textContent=GOURD_MAX_SLOTS;
+  const row=$("gourd-shop-row"); if(!row) return;
+  row.innerHTML="";
+  const div=document.createElement("div");
+  div.className="talisman";
+  const maxed=cap>=GOURD_MAX_SLOTS;
+  div.innerHTML=`<div class="icon">🫙</div><div class="info"><div class="tname">Hồ Lô Trấn Ma (thêm 1 ô chứa)</div><div class="tdesc">Mỗi hồ lô chứa đúng 1 con ma. Đang có ${cap} hồ lô${maxed?" — đã đạt tối đa "+GOURD_MAX_SLOTS+" cái":""}.</div><div class="tdesc" style="color:var(--gold)">Giá: ${GOURD_PRICE} công đức/cái</div></div><div class="count">${used}/${cap}</div>`;
+  const btn=document.createElement("button");
+  btn.textContent=maxed?"Đã tối đa":("Mua · "+GOURD_PRICE);
+  btn.disabled=maxed;
+  if(!maxed&&S.merit<GOURD_PRICE) btn.style.opacity=".75";
+  btn.addEventListener("click",()=>{ sfx.pop(); buyGourd(); });
+  div.appendChild(btn); row.appendChild(div);
+}
+function buyGourd(){
+  const cap=gourdCapacity(S);
+  if(cap>=GOURD_MAX_SLOTS){ gourdMsg(`Đã có tối đa ${GOURD_MAX_SLOTS} hồ lô rồi — muốn chứa thêm thì thả bớt ma trong Hồ Lô ở Sổ Ma nhé.`,true); return; }
+  if(S.merit<GOURD_PRICE){ gourdMsg(`Chưa đủ công đức mua hồ lô: cần ${GOURD_PRICE}, bạn có ${S.merit} — còn thiếu ${GOURD_PRICE-S.merit}. Đi siêu độ thêm ma (hoặc đi bộ đạt mốc quãng đường) để tích nhé!`,true); return; }
+  S.merit-=GOURD_PRICE;
+  S.gourdSlots=cap+1;
+  let extra="";
+  /* đang có ma chờ chỗ mà mua thêm hồ lô → thu con ma chờ vào luôn cho gọn */
+  if(S.pendingGhost&&gourdFree(S)>0){
+    const nm=(SPECIES_BY_ID[S.pendingGhost.id]||{}).name||"Con ma chờ";
+    S.collection.push(S.pendingGhost); S.pendingGhost=null;
+    extra=` Tiện thể thu luôn ${nm} đang chờ chỗ vào hồ lô mới!`;
+  }
+  persist(); refreshHome(); renderMarket();
+  gourdMsg(`✅ Đã mua thêm 1 hồ lô (−${GOURD_PRICE} công đức). Giờ chứa được ${gourdCapacity(S)} con · Số dư còn lại: ${S.merit.toLocaleString("vi-VN")} công đức.${extra}`);
+}
+function renderGourd(){
+  const cap=gourdCapacity(S), list=S.collection||[];
+  $("gourd-progress").textContent=`Đang chứa ${list.length} / ${cap} con · mỗi con 1 hồ lô`+(list.length>=cap?" · ĐÃ ĐẦY!":"");
+  const bg=$("book-gourd-count"); if(bg) bg.textContent=list.length+"/"+cap;
+  /* ô hồ lô trực quan: đầy = 🫙 có ma, trống = ô chờ */
+  const slots=$("gourd-slots"); slots.innerHTML="";
+  for(let i=0;i<cap;i++){
+    const d=document.createElement("div");
+    d.className="gourd-slot"+(i<list.length?" full":"");
+    d.textContent=i<list.length?"🫙":"·";
+    d.title=i<list.length?((SPECIES_BY_ID[list[i].id]||{}).name||""):"Hồ lô trống";
+    slots.appendChild(d);
+  }
+  /* ma đang chờ chỗ (bắt được lúc hồ lô đầy) */
+  const pc=$("pending-card");
+  if(S.pendingGhost){
+    const sp=SPECIES_BY_ID[S.pendingGhost.id];
+    pc.style.display="";
+    $("pending-info").innerHTML=sp?`<b style="color:var(--gold2)">${escHtml(sp.name)}</b> <span class="badge ${RARITY[sp.rarity].css}" style="border-color:currentColor">${RARITY[sp.rarity].name}</span> đang chờ một hồ lô trống. Hồ lô hiện ${list.length}/${cap}.`:"";
+    $("btn-pending-keep").disabled=gourdFree(S)<=0;
+  } else pc.style.display="none";
+  /* danh sách ma đang chứa */
+  const wrap=$("gourd-list"); wrap.innerHTML="";
+  if(!list.length){
+    wrap.innerHTML='<div class="sect-note">Chưa chứa con ma nào. Đi quét ma, siêu độ thành công là thu vào đây — nhớ là tân thủ chỉ có 5 hồ lô thôi đó!</div>';
+    return;
+  }
+  list.forEach((e,idx)=>{
+    const sp=SPECIES_BY_ID[e.id]; if(!sp) return;
+    const div=document.createElement("div");
+    div.className="gourd-item";
+    const cv=document.createElement("canvas"); cv.width=120; cv.height=120;
+    if(sp.img) drawPortrait(cv,sp);
+    div.appendChild(cv);
+    const info=document.createElement("div"); info.className="ginfo";
+    info.innerHTML=`<div class="gname">${escHtml(sp.name)}</div><div class="gmeta"><span class="${RARITY[sp.rarity].css}" style="font-weight:800">${RARITY[sp.rarity].name}</span> · đáng ${sp.merit||RARITY[sp.rarity].merit} công đức<br>Thu vào: ${e.at?fmtTime(e.at):"—"}</div>`;
+    div.appendChild(info);
+    const btn=document.createElement("button");
+    btn.textContent="🌬️ Thả";
+    btn.addEventListener("click",()=>{
+      if(btn.dataset.armed!=="1"){
+        btn.dataset.armed="1"; btn.classList.add("armed"); btn.textContent="Thả thật?";
+        setTimeout(()=>{ btn.dataset.armed=""; btn.classList.remove("armed"); btn.textContent="🌬️ Thả"; },2600);
+        return;
+      }
+      S.collection.splice(idx,1); persist();
+      toast("🌬️ Đã thả "+sp.name+" — trống 1 hồ lô rồi.",2200);
+      renderGourd(); renderMarket();
+    });
+    div.appendChild(btn);
+    wrap.appendChild(div);
+  });
+}
+$("btn-pending-keep").addEventListener("click",()=>{
+  if(!S.pendingGhost||gourdFree(S)<=0) return;
+  const sp=SPECIES_BY_ID[S.pendingGhost.id];
+  S.collection.push(S.pendingGhost); S.pendingGhost=null; persist();
+  toast("🫙 Đã giữ "+(sp?sp.name:"con ma")+" vào hồ lô!",2200);
+  renderGourd();
+});
+$("btn-pending-release").addEventListener("click",()=>{
+  if(!S.pendingGhost) return;
+  const sp=SPECIES_BY_ID[S.pendingGhost.id];
+  S.pendingGhost=null; persist();
+  toast("🌬️ Đã thả "+(sp?sp.name:"con ma")+" đi.",2200);
+  renderGourd();
+});
+$("btn-book-gourd").addEventListener("click",()=>{ sfx.tap(); renderGourd(); show("screen-gourd"); });
+$("btn-gourd-back").addEventListener("click",()=>{ sfx.tap(); renderBook(); show("screen-book"); });
 function renderBook(){
   const grid=$("book-grid"); grid.innerHTML="";
   let caught=0;
@@ -5977,6 +6584,7 @@ function renderBook(){
     grid.appendChild(cell);
   }
   $("book-progress").textContent=`Đã thu phục ${caught} / ${SPECIES.length} loài · ${S.merit} công đức khả dụng · tổng tích lũy ${S.meritTotal||0} (${rankFor(S.meritTotal)})`;
+  const bgc=$("book-gourd-count"); if(bgc) bgc.textContent=(S.collection||[]).length+"/"+gourdCapacity(S);
 }
 
 /* ---------------- MODAL CHI TIẾT MA (3D preview nếu có file) ---------------- */
@@ -6131,6 +6739,7 @@ function renderAreaMarkers(){
 }
 function onMapPos(lat,lon,acc){
   playerPos={lat,lon,acc};
+  trackMove(lat,lon);
   if(mapObj){
     const ll=[lat,lon];
     if(!meMarker){
@@ -6198,20 +6807,64 @@ function renderAreaList(){
 }
 function renderStreet(){
   if(S.settings.sim){ currentAreaKey=SIM_AREA.key; $("street-now").textContent="📍 Đang ở: "+SIM_AREA.name+" (mô phỏng)"; }
+  renderWalkCard();
   renderAreaList();
   renderAreaMarkers();
+}
+/* Thẻ DU HÀNH ở màn Khu Phố: quãng đường hôm nay / cả đời, linh khí, mốc thưởng */
+function renderWalkCard(){
+  ensureWalkDay();
+  const sp=Math.round(spiritNow());
+  const tEl=$("walk-today"); if(tEl) tEl.textContent=fmtDist(S.walk.today);
+  const totEl=$("walk-total"); if(totEl) totEl.textContent=fmtDist(S.walk.total);
+  const spEl=$("walk-spirit"); if(spEl) spEl.textContent=sp+"%";
+  const fill=$("walk-spirit-fill"); if(fill) fill.style.width=sp+"%";
+  const msEl=$("walk-milestones"); if(!msEl) return;
+  msEl.innerHTML="";
+  for(const ms of WALK_MILESTONES){
+    const done=S.walk.milestones.includes(ms.m)||S.walk.today>=ms.m;
+    const row=document.createElement("div");
+    row.className="walk-ms";
+    row.innerHTML=`<span>${done?"✅":"🎯"} Mốc ${fmtDist(ms.m)}</span><span class="${done?"done":""}">${done?"Đã nhận":"+"+ms.merit+" công đức"+(ms.tal?" + bùa "+TALISMANS[ms.tal].name:"")}</span>`;
+    msEl.appendChild(row);
+  }
+}
+/* Nhãn linh khí ở màn quét: cao = xanh lá, thấp (đứng yên lâu) = xám nhắc đi bộ */
+let _spiritTagVal=-1;
+function paintSpiritTag(){
+  const el=$("spirit-tag"); if(!el) return;
+  const sp=Math.round(spiritNow());
+  if(sp===_spiritTagVal) return;
+  _spiritTagVal=sp;
+  el.textContent=sp>=50?`🍃 Linh khí: ${sp}% · dễ ra ma xịn!`:(sp>=15?`🍃 Linh khí: ${sp}%`:`🍃 Linh khí: ${sp}% · đi bộ thêm để nạp`);
+  el.classList.toggle("low",sp<15);
 }
 function renderMarket(){
   $("market-merit").textContent=S.merit.toLocaleString("vi-VN");
   $("market-total").textContent=(S.meritTotal||0).toLocaleString("vi-VN");
   $("market-rank").textContent=rankFor(S.meritTotal);
   renderRankShop();
+  renderGourdShop();
 }
-/* Cấp bậc & Quyền lợi: thu gọn mặc định — chạm hàng tiêu đề để xổ/thu bảng chi tiết */
+/* Cấp Bậc: thu gọn mặc định — chạm hàng tiêu đề để xổ/thu bảng chi tiết */
 $("rank-toggle").addEventListener("click",()=>{
   const card=$("rank-card"), open=card.classList.toggle("open");
   $("rank-toggle").setAttribute("aria-expanded",open?"true":"false");
   $("rank-head-hint").textContent=open?"chạm để thu gọn":"chạm để xem";
+  sfx.tap();
+});
+/* Tiệm Linh Phù: mục riêng thu gọn như Cấp Bậc — chạm hàng tiêu đề để xổ/thu quầy đổi bùa */
+$("shop-toggle").addEventListener("click",()=>{
+  const card=$("shop-card"), open=card.classList.toggle("open");
+  $("shop-toggle").setAttribute("aria-expanded",open?"true":"false");
+  $("shop-head-hint").textContent=open?"chạm để thu gọn":"chạm để xem";
+  sfx.tap();
+});
+/* Hồ Lô: mục riêng thu gọn như Cấp Bậc — chạm hàng tiêu đề để xổ/thu quầy bán hồ lô */
+$("gourd-toggle").addEventListener("click",()=>{
+  const card=$("gourd-card"), open=card.classList.toggle("open");
+  $("gourd-toggle").setAttribute("aria-expanded",open?"true":"false");
+  $("gourd-head-hint").textContent=open?"chạm để thu gọn":"chạm để xem";
   sfx.tap();
 });
 $("btn-market").addEventListener("click",()=>{ sfx.tap(); renderMarket(); show("screen-market"); });
@@ -6268,8 +6921,12 @@ $("btn-book").addEventListener("click",()=>{ sfx.tap(); renderBook(); show("scre
 $("btn-book-back").addEventListener("click",()=>{ sfx.tap(); show("screen-home"); refreshHome(); });
 
 /* ---------------- KHỞI ĐỘNG ---------------- */
-const GAME_VER="3.3"; // tăng số này mỗi lần deploy để khỏi nhầm bản cache
+const GAME_VER="3.5"; // tăng số này mỗi lần deploy để khỏi nhầm bản cache
 $("game-ver").textContent="v"+GAME_VER;
+ensureWalkDay(); // sang ngày mới thì quãng đường hôm nay + mốc thưởng làm lại
+/* linh khí hao hụt trong lúc đóng app cũng phải tính: chốt lại giá trị đã hao
+   theo thời gian thực kể từ lần lưu cuối, rồi bắt đầu đếm hao từ bây giờ */
+S.walk.spirit=spiritNow(); S.walk.spiritAt=Date.now(); persist();
 regenNow();
 paintSwitches();
 refreshHome();
@@ -6278,10 +6935,13 @@ refreshHome();
 
 /* export cho node test */
 if (typeof module !== "undefined" && module.exports){
-  module.exports={ RARITY,RANKS,RANK_PERKS,TALISMAN_PRICES,STRUGGLE,ESCAPE_LIMITS,TALISMANS,SPECIES,SPECIES_BY_ID,
+  module.exports={ RARITY,RANKS,RANK_PERKS,TALISMAN_PRICES,STRUGGLE,ESCAPE_LIMITS,KETAN,SEAL_POOLS,SEAL_NAMES,FISH,TALISMANS,SPECIES,SPECIES_BY_ID,
     haversineM,destPoint,isNight,pickSpecies,spawnGhosts,rankFor,rankIndexFor,rankPerks,meritFor,
     tracePathPoints,scoreTrace,needleInZone,regenTalismans,defaultSave,loadSave,
     round2,applyAreaCapture,
+    GOURD_BASE_SLOTS,GOURD_MAX_SLOTS,GOURD_PRICE,gourdCapacity,gourdFree,
+    SPAWN_MOVE_M,SPAWN_COOLDOWN_MS,SPAWN_EXPIRE_MS,spawnGate,spiritAt,spiritBoost,SPIRIT_PER_M,SPIRIT_DECAY_PER_S,
+    WALK_MILESTONES,fmtDist,
     MAX_TALISMAN,TALISMAN_REGEN_S };
 }
 </script>
