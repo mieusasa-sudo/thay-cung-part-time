@@ -38,8 +38,12 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 /* ---------- màn chính ---------- */
 #screen-home{container-type:size;background-color:#060303}
 #screen-home::before{content:"";position:absolute;inset:0;z-index:0;background-image:url(assets/home-bg.jpg);background-size:cover;background-position:center;filter:blur(22px) brightness(.5);-webkit-filter:blur(22px) brightness(.5);transform:scale(1.15)}
-.home-ui{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:100%;height:179.13cqw;
-  z-index:1;font-size:8px;font-size:1.7913cqw;background-image:url(assets/home-bg.jpg);background-size:cover;background-position:center;background-repeat:no-repeat}
+/* Khung ảnh menu: thu TRỌN VẸN ảnh 1284×2300 (tỉ lệ 0,5583) vào giữa màn hình ở mọi tỉ lệ máy —
+   không cover/crop nữa. Phần thừa trên/dưới/hai bên do lớp ::before mờ ở trên lấp.
+   Mọi vùng bấm + số công đức + cấp bậc nằm trong khung này theo %, nên tự khớp nút vẽ trong ảnh. */
+.home-ui{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:100%;height:179.13cqw;
+  width:min(100cqw,55.8261cqh);height:min(179.1277cqw,100cqh);
+  z-index:1;font-size:8px;font-size:min(1.7913cqw,1cqh);background-image:url(assets/home-bg.jpg);background-size:100% 100%;background-position:center;background-repeat:no-repeat}
 #home-mascot{display:none}
 #screen-home .title,#screen-home .subtitle{display:none}
 .merit-box{position:absolute;inset:0;margin:0;padding:0;background:none;border:none;border-radius:0;box-shadow:none;pointer-events:none}
@@ -197,6 +201,32 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 #map .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.92) saturate(.55)}
 #map-msg{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:13.5px;line-height:1.45;background:rgba(255,176,32,.12);border:1px solid rgba(255,176,32,.45)}
 #map-msg.hidden{display:none}
+/* ---------- màn Khu Phố: gọn đúng 1 màn hình, KHÔNG cuộn ----------
+   .wrap thành cột flex cao đúng viewport (màn .screen đã khóa overflow):
+   tiêu đề + trạng thái + thẻ Du Hành + thông báo GPS + nút cuối màn là các khối cố định,
+   bản đồ flex chiếm phần cao còn lại (tối thiểu 140px), mục Khu vực đã săn nằm trong
+   khe flex bị chặn chiều cao — quá nhiều khu vực thì chỉ danh sách đó cuộn nội bộ. */
+#screen-street .wrap{display:flex;flex-direction:column;overflow:hidden;gap:8px;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+.street-head{display:flex;align-items:center;gap:8px;flex:none}
+.street-head .title{flex:1}
+#screen-street .title{font-size:22px;margin:0}
+#screen-street #btn-street-back{width:auto;flex:none;margin:0;padding:8px 13px;font-size:15px;border-radius:12px}
+#screen-street .subtitle{flex:none;margin:0;font-size:13px}
+#screen-street #walk-card{flex:none;margin:0;padding:10px 12px}
+#screen-street #walk-card .sect-title{font-size:14px;margin-bottom:4px}
+#screen-street #walk-card .sect-note{font-size:12px;line-height:1.4;margin:3px 0}
+#screen-street .walk-bar{height:8px;margin:4px 0}
+#screen-street .walk-ms{font-size:12px;padding:3px 2px}
+#screen-street #map{flex:1 1 auto;height:auto;min-height:140px}
+#screen-street #map-msg{flex:none;margin:0;padding:8px 10px;font-size:12.5px;line-height:1.4}
+.street-areas{flex:0 1 auto;min-height:0;display:flex;flex-direction:column}
+.street-areas .sect-title{flex:none;font-size:14px;margin:0 0 4px}
+#screen-street #area-list{overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch}
+#screen-street .area-item{padding:7px 10px;margin:0 0 6px;border-radius:10px}
+#screen-street .area-item .aname{font-size:13.5px}
+#screen-street .area-item .ameta{font-size:11.5px;line-height:1.35}
+#screen-street #btn-locate{flex:none;margin:0;padding:12px 18px}
 .me-dot-wrap{background:none;border:none}
 .me-dot{width:18px;height:18px;border-radius:50%;background:#2f7bff;border:3px solid #fff;box-shadow:0 0 0 6px rgba(47,123,255,.35),0 0 14px rgba(47,123,255,.9);animation:mePulse 1.6s ease-out infinite}
 @keyframes mePulse{0%{box-shadow:0 0 0 4px rgba(47,123,255,.45),0 0 14px rgba(47,123,255,.9)}70%{box-shadow:0 0 0 14px rgba(47,123,255,0),0 0 14px rgba(47,123,255,.9)}100%{box-shadow:0 0 0 4px rgba(47,123,255,0),0 0 14px rgba(47,123,255,.9)}}
@@ -219,6 +249,36 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 .book-cell .bcount{position:absolute;top:4px;right:6px;font-size:11px;background:var(--gold);color:#241a05;
   border-radius:99px;padding:1px 7px;font-weight:800}
 .book-cell.locked{opacity:.85}
+/* ---------- màn Sổ Ma: gọn đúng 1 màn hình, KHÔNG cuộn ----------
+   Cùng công thức màn Khu Phố: .wrap thành cột flex cao đúng viewport (màn .screen đã khóa overflow):
+   tiêu đề + dòng tiến độ + nút Quay lại là các khối cố định (Hồ Lô là icon nổi kéo được đè lên trên),
+   lưới 20 loài (4×5) flex chiếm phần cao còn lại — mỗi ô tự co giãn theo,
+   tranh ma thu nhỏ theo ô bằng object-fit:contain nên không méo hình. */
+#screen-book .wrap{display:flex;flex-direction:column;overflow:hidden;gap:6px;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+#screen-book .title{flex:none;font-size:22px;margin:0}
+#screen-book .subtitle{flex:none;margin:0;font-size:12.5px;line-height:1.35}
+/* icon HỒ LÔ nổi ở góc phải màn Sổ Ma: dùng ĐÚNG hình hồ lô người chơi gửi (assets/ho-lo.png,
+   nền trong suốt) — chạm nhẹ = mở Hồ Lô, đè & kéo = di chuyển khắp màn, buông tay là đứng yên
+   tại chỗ thả (JS kéo-thả ở dưới, vị trí giữ trong phiên chơi). Huy hiệu số ma nằm ở góc icon. */
+#screen-book #btn-book-gourd{position:absolute;top:84px;right:14px;z-index:60;width:58px;padding:0;
+  background:none;border:none;cursor:grab;touch-action:none;-webkit-tap-highlight-color:transparent}
+#screen-book #btn-book-gourd img{width:100%;height:auto;display:block;pointer-events:none;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.55))}
+#screen-book #btn-book-gourd #book-gourd-count{position:absolute;top:-5px;right:-9px;background:var(--gold);
+  color:#241a05;font-size:11px;font-weight:800;border-radius:99px;padding:1px 7px;line-height:1.5;
+  pointer-events:none;border:1.5px solid rgba(20,16,4,.85);box-shadow:0 2px 6px rgba(0,0,0,.5)}
+#screen-book #btn-book-gourd.dragging{cursor:grabbing;transform:scale(1.07)}
+@media (prefers-reduced-motion: reduce){ #screen-book #btn-book-gourd.dragging{transform:none} }
+#screen-book .book-grid{flex:1 1 auto;min-height:0;grid-template-rows:repeat(5,minmax(0,1fr));gap:6px}
+#screen-book .book-cell{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  padding:4px 2px 3px;min-height:0;border-radius:10px;overflow:hidden}
+#screen-book .book-cell canvas{flex:1 1 0;min-height:0;height:auto;width:100%;object-fit:contain}
+#screen-book .book-cell .book-noimg{flex:1 1 0;min-height:0;height:auto;width:100%}
+#screen-book .book-cell .bname{flex:none;font-size:10.5px;line-height:1.2;min-height:25px;margin-top:1px}
+#screen-book .book-cell .brare{flex:none;font-size:9.5px}
+#screen-book .book-cell .bcount{font-size:10px;padding:0 6px}
+#screen-book #btn-book-back{flex:none;margin:0;padding:11px 14px;font-size:16px;border-radius:12px}
 .rare-thuong{color:#b9c2cc}.rare-hiem{color:#5ac8fa}.rare-quy{color:#c77dff}
 .rare-huyenthoai{color:#ffb703}.rare-thanthoai{color:#ff5a5a}
 .rare-toannang{color:#ffe45a;text-shadow:0 0 8px #ffe45a}
@@ -245,7 +305,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 #modal-settings .switch::after{content:"";position:absolute;top:50%;left:4%;transform:translateY(-50%);height:82%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f9e7c0,#c89b5a 55%,#8a5f27);box-shadow:0 1px 3px rgba(0,0,0,.7);transition:left .15s}
 #modal-settings .switch.on{background:linear-gradient(180deg,#3fe0a0,#159a66);border-color:#2bd98f;box-shadow:0 0 14px rgba(50,220,150,.45),inset 0 2px 4px rgba(0,0,0,.35)}
 #modal-settings .switch.on::after{left:auto;right:4%}
-#modal-settings #btn-wipe{pointer-events:auto;position:absolute;left:73.6%;top:48.1%;width:25.2%!important;height:8.8%!important;margin:0!important;padding:0!important;background:linear-gradient(180deg,#42170f,#1e0a05);color:#ffb59d;border:1px solid #8a4630;border-radius:10px;box-shadow:inset 0 1px 0 rgba(255,180,140,.25),0 3px 8px rgba(0,0,0,.6);font-family:'Playfair Display',Georgia,serif;font-size:15px;letter-spacing:1px;text-shadow:0 1px 2px #000}
+#modal-settings #btn-wipe{pointer-events:auto;position:absolute;left:73.6%;top:48.1%;width:25.2%!important;height:8.8%!important;margin:0!important;padding:0!important;background:transparent;color:transparent;border:none;border-radius:10px;box-shadow:none;font-family:'Playfair Display',Georgia,serif;font-size:15px;letter-spacing:1px;text-shadow:none}
 #modal-settings #sw-3d{pointer-events:auto;position:absolute;left:80.5%;top:62.6%;min-width:11.5%;text-align:center;background:#100b08;border-radius:6px;padding:3px 4px;font-size:15px;font-weight:700;text-shadow:0 0 10px currentColor}
 #modal-settings #btn-settings-close{position:absolute;left:4.5%;top:80.3%;width:92%;height:15.7%;margin:0!important;padding:0;background:transparent;border:none;border-radius:12px;color:transparent;box-shadow:none;text-shadow:none;cursor:pointer}
 #modal-settings #btn-settings-close:active{background:rgba(255,190,80,.16)}
@@ -344,12 +404,16 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
   <!-- ===== SỔ MA ===== -->
   <div class="screen" id="screen-book">
     <div class="wrap">
-      <h1 class="title" style="font-size:26px">📖 SỔ MA</h1>
+      <h1 class="title">📖 SỔ MA</h1>
       <div class="subtitle" id="book-progress">Đã thu phục 0 / 15 loài</div>
-      <button class="btn" id="btn-book-gourd" style="margin:4px 0 10px">🫙 HỒ LÔ CHỨA MA · <span id="book-gourd-count">0/5</span></button>
       <div class="book-grid" id="book-grid"></div>
-      <button class="btn ghost" id="btn-book-back" style="margin-top:16px">← Quay lại</button>
+      <button class="btn ghost" id="btn-book-back">← Quay lại</button>
     </div>
+    <!-- Icon HỒ LÔ nổi góc phải: chạm = mở Hồ Lô · đè & kéo = di chuyển khắp màn, thả tay là đứng yên tại chỗ -->
+    <button id="btn-book-gourd" aria-label="Hồ lô chứa ma — chạm để mở, đè và kéo để di chuyển">
+      <img src="data:image/webp;base64,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" alt="">
+      <span id="book-gourd-count">0/5</span>
+    </button>
   </div>
 
   <!-- ===== HỒ LÔ CHỨA MA ===== -->
@@ -435,7 +499,10 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
   <!-- ===== KHU PHỐ ===== -->
   <div class="screen" id="screen-street">
     <div class="wrap">
-      <h1 class="title" style="font-size:26px">🏘️ KHU PHỐ</h1>
+      <div class="street-head">
+        <button class="btn ghost" id="btn-street-back" aria-label="Quay lại">←</button>
+        <h1 class="title">🏘️ KHU PHỐ</h1>
+      </div>
       <div class="subtitle" id="street-now">📍 Đang xác định khu vực…</div>
       <div class="card" id="walk-card">
         <h3 class="sect-title">🚶 DU HÀNH HÔM NAY</h3>
@@ -446,10 +513,11 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
       </div>
       <div id="map"></div>
       <div id="map-msg" class="hidden"></div>
-      <button class="btn" id="btn-locate" style="margin-top:10px">📍 Vị trí của tôi</button>
-      <h3 class="sect-title" style="margin-top:18px">🗺️ Khu vực đã săn</h3>
-      <div id="area-list"></div>
-      <button class="btn ghost" id="btn-street-back" style="margin-top:16px">← Quay lại</button>
+      <div class="street-areas">
+        <h3 class="sect-title">🗺️ Khu vực đã săn</h3>
+        <div id="area-list"></div>
+      </div>
+      <button class="btn" id="btn-locate">📍 Vị trí của tôi</button>
     </div>
   </div>
 
@@ -6578,6 +6646,52 @@ $("btn-pending-release").addEventListener("click",()=>{
   renderGourd();
 });
 $("btn-book-gourd").addEventListener("click",()=>{ sfx.tap(); renderGourd(); show("screen-gourd"); });
+/* ICON HỒ LÔ NỔI KÉO ĐƯỢC (màn Sổ Ma): chạm nhẹ = mở Hồ Lô như nút cũ;
+   đè & kéo = di chuyển icon khắp màn hình, buông tay là đứng yên ngay tại chỗ thả.
+   Vị trí chỉ giữ trong bộ nhớ phiên chơi (không ghi vào save). */
+(function(){
+  const btn=$("btn-book-gourd"), scr=$("screen-book");
+  if(!btn||!scr) return;
+  let sx=0, sy=0, sl=0, st=0, dragging=false, moved=false, swallowClick=false;
+  const M=4; // lề tối thiểu cách mép màn hình khi kéo
+  function clampPos(l,t){
+    const sw=scr.clientWidth, sh=scr.clientHeight, bw=btn.offsetWidth, bh=btn.offsetHeight;
+    return [Math.max(M,Math.min(l,sw-bw-M)), Math.max(M,Math.min(t,sh-bh-M))];
+  }
+  function applyPos(l,t){ btn.style.left=l+"px"; btn.style.top=t+"px"; btn.style.right="auto"; }
+  btn.addEventListener("pointerdown",e=>{
+    const r=btn.getBoundingClientRect(), sr=scr.getBoundingClientRect();
+    sx=e.clientX; sy=e.clientY; sl=r.left-sr.left; st=r.top-sr.top;
+    dragging=true; moved=false;
+    try{ btn.setPointerCapture(e.pointerId); }catch(x){}
+  });
+  btn.addEventListener("pointermove",e=>{
+    if(!dragging) return;
+    const dx=e.clientX-sx, dy=e.clientY-sy;
+    if(!moved && Math.hypot(dx,dy)<7) return; // chưa qua ngưỡng → vẫn là một cái chạm
+    moved=true; btn.classList.add("dragging");
+    const p=clampPos(sl+dx, st+dy); applyPos(p[0],p[1]);
+    e.preventDefault();
+  });
+  const end=()=>{
+    if(!dragging) return;
+    dragging=false; btn.classList.remove("dragging");
+    if(moved){ swallowClick=true; moved=false; }
+  };
+  btn.addEventListener("pointerup",end);
+  btn.addEventListener("pointercancel",end);
+  /* click luôn nảy ra sau pointerup — nếu vừa kéo xong thì nuốt click đó ở pha capture
+     trên màn cha, tránh thả tay là nhảy ngay sang màn Hồ Lô */
+  scr.addEventListener("click",e=>{
+    if(swallowClick && e.target.closest && e.target.closest("#btn-book-gourd")){
+      swallowClick=false; e.stopPropagation(); e.preventDefault();
+    }
+  },true);
+  /* xoay máy / đổi kích thước màn: kéo icon về trong khung nếu đang kẹt ngoài mép */
+  window.addEventListener("resize",()=>{
+    if(btn.style.left){ const p=clampPos(parseFloat(btn.style.left)||0, parseFloat(btn.style.top)||0); applyPos(p[0],p[1]); }
+  });
+})();
 $("btn-gourd-back").addEventListener("click",()=>{ sfx.tap(); renderBook(); show("screen-book"); });
 function renderBook(){
   const grid=$("book-grid"); grid.innerHTML="";
@@ -6714,6 +6828,9 @@ function initMap(){
     return;
   }
   mapObj=L.map("map",{zoomControl:true}).setView([10.762622,106.660172],13);
+  /* Màn Khu Phố không cuộn: khung bản đồ co giãn theo chiều cao còn lại —
+     mỗi khi khung đổi cỡ (mở màn, hiện/ẩn thông báo GPS…) bảo Leaflet vẽ lại cho khớp */
+  if(window.ResizeObserver){ new ResizeObserver(()=>{ if(mapObj) mapObj.invalidateSize(); }).observe(document.getElementById("map")); }
   /* Tile chính: tile.openstreetmap.de (máy chủ OSM Đức, cho phép nhúng, KHÔNG cần
      key) — đã kiểm chứng thật 2026-10-27: gạch tại 10.72304,106.73587 zoom 13+16
      trả HTTP 200, hình bản đồ thật. KHÔNG dùng tile.openstreetmap.org (trả 403
