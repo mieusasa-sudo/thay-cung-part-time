@@ -257,6 +257,23 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 #modal-settings .note{color:#bd8a5f;font-size:12.5px;text-align:center;margin-top:12px}
 #modal-settings #btn-settings-close{margin-top:14px;padding:16px;font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:800;letter-spacing:3px;color:#47230a;background:linear-gradient(180deg,#ffedb0 0%,#ffc94d 38%,#f59b1d 62%,#d97a10 100%);border:1px solid #ffe1a0;border-radius:12px;box-shadow:0 0 26px rgba(255,166,30,.5),inset 0 1px 0 #fff8dd,inset 0 -3px 8px rgba(146,74,0,.55);text-shadow:0 1px 0 rgba(255,240,200,.6)}
 #modal-settings #btn-settings-close:active{transform:translateY(2px)}
+/* ===== CẢNH BÁO TÂM LINH — cùng style đá nứt, viền đồng đỏ ===== */
+#modal-warn{background:rgba(0,0,0,.85)}
+#modal-warn .modal-box{position:relative;background:
+  radial-gradient(circle at 50% 30%,transparent 50px,rgba(216,120,60,.05) 51px,rgba(216,120,60,.05) 54px,transparent 55px),
+  radial-gradient(120% 90% at 50% 0%,#251611 0%,#170d08 45%,#0b0605 100%);
+  border:2px solid #8a3b26;border-radius:14px;padding:24px 20px 20px;max-width:400px;
+  box-shadow:0 0 0 1px #220d05,0 0 38px rgba(255,60,20,.20),inset 0 0 0 2px rgba(216,120,60,.28),inset 0 0 0 6px #0d0705,inset 0 0 0 7px rgba(216,120,60,.18),inset 0 0 70px rgba(0,0,0,.8)}
+#modal-warn .orn{position:absolute;width:26px;height:26px;pointer-events:none;opacity:.9}
+#modal-warn .orn.tl{top:7px;left:7px;border-top:2px solid #cf6a35;border-left:2px solid #cf6a35;border-top-left-radius:9px}
+#modal-warn .orn.tr{top:7px;right:7px;border-top:2px solid #cf6a35;border-right:2px solid #cf6a35;border-top-right-radius:9px}
+#modal-warn .orn.bl{bottom:7px;left:7px;border-bottom:2px solid #cf6a35;border-left:2px solid #cf6a35;border-bottom-left-radius:9px}
+#modal-warn .orn.br{bottom:7px;right:7px;border-bottom:2px solid #cf6a35;border-right:2px solid #cf6a35;border-bottom-right-radius:9px}
+#modal-warn .modal-box h2{font-family:'Playfair Display',Georgia,serif;font-size:23px;font-weight:800;letter-spacing:2px;color:#ff7a52;text-shadow:0 0 16px rgba(255,70,30,.45),0 2px 3px #000}
+#modal-warn #btn-warn-no{background:linear-gradient(180deg,#2a1c11,#17100a);color:#e8c39a;border:1px solid #7c4a26;box-shadow:inset 0 1px 0 rgba(255,200,140,.15),0 3px 8px rgba(0,0,0,.6);text-shadow:none}
+#modal-warn #btn-warn-ok{font-family:'Playfair Display',Georgia,serif;font-weight:800;letter-spacing:1px;color:#47230a;background:linear-gradient(180deg,#ffedb0 0%,#ffc94d 38%,#f59b1d 62%,#d97a10 100%);border:1px solid #ffe1a0;box-shadow:0 0 22px rgba(255,166,30,.45),inset 0 1px 0 #fff8dd,inset 0 -3px 8px rgba(146,74,0,.55);text-shadow:0 1px 0 rgba(255,240,200,.6)}
+#modal-warn #btn-warn-ok:active{transform:translateY(2px)}
+
 
 /* kết quả */
 #result-emoji{font-size:64px;text-align:center;margin:10px 0}
@@ -487,9 +504,10 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 
   <!-- ===== MODAL CẢNH BÁO TÂM LINH ===== -->
   <div class="modal" id="modal-warn">
-    <div class="modal-box" style="border-color:#a33;text-align:center">
+    <div class="modal-box" style="text-align:center">
+      <i class="orn tl"></i><i class="orn tr"></i><i class="orn bl"></i><i class="orn br"></i>
       <div style="font-size:44px">🕯️</div>
-      <h2 style="color:#ff6b6b">CẢNH BÁO TÂM LINH</h2>
+      <h2>CẢNH BÁO TÂM LINH</h2>
       <p style="color:var(--text);font-size:15px;line-height:1.7">
         Cảm biến trong game quét ma <b>hoàn toàn ngẫu nhiên</b>.<br><br>
         Nhưng đôi khi… nó phát hiện những thứ mà <b>mắt thường không thấy được</b>.<br><br>
