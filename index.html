@@ -7015,7 +7015,7 @@ function openGhostModal(sp,n){
     Ghost3D.bookOpen(sp.id,c3).then(ok=>{
       if(ok&&$("modal-ghost").classList.contains("on")){
         c2.style.display="none"; c3.style.display="block";
-        $("mg-hint").textContent="Kéo để xoay · chụm 2 ngón để zoom soi chi tiết 🔍";
+        $("mg-hint").textContent="Kéo để xoay · chụm để zoom 🔍";
       } else if(sp.img){
         c2.style.display="none"; im.src=sp.img; im.style.display="block";
       }
