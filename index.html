@@ -6822,7 +6822,7 @@ $("btn-book-gourd").addEventListener("click",()=>{ sfx.tap(); renderGourd(); sho
     const sw=scr.clientWidth, sh=scr.clientHeight, bw=btn.offsetWidth, bh=btn.offsetHeight;
     return [Math.max(M,Math.min(l,sw-bw-M)), Math.max(M,Math.min(t,sh-bh-M))];
   }
-  function applyPos(l,t){ btn.style.left=l+"px"; btn.style.top=t+"px"; btn.style.right="auto"; }
+  function applyPos(l,t){ btn.style.left=l+"px"; btn.style.top=t+"px"; btn.style.right="auto"; btn.style.bottom="auto"; }
   btn.addEventListener("pointerdown",e=>{
     const r=btn.getBoundingClientRect(), sr=scr.getBoundingClientRect();
     sx=e.clientX; sy=e.clientY; sl=r.left-sr.left; st=r.top-sr.top;
