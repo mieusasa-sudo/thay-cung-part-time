@@ -312,7 +312,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 #screen-book{padding:0}
 .book-art-frame{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(100cqw,55.8261cqh);height:min(179.1277cqw,100cqh);margin:0 auto;container-type:inline-size}
 .book-art-frame .bk-bg{position:absolute;inset:0;width:100%;height:100%;display:block}
-#screen-book #book-progress{position:absolute;left:0;top:9.1%;width:100%;z-index:3;text-align:center;color:#ecd9a8;font-size:3.9cqw;font-weight:700;text-shadow:0 2px 8px #000}
+#screen-book #book-progress{position:absolute;left:0;top:10.6%;width:100%;z-index:3;text-align:center;color:#ecd9a8;font-size:3.9cqw;font-weight:700;text-shadow:0 2px 8px #000}
 #screen-book .book-grid{position:absolute;left:3.5%;top:12%;width:91.9%;height:78.7%;z-index:3;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(5,1fr);column-gap:3.37%;row-gap:2.29%}
 #screen-book .book-cell{background:transparent;border:none;box-shadow:none;border-radius:6px;padding:5% 3% 3%}
 #screen-book .book-cell canvas{width:97%;height:auto;aspect-ratio:1/1}
@@ -4782,6 +4782,24 @@ const RARITY = {
   thanthoai:  { name:"Thần Thoại",  css:"rare-thanthoai",  merit:400, weight:1.5,dist:[45,60], trace:"sao",    color:"#ff5a5a" },
   toannang:   { name:"Toàn Năng",   css:"rare-toannang",   merit:800, weight:0.8,dist:[50,70], trace:"sao",    color:"#ffe45a" },
 };
+const RARITY_ORDER = Object.keys(RARITY);
+/* PHẨM CHẤT CÁ THỂ (Nhiên chốt 30/10): mỗi con ma bốc phẩm chất RIÊNG quanh bậc của loài —
+   cùng một loài có con dễ, con khó. Lệch bậc: -1 bậc 10% · đúng bậc 63% · +1 bậc 20% · +2 bậc 7%.
+   Bậc cá thể quyết định độ khó (đồng hồ bỏ chạy, kết ấn, kho hình ấn, vùng vẫy) + hệ số công đức.
+   Tâm trạng: giận dữ = khó hơn + thưởng thêm 25%; sợ hãi = dễ hơn. */
+function rollGhostTier(sp){
+  const i=RARITY_ORDER.indexOf(sp.rarity), r=Math.random();
+  const d=r<0.10?-1:(r<0.73?0:(r<0.93?1:2));
+  return RARITY_ORDER[Math.max(0,Math.min(RARITY_ORDER.length-1,i+d))];
+}
+function ghostTier(g){ return (g&&g.q)||(g&&g.sp&&g.sp.rarity)||"thuong"; }
+function moodKey(g){ const t=(g&&g.mood&&g.mood.text)||""; return t==="giận dữ"?"angry":(t==="sợ hãi"?"fear":"calm"); }
+function struggleFor(cs){
+  const base=STRUGGLE[ghostTier(cs.ghost)]||STRUGGLE.thuong, mk=moodKey(cs.ghost);
+  if(mk==="angry") return {...base, pulseAmt:Math.round(base.pulseAmt*1.3), release:Math.round(base.release*1.25)};
+  if(mk==="fear") return {...base, pulseAmt:Math.round(base.pulseAmt*0.65), release:Math.round(base.release*0.8)};
+  return base;
+}
 const RANKS = [
   [100,"Tiểu Đạo Đồng"],[400,"Đạo Sĩ"],[1000,"Pháp Sư"],[2500,"Thiên Sư"],[Infinity,"Đại Thiên Sư"]
 ];
@@ -5090,7 +5108,15 @@ function rankFor(merit){
   for(const [limit,name] of RANKS) if(merit<limit) return name;
   return RANKS[RANKS.length-1][1];
 }
-function meritFor(sp, tulinh){ return Math.round((sp.merit||RARITY[sp.rarity].merit)*(tulinh?1.5:1)); }
+function meritFor(sp, tulinh, g){
+  let base=sp.merit||RARITY[sp.rarity].merit;
+  if(g){
+    const d=RARITY_ORDER.indexOf(ghostTier(g))-RARITY_ORDER.indexOf(sp.rarity);
+    base*= d<=-1?0.75 : d===0?1 : d===1?1.6 : 2.5;
+    if(moodKey(g)==="angry") base*=1.25;
+  }
+  return Math.round(base*(tulinh?1.5:1));
+}
 /* đường kết ấn chuẩn hoá 0..1 theo độ hiếm */
 function tracePathPoints(kind){
   const pts=[];
@@ -5702,6 +5728,7 @@ function spawnOne(awayFrom){
   ghosts.push({ sp, heading:Math.round(heading), pitch:Math.round(spot.pitch()),
     dist:Math.round(spot.dist()*10)/10, place:spot.place,
     mood: GHOST_MOODS[Math.floor(Math.random()*GHOST_MOODS.length)],
+    q: rollGhostTier(sp),
     tuoi: ageRange[0]+Math.floor(Math.random()*(ageRange[1]-ageRange[0]+1)),
     phase:Math.random()*7, caught:false, spawnT:Date.now() });
   // tải trước model 3D ngay khi ma xuất hiện, không đợi tới lúc lia camera tới mới tải
@@ -5713,7 +5740,7 @@ function spawnOne(awayFrom){
    thay mới khi đã xử lý xong hết VÀ đã đi xa điểm neo ≥120m hoặc chờ đủ 5 phút. */
 function serializeGhost(g){
   return { id:g.sp.id, heading:g.heading, pitch:g.pitch, dist:g.dist, place:g.place,
-           mood:g.mood, tuoi:g.tuoi, spawnT:g.spawnT };
+           mood:g.mood, tuoi:g.tuoi, q:g.q||g.sp.rarity, spawnT:g.spawnT };
 }
 /* Đồng bộ danh sách ma đang sống vào save; đợt ma về 0 con → ghi giờ xử lý xong */
 function syncHuntSave(){
@@ -5741,7 +5768,7 @@ function restoreHunt(){
     persist();
   }
   ghosts=fresh.map(e=>({ sp:SPECIES_BY_ID[e.id], heading:e.heading||0, pitch:e.pitch||0, dist:e.dist||3,
-    place:e.place||"", mood:e.mood||GHOST_MOODS[3], tuoi:e.tuoi||100,
+    place:e.place||"", mood:e.mood||GHOST_MOODS[3], tuoi:e.tuoi||100, q:e.q||(SPECIES_BY_ID[e.id]||{}).rarity||"thuong",
     phase:Math.random()*7, caught:false, spawnT:e.spawnT||now }));
   for(const g of ghosts) if(g.sp.model3d&&window.Ghost3D&&Ghost3D.preload) Ghost3D.preload(g.sp.id);
   return ghosts.length;
@@ -5905,7 +5932,7 @@ function scanLoop(){
       // nhãn tên + trạng thái cảm xúc + tuổi (không hiện vị trí nấp)
       ctx.font="700 13px sans-serif"; ctx.textAlign="center";
       const mood=g.mood||GHOST_MOODS[3];
-      const label=`${sp.name} · ${mood.emoji} ${mood.text} · ${g.tuoi} tuổi`;
+      const label=`${sp.name} · ${mood.emoji} ${mood.text} · ${g.tuoi} tuổi${ghostTier(g)!==sp.rarity?" · "+RARITY[ghostTier(g)].name:""}`;
       const tw=ctx.measureText(label).width;
       const ly=Math.min(h-30,y+size*0.45);
       ctx.fillStyle="rgba(0,0,0,.65)";
@@ -6059,6 +6086,7 @@ function enterCatch(g){
   consumeHuntSpawn(g);
   regenNow();
   const sp=SPECIES_BY_ID[g.sp.id];
+  const escT=Math.max(10,Math.round((ESCAPE_LIMITS[ghostTier(g)]||90)*(moodKey(g)==="angry"?0.85:(moodKey(g)==="fear"?1.15:1))));
   CS={ ghost:g, sp,
        quote:sp.quotes[Math.floor(Math.random()*sp.quotes.length)],
        buffs:Object.fromEntries(Object.keys(TALISMANS).map(k=>[k,false])), kimthanUsed:false,
@@ -6067,7 +6095,7 @@ function enterCatch(g){
        needle:0, zoneC:0, zoneW:50, misses:0,
        chant:0, holding:false,
        /* đồng hồ ma bỏ chạy cho cả lượt bắt + đóng băng khi dùng bùa */
-       escapeTotal:ESCAPE_LIMITS[sp.rarity]||90, escapeLeft:ESCAPE_LIMITS[sp.rarity]||90, freezeT:0, _panicSec:-1,
+       escapeTotal:escT, escapeLeft:escT, freezeT:0, _panicSec:-1,
        /* vùng vẫy pha siêu độ */
        chantPeak:0, pulseT:0, calmT:0, shakeT:0, breakoutT:0, breakoutLeft:0 };
   /* Chốt khu vực săn NGAY lúc bắt đầu lượt bắt (bắt dở đi chỗ khác cũng không đổi tính) */
@@ -6077,7 +6105,7 @@ function enterCatch(g){
   $("breakout-warn").classList.add("hidden");
   show("screen-catch");
   $("catch-title").textContent="👻 "+sp.name+(g.tuoi?` · ${g.tuoi} tuổi`:"");
-  CS.subBase=`<span class="badge ${RARITY[sp.rarity].css}" style="border-color:currentColor">${RARITY[sp.rarity].name}</span>${sp.dod?` <span class="badge" style="border-color:#ff6b6b;color:#ff6b6b">😈 ${sp.dod}</span>`:""} · ${(g.mood||GHOST_MOODS[3]).emoji} ${(g.mood||GHOST_MOODS[3]).text}`;
+  CS.subBase=`<span class="badge ${RARITY[ghostTier(g)].css}" style="border-color:currentColor">${RARITY[ghostTier(g)].name}</span>${ghostTier(g)!==sp.rarity?` <span class="badge" style="border-color:#ffd166;color:#ffd166">${RARITY_ORDER.indexOf(ghostTier(g))>RARITY_ORDER.indexOf(sp.rarity)?"💎 Cá thể hiếm":"🍃 Cá thể yếu"}</span>`:""}${sp.dod?` <span class="badge" style="border-color:#ff6b6b;color:#ff6b6b">😈 ${sp.dod}</span>`:""} · ${(g.mood||GHOST_MOODS[3]).emoji} ${(g.mood||GHOST_MOODS[3]).text}`;
   $("catch-sub").innerHTML=CS.subBase;
   $("catch-quote").textContent="“"+CS.quote+"”";
   setCatchStep("tran");
@@ -6146,7 +6174,7 @@ function setCatchStep(step){
     CS.barY=0.30; CS.barVel=0;
     CS.fishY=0.5; CS.fishVel=0; CS.fishTgt=0.3+Math.random()*0.4; CS.fishT=0.6; CS.fishBurst=0; CS.fishIn=false; CS.fishTime=0;
     /* nhịp ma giãy + lịch vùng thoát (bảng STRUGGLE) cho pha này */
-    const scfgS=STRUGGLE[CS.sp.rarity]||STRUGGLE.thuong;
+    const scfgS=STRUGGLE[ghostTier(CS.ghost)]||STRUGGLE.thuong;
     CS.pulseT=0;
     CS.breakoutT=scfgS.breakoutEvery? scfgS.breakoutEvery[0]+Math.random()*(scfgS.breakoutEvery[1]-scfgS.breakoutEvery[0]) : 0;
     $("breakout-warn").classList.add("hidden");
@@ -6177,7 +6205,7 @@ function paintBuffs(){
 }
 function startKetan(){
   /* bốc NGẪU NHIÊN 1 hình ấn trong kho của bậc ma này — mỗi lượt một hình khác nhau */
-  const pool=SEAL_POOLS[CS.sp.rarity]||[RARITY[CS.sp.rarity].trace];
+  const pool=SEAL_POOLS[ghostTier(CS.ghost)]||[RARITY[ghostTier(CS.ghost)].trace];
   const kind=pool[Math.floor(Math.random()*pool.length)];
   CS.sealKind=kind; CS.sealName=SEAL_NAMES[kind]||"";
   CS.path=tracePathPoints(kind);
@@ -6275,7 +6303,7 @@ function catchLoop(){
   }
   else if(CS.step==="ketan"){
     const R=Math.min(w,h)*0.36, el=(performance.now()-CS.startT)/1000;
-    const kc=KETAN[CS.sp.rarity]||KETAN.thuong;
+    const kc=KETAN[ghostTier(CS.ghost)]||KETAN.thuong;
     const limit=kc.time+(CS.buffs.dinhthan?5:0), left=Math.max(0,limit-el);
     $("timer-fill").style.width=(left/limit*100)+"%";
     $("timer-fill").style.background=left<5?"var(--red)":"";
@@ -6342,7 +6370,7 @@ function catchLoop(){
        hết trấn áp, cứ mỗi pulseEvery giây ma giãy 1 cú giật lùi tiến trình và phóng vọt đi;
        Quý trở lên còn thỉnh thoảng VÙNG THOÁT: cửa sổ 1,5s để bấm TRẤN ÁP bằng bùa,
        quá hạn mất breakoutLoss% tiến trình. --- */
-    const scfg=STRUGGLE[CS.sp.rarity]||STRUGGLE.thuong;
+    const scfg=struggleFor(CS);
     if(CS.calmT>0) CS.calmT-=dt;
     if(scfg.pulseEvery>0&&CS.calmT<=0){
       CS.pulseT+=dt;
@@ -6474,7 +6502,7 @@ function catchLoop(){
   const up=e=>{
     if(!CS||CS.step!=="ketan"||!CS.drawing) return;
     CS.drawing=false;
-    const kc=KETAN[CS.sp.rarity]||KETAN.thuong;
+    const kc=KETAN[ghostTier(CS.ghost)]||KETAN.thuong;
     const sc=scoreTrace(CS.path,CS.user,kc.tol);
     if(sc>=kc.need){ sfx.chime(); setCatchStep("holo"); }
     else { sfx.fail(); toast("Chỉ khớp "+sc+"%, cần ≥"+kc.need+"%! Vẽ lại nào.",2200); CS.user=[]; }
@@ -6573,7 +6601,7 @@ function paintSuppressBtn(){
 }
 function suppressGhost(){
   if(!CS||CS.step!=="sieudo"||!(CS.breakoutLeft>0)) return;
-  const cfg=STRUGGLE[CS.sp.rarity]||STRUGGLE.thuong;
+  const cfg=STRUGGLE[ghostTier(CS.ghost)]||STRUGGLE.thuong;
   const order=Object.keys(TALISMANS); // trấn áp tiêu lá rẻ trước (thứ tự khai báo = giá tăng dần)
   const k=order.find(x=>(S.tal[x]||0)>0);
   if(!k){ toast("😱 Hết bùa rồi — không trấn áp được! Cố giữ niệm chờ ma qua cơn vùng thoát…",2200); return; }
@@ -6592,7 +6620,7 @@ function sieuDoXong(){
   sfx.gong();
   $("breakout-warn").classList.add("hidden");
   $("screen-catch").classList.remove("panic");
-  const m=meritFor(CS.sp,CS.buffs.tulinh);
+  const m=meritFor(CS.sp,CS.buffs.tulinh,CS.ghost);
   S.merit+=m;
   S.meritTotal=(S.meritTotal||0)+m; // tổng tích lũy cả đời — quyết định cấp bậc, tiêu không tụt cấp
   S.book[CS.sp.id]=(S.book[CS.sp.id]||0)+1;
