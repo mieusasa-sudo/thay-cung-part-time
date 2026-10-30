@@ -336,6 +336,12 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 #mk-tab-shop{top:86.1%;height:6.4%}
 #mk-tab-gourd{top:93.5%;height:5.8%}
 .mk-modal-box{max-height:82dvh;overflow-y:auto}
+#modal-market-shop .talisman{padding:7px 9px;gap:9px;margin:6px 0;border-radius:12px}
+#modal-market-shop .talisman .icon{font-size:24px}
+#modal-market-shop .talisman .tname{font-size:14px}
+#modal-market-shop .talisman .tdesc{font-size:11.5px;line-height:1.3}
+#modal-market-shop .talisman .count{padding:3px 8px;font-size:13px}
+#modal-market-shop .talisman button{padding:7px 10px;font-size:13px;white-space:nowrap}
 /* ===== CẢNH BÁO TÂM LINH: dùng NGUYÊN HÌNH Nhiên gửi, 2 nút vẽ sẵn là nút vô hình ===== */
 .warn-frame{position:relative;width:min(94vw,66dvh);aspect-ratio:1215/1618}
 .warn-frame .warn-bg{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -561,7 +567,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
   <div class="modal" id="modal-market-shop">
     <div class="modal-box mk-modal-box">
       <h2 style="color:var(--gold);margin-top:0">🔖 TIỆM LINH PHÙ</h2>
-      <div class="sect-note">Số dư khả dụng: <b id="shop-balance" style="color:var(--gold)">0</b> công đức · Kho chứa tối đa <b id="shop-cap">5</b> lá mỗi loại ở cấp hiện tại. Đổi là có bùa ngay, khỏi chờ hồi.</div>
+      <div class="sect-note">Dư: <b id="shop-balance" style="color:var(--gold)">0</b> công đức · Kho: tối đa <b id="shop-cap">5</b> lá/loại · Đổi là có ngay.</div>
       <div id="shop-list"></div>
       <div id="shop-msg" class="hidden"></div>
       <button class="btn ghost mk-close" style="width:100%;margin-top:12px">Đóng</button>
@@ -4904,11 +4910,11 @@ function applyAreaCapture(areas, area, speciesId, nowMs){
   return list;
 }
 const TALISMANS = {
-  danlo:   { name:"Dẫn Lộ",   icon:"🔦", desc:"Hiện rõ đường kết ấn phát sáng, dễ vẽ theo hơn." },
-  dinhthan:{ name:"Định Thân", icon:"📌", desc:"Ma đứng yên khi kết ấn, +5s giờ vẽ ấn, ma bơi chậm hơn 25% ở pha siêu độ." },
-  anhon:   { name:"An Hồn",   icon:"🕯️", desc:"Dán vào là ma dịu lại: +10 giây đồng hồ ma thoát trong lượt bắt này." },
-  tulinh:  { name:"Tụ Linh",  icon:"💠", desc:"+50% điểm công đức khi siêu độ thành công." },
-  kimthan: { name:"Kim Thân", icon:"🛡️", desc:"Bùa cứu mạng: lượt bắt này nếu siêu độ tụt về 0% hoặc hết giờ thoát, bùa tự cháy để cứu 1 lần (hồi tiến trình 40% / +10s). Mỗi lượt chỉ cứu 1 lần." },
+  danlo:   { name:"Dẫn Lộ",   icon:"🔦", desc:"Lộ đường ấn phát sáng, dễ vẽ theo." },
+  dinhthan:{ name:"Định Thân", icon:"📌", desc:"Ma đứng yên · +5s vẽ ấn · siêu độ chậm 25%" },
+  anhon:   { name:"An Hồn",   icon:"🕯️", desc:"+10s đồng hồ bắt ma" },
+  tulinh:  { name:"Tụ Linh",  icon:"💠", desc:"+50% công đức khi siêu độ" },
+  kimthan: { name:"Kim Thân", icon:"🛡️", desc:"Cứu mạng 1 lần: hồi 40% tiến trình / +10s" },
 };
 const MAX_TALISMAN = 5, TALISMAN_REGEN_S = 60;
 
@@ -6664,7 +6670,7 @@ function renderRankShop(){
     const full=n>=perks.cap, afford=S.merit>=price;
     const div=document.createElement("div");
     div.className="talisman";
-    div.innerHTML=`<div class="icon">${t.icon}</div><div class="info"><div class="tname">${t.name}</div><div class="tdesc">${t.desc}</div><div class="tdesc" style="color:var(--gold)">Giá: ${price} công đức/lá</div></div><div class="count">×${n}/${perks.cap}</div>`;
+    div.innerHTML=`<div class="icon">${t.icon}</div><div class="info"><div class="tname">${t.name}</div><div class="tdesc">${t.desc}</div></div><div class="count">×${n}/${perks.cap}</div>`;
     const btn=document.createElement("button");
     btn.textContent=full?"Kho đầy":("Đổi · "+price);
     /* Chỉ khóa khi kho đầy. Thiếu công đức vẫn bấm được để buyTalisman báo rõ "còn thiếu bao nhiêu"
