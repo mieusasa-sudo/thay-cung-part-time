@@ -61,6 +61,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
   background:transparent;border:none;border-radius:12px;box-shadow:none;cursor:pointer}
 .home-row .btn:active{transform:none;background:rgba(255,215,110,.12)}
 #screen-home .note{display:none}
+.home-ver{position:absolute;top:1.1%;right:2.6%;z-index:2;pointer-events:none;font-size:1.55em;font-weight:600;letter-spacing:.4px;color:rgba(255,226,170,.92);text-shadow:0 1px 4px #000,0 0 8px rgba(0,0,0,.65);white-space:nowrap}
 /* ---------- màn quét ---------- */
 #screen-scan{background:#000}
 #cam-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -97,20 +98,20 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 #catch-canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
 #catch-quote{position:absolute;left:12px;right:12px;bottom:8px;background:rgba(0,0,0,.65);
   border:1px solid rgba(245,197,66,.4);border-radius:14px;padding:10px 14px;font-size:14px;font-style:italic;color:var(--gold2)}
-#catch-bar{padding:10px 14px calc(12px + env(safe-area-inset-bottom));background:rgba(0,0,0,.5)}
-#timer-wrap{height:10px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden;margin:6px 0}
+#catch-bar{padding:6px 12px calc(8px + env(safe-area-inset-bottom));background:rgba(0,0,0,.5)}
+#timer-wrap{height:10px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden;margin:4px 0}
 #timer-fill{height:100%;width:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:99px}
-#chant-wrap{height:16px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden;margin:8px 0}
+#chant-wrap{height:10px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden;margin:4px 0}
 #chant-fill{height:100%;width:0%;background:linear-gradient(90deg,#7c5cff,#c77dff);border-radius:99px}
 #screen-catch{background:radial-gradient(ellipse at 50% 25%,#3a0d0d 0%,#160404 55%,#050101 100%)}
-#catch-title{text-align:center;font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:900;color:#ff7070;padding-top:calc(10px + env(safe-area-inset-top));letter-spacing:1px;text-shadow:0 0 18px #ff1a1a,0 0 45px #800000,0 3px 6px #000}
-#catch-sub{text-align:center;font-size:13px;color:#c99898;margin-bottom:4px}
+#catch-title{text-align:center;font-family:'Playfair Display',Georgia,serif;font-size:23px;font-weight:900;color:#ff7070;padding-top:calc(5px + env(safe-area-inset-top));letter-spacing:1px;line-height:1.15;text-shadow:0 0 18px #ff1a1a,0 0 45px #800000,0 3px 6px #000}
+#catch-sub{text-align:center;font-size:12px;color:#c99898;margin-bottom:2px;line-height:1.3}
 #catch-sub .badge{border:1px solid #8a4a4a;background:linear-gradient(180deg,#2b1212,#160808);color:#ffb3b3;border-radius:6px;padding:2px 10px}
 /* hộp thoại bia đá */
-#catch-quote{position:absolute;left:14px;right:14px;bottom:10px;background:linear-gradient(180deg,#2e2e33 0%,#1c1c20 100%);border:2px solid #5c4343;border-radius:10px;box-shadow:inset 0 0 20px rgba(0,0,0,.7),0 0 15px rgba(255,30,30,.25);color:#ffd9d9;font-family:Georgia,serif;font-style:italic;font-size:17px;text-align:center;padding:14px 16px;text-shadow:0 0 12px rgba(255,60,60,.6)}
+#catch-quote{position:absolute;left:14px;right:14px;bottom:8px;background:linear-gradient(180deg,#2e2e33 0%,#1c1c20 100%);border:2px solid #5c4343;border-radius:10px;box-shadow:inset 0 0 20px rgba(0,0,0,.7),0 0 15px rgba(255,30,30,.25);color:#ffd9d9;font-family:Georgia,serif;font-style:italic;font-size:13px;line-height:1.35;text-align:center;padding:8px 12px;text-shadow:0 0 12px rgba(255,60,60,.6)}
 /* nút khung kim loại gothic */
 #catch-btns{padding:0 14px}
-#catch-btns .btn{display:block;width:100%;margin:8px 0;padding:14px;font-family:'Playfair Display',Georgia,serif;font-size:17px;font-weight:700;letter-spacing:2px;color:#ffcccc;background:linear-gradient(180deg,#3d2323 0%,#1e0f0f 50%,#2b1515 100%);border:2px solid #7a5252;border-radius:12px;text-shadow:0 0 10px rgba(255,50,50,.7);box-shadow:inset 0 1px 0 rgba(255,200,200,.15),inset 0 -2px 6px rgba(0,0,0,.6),0 4px 14px rgba(0,0,0,.8);position:relative}
+#catch-btns .btn{display:block;width:100%;margin:6px 0;padding:11px;font-family:'Playfair Display',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:2px;color:#ffcccc;background:linear-gradient(180deg,#3d2323 0%,#1e0f0f 50%,#2b1515 100%);border:2px solid #7a5252;border-radius:12px;text-shadow:0 0 10px rgba(255,50,50,.7);box-shadow:inset 0 1px 0 rgba(255,200,200,.15),inset 0 -2px 6px rgba(0,0,0,.6),0 4px 14px rgba(0,0,0,.8);position:relative}
 #catch-btns .btn:active{transform:scale(.97)}
 #catch-btns .btn.btn-fire{background:linear-gradient(180deg,#ff7b2e 0%,#d42a1e 45%,#8f1010 100%);border-color:#ffb13d;color:#fff8ee;text-shadow:0 0 12px #ffdd88,0 2px 4px #600;box-shadow:0 0 25px rgba(255,110,20,.7),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -3px 8px rgba(120,10,0,.6)}
 #catch-btns .btn:disabled{opacity:.45;filter:grayscale(.5)}
@@ -121,6 +122,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 #loading-bar-wrap{display:none;position:absolute;left:12%;right:12%;bottom:9%;height:14px;background:rgba(0,0,0,.65);border:2px solid #8a6a3a;border-radius:10px;overflow:hidden;box-shadow:0 0 12px rgba(0,0,0,.8)}
 #loading-bar{height:100%;width:0%;background:linear-gradient(90deg,#ffb13d,#ff7b2e);border-radius:8px;transition:width .25s}
 #loading-tip{position:absolute;left:0;right:0;bottom:4.5%;text-align:center;color:#ffd9a0;font-size:14px;text-shadow:0 2px 4px #000}
+#loading-credit{position:absolute;right:12px;bottom:calc(8px + env(safe-area-inset-bottom));z-index:5;font-size:11px;letter-spacing:1.2px;color:rgba(255,217,160,.85);text-shadow:0 1px 4px #000,0 0 8px rgba(0,0,0,.7);pointer-events:none;white-space:nowrap}
 #video-tap-hint{position:absolute;top:12%;left:0;right:0;text-align:center;color:#ffd9a0;font-size:15px;text-shadow:0 2px 4px #000;z-index:5;animation:hintpulse 1.5s ease-in-out infinite}
 @keyframes hintpulse{0%,100%{opacity:.6}50%{opacity:1}}
 @keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.12)}}
@@ -179,7 +181,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 .gourd-item button.armed{background:var(--red);color:#fff}
 #pending-card{border-color:#ff9f43;background:rgba(255,140,40,.10)}
 /* đồng hồ ma bỏ chạy (màn bắt) */
-#escape-wrap{position:relative;height:20px;background:rgba(255,255,255,.10);border-radius:99px;overflow:hidden;margin:6px 10px 0}
+#escape-wrap{position:relative;height:15px;background:rgba(255,255,255,.10);border-radius:99px;overflow:hidden;margin:4px 10px 0}
 #escape-fill{height:100%;width:100%;background:linear-gradient(90deg,#ffb13d,#ff7b2e);border-radius:99px;transition:width .2s linear}
 #escape-wrap.frozen #escape-fill{background:linear-gradient(90deg,#5ac8fa,#3a7bd5)}
 #escape-wrap.panic #escape-fill{background:linear-gradient(90deg,#ff3b3b,#c1121f)}
@@ -189,8 +191,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 #screen-catch.panic #catch-stage{animation:panicShake .28s linear infinite}
 @keyframes panicShake{0%,100%{transform:translate(0,0)}25%{transform:translate(1.5px,-1px)}75%{transform:translate(-1.5px,1px)}}
 /* cảnh báo ma vùng thoát */
-#breakout-warn{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:8;background:rgba(160,10,10,.92);border:2px solid #ff5252;border-radius:14px;color:#fff;font-weight:900;font-size:17px;text-align:center;padding:10px 16px;line-height:1.35;box-shadow:0 0 24px rgba(255,30,30,.7);animation:warnPulse .3s ease-in-out infinite alternate;pointer-events:none;white-space:nowrap}
-#breakout-warn span{font-size:12.5px;font-weight:700;color:#ffd7d7}
+#breakout-warn{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:8;background:rgba(160,10,10,.92);border:2px solid #ff5252;border-radius:12px;color:#fff;font-weight:900;font-size:14px;text-align:center;padding:7px 12px;line-height:1.3;box-shadow:0 0 24px rgba(255,30,30,.7);animation:warnPulse .3s ease-in-out infinite alternate;pointer-events:none;white-space:nowrap}
 #breakout-warn.hidden{display:none}
 @keyframes warnPulse{from{transform:translateX(-50%) scale(1)}to{transform:translateX(-50%) scale(1.06)}}
 #btn-suppress{border:2px solid #ff5252!important}
@@ -246,6 +247,9 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 .area-item.open .area-detail{display:block}
 /* hồ lô */
 #gourd-needle-info,#fish-info{text-align:center;color:var(--dim);font-size:13px;margin-top:6px;line-height:1.55}
+/* pha siêu độ: chữ rút tối đa, ưu tiên chiều cao sân chơi + cột thanh trượt */
+#fish-info{font-size:12px;line-height:1.35;margin-top:3px}
+#screen-catch.step-sieudo #catch-quote{right:84px}
 /* ---------- sổ ma ---------- */
 .book-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .book-cell{background:var(--panel);border:1px solid rgba(245,197,66,.25);border-radius:14px;
@@ -460,7 +464,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
 #gl-pending{position:absolute;left:7%;right:7%;top:32%;z-index:8;background:rgba(24,12,8,.97);border:1px solid rgba(245,197,66,.5);border-radius:14px;padding:4.5%;color:#f3e2c7;font-size:3.8cqw;line-height:1.5;box-shadow:0 14px 40px rgba(0,0,0,.6)}
 #gl-btn-art{position:absolute;left:4.5%;top:85.2%;width:91%;height:6%;background:transparent;border:none;color:transparent;font-size:0;cursor:pointer}
 #gl-btn-back{position:absolute;left:4.5%;top:92.6%;width:91%;height:5.8%;background:transparent;border:none;color:transparent;font-size:0;cursor:pointer}
-#btn-gourd-open-list{position:absolute;left:50%;top:40.9%;transform:translate(-50%,-50%);z-index:6;background:rgba(20,8,6,.82);border:1px solid rgba(245,197,66,.65);color:#ffd9a0;border-radius:99px;padding:2.2% 5%;font-size:13px;font-size:3.7cqw;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+#btn-gourd-open-list{position:absolute;left:50%;top:81.1%;transform:translate(-50%,-50%);z-index:6;background:rgba(20,8,6,.82);border:1px solid rgba(245,197,66,.65);color:#ffd9a0;border-radius:99px;padding:1.6% 4.6%;font-size:13px;font-size:3.45cqw;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.5)}
 /* ---------- modal Cài đặt: nguyên hình vẽ của Nhiên làm nền, nút thật phủ đúng vị trí vẽ ---------- */
 #modal-settings .set-panel{position:relative;width:min(400px,calc((100dvh - 56px)*.7582));max-width:100%;aspect-ratio:928/1224;container-type:inline-size;filter:drop-shadow(0 18px 44px rgba(0,0,0,.65))}
 #modal-settings .set-panel-img{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -518,11 +522,13 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
     <audio id="bgm-music" src="assets/bgm_devour.m4a" loop preload="auto"></audio>
     <div id="loading-bar-wrap"><div id="loading-bar"></div></div>
     <div id="loading-tip">Đang triệu hồi các vong... 👻</div>
+    <div id="loading-credit">Made by LAM MOC NHIEN</div>
   </div>
 
   <!-- ===== MÀN CHÍNH ===== -->
   <div class="screen" id="screen-home">
     <div class="home-ui">
+      <div class="home-ver">Ver 1.0 · Early Access</div>
       <canvas id="home-mascot" width="300" height="300"></canvas>
       <h1 class="title">THẦY CÚNG PARTIME</h1>
       <div class="subtitle">Lia camera dò ma quanh nhà · Thu phục · Siêu độ tích công đức 👻</div>
@@ -577,7 +583,7 @@ h1.title{font-size:34px;text-align:center;color:var(--gold);text-shadow:0 0 24px
     <div id="catch-title">BẮT MA</div>
     <div id="catch-sub"></div>
     <div id="escape-wrap"><div id="escape-fill"></div><span id="escape-text">⏳</span></div>
-    <div id="catch-stage"><canvas id="catch-canvas"></canvas><canvas id="catch-3d"></canvas><div id="catch-quote"></div><div id="breakout-warn" class="hidden">⚠️ MA ĐANG VÙNG THOÁT!<br><span>Bấm nút TRẤN ÁP bằng bùa ngay!</span></div></div>
+    <div id="catch-stage"><canvas id="catch-canvas"></canvas><canvas id="catch-3d"></canvas><div id="catch-quote"></div><div id="breakout-warn" class="hidden">⚠ Ma vùng thoát — bấm TRẤN ÁP!</div></div>
     <div class="toast" id="catch-toast" style="bottom:180px"></div>
     <div id="catch-bar">
       <div id="timer-wrap" class="hidden"><div id="timer-fill"></div></div>
@@ -6232,6 +6238,7 @@ window.addEventListener("resize",()=>{ if($("screen-catch").classList.contains("
 
 function setCatchStep(step){
   CS.step=step; CS.startT=performance.now();
+  $("screen-catch").classList.toggle("step-sieudo",step==="sieudo");
   $("timer-wrap").classList.add("hidden");
   $("chant-wrap").classList.add("hidden");
   const B=$("catch-btns"); B.innerHTML="";
@@ -6290,10 +6297,10 @@ function setCatchStep(step){
     CS.breakoutT=scfgS.breakoutEvery? scfgS.breakoutEvery[0]+Math.random()*(scfgS.breakoutEvery[1]-scfgS.breakoutEvery[0]) : 0;
     $("breakout-warn").classList.add("hidden");
     const info=document.createElement("div"); info.id="fish-info";
-    info.innerHTML=`🎣 <b>GIỮ</b> nút bên dưới (hoặc giữ tay trên màn hình) để nâng <b style="color:var(--green)">thanh xanh</b>, buông ra thanh sẽ rơi xuống. Đè thanh lên 👻 trong cột bên phải cho <b>tiến trình siêu độ</b> đầy 100% — để tụt về 0% là ma vùng thoát đó!`+(scfgS.breakoutEvery?`<br>⚠️ Ma bậc này còn hay <b>VÙNG THOÁT</b>: thấy cảnh báo đỏ thì bấm nút <b>TRẤN ÁP</b> bằng bùa ngay, chậm tay là mất tiến trình!`:"");
+    info.innerHTML=`🎣 <b>Giữ</b> = nâng <b style="color:var(--green)">thanh xanh</b> · buông = rơi · đè thanh lên 👻 cho đầy <b>100%</b>`+(scfgS.breakoutEvery?` · ⚠️ Vùng thoát: bấm <b>TRẤN ÁP</b>!`:"");
     B.appendChild(info);
     const b=document.createElement("button");
-    b.className="btn"; b.textContent="🎣 GIỮ ĐỂ NÂNG THANH"; b.style.fontSize="20px"; b.style.padding="20px";
+    b.className="btn"; b.textContent="🎣 GIỮ ĐỂ NÂNG THANH"; b.style.fontSize="18px"; b.style.padding="13px";
     b.style.userSelect="none"; b.style.webkitUserSelect="none"; b.style.touchAction="none";
     b.addEventListener("pointerdown",e=>{ e.preventDefault(); CS.holding=true; });
     const stop=()=>{ CS.holding=false; };
@@ -6497,7 +6504,7 @@ function catchLoop(){
           CS.chant=Math.max(0,CS.chant-scfg.breakoutLoss);
           CS.breakoutT=scfg.breakoutEvery[0]+Math.random()*(scfg.breakoutEvery[1]-scfg.breakoutEvery[0]);
           $("breakout-warn").classList.add("hidden"); paintSuppressBtn();
-          toast("💥 Ma vùng thoát thành công — mất "+scfg.breakoutLoss+"% tiến trình!",1800);
+          toast("💥 Vùng thoát thành công — mất "+scfg.breakoutLoss+"%!",1800);
         }
       } else {
         CS.breakoutT-=dt;
@@ -6547,7 +6554,7 @@ function catchLoop(){
       if(CS.buffs.kimthan&&!CS.kimthanUsed){
         CS.kimthanUsed=true; CS.chant=40; CS.fishTime=0; CS.chantPeak=Math.max(CS.chantPeak,40);
         $("chant-fill").style.width="40%";
-        toast("🛡️ Kim Thân Phù tự cháy — cứu một mạng! Tiến trình hồi về 40%, giữ chắc tay vào!",2600);
+        toast("🛡️ Kim Thân Phù tự cháy — hồi 40% tiến trình!",2600);
         if(navigator.vibrate) navigator.vibrate([50,40,50]);
       } else {
         sfx.fail();
@@ -6569,8 +6576,10 @@ function catchLoop(){
     for(let i=0;i<24;i++){ const px=(i*97+t*40)%w, py=h-((i*53+t*70)%(h+40))+20;
       ctx.globalAlpha=0.25+0.55*rise; ctx.beginPath(); ctx.arc(px,py,2.5,0,7); ctx.fill(); }
     ctx.globalAlpha=1;
-    /* --- cột minigame bên phải: rãnh tối + thanh xanh + con ma --- */
-    const tw=46, th=h*0.64, tx=w-tw-16, ty=h*0.13;
+    /* --- cột minigame bên phải: rãnh tối + thanh xanh + con ma ---
+       cột cao gần hết sân chơi (0,88 chiều cao) để điều khiển chính xác;
+       khung thoại đã lùi mép phải (CSS .step-sieudo) nên không đè lên cột */
+    const tw=48, th=h*0.88, tx=w-tw-14, ty=h*0.06;
     const yOf=p=>ty+th-p*th; // p: 0 = đáy cột, 1 = đỉnh cột
     ctx.save();
     ctx.fillStyle="rgba(4,10,18,.78)"; ctx.strokeStyle="rgba(245,197,66,.55)"; ctx.lineWidth=2;
@@ -6589,8 +6598,8 @@ function catchLoop(){
     ctx.fillText(Math.floor(CS.chant)+"%",tx+tw/2,ty-9);
     ctx.restore();
     $("catch-sub").textContent=CS.fishIn
-      ? "\u{1F3A3} Đang đè trúng ma — tiến trình tăng! ("+Math.floor(CS.chant)+"%)"
-      : "\u{1F3A3} Ma ngoài thanh — tiến trình đang tụt! Đưa thanh xanh đè lên con ma đi ("+Math.floor(CS.chant)+"%)";
+      ? "\u{1F3A3} Trong thanh · "+Math.floor(CS.chant)+"%"
+      : "\u{1F3A3} Ngoài thanh — đang tụt! · "+Math.floor(CS.chant)+"%";
   }
   if(window.Ghost3D) Ghost3D.render("catch",w,h,t);
   catchRAF=requestAnimationFrame(catchLoop);
@@ -6707,15 +6716,15 @@ function paintSuppressBtn(){
   const active=CS.breakoutLeft>0;
   sb.disabled=!active;
   sb.textContent=active
-    ? `🧧 TRẤN ÁP NGAY! (dùng 1 bùa · còn ${total} lá)`
-    : `🧧 Trấn áp bằng bùa (còn ${total} lá) — chờ ma vùng thoát`;
+    ? `🧧 TRẤN ÁP NGAY! (còn ${total} bùa)`
+    : `🧧 Trấn áp bằng bùa (còn ${total} lá)`;
 }
 function suppressGhost(){
   if(!CS||CS.step!=="sieudo"||!(CS.breakoutLeft>0)) return;
   const cfg=STRUGGLE[ghostTier(CS.ghost)]||STRUGGLE.thuong;
   const order=Object.keys(TALISMANS); // trấn áp tiêu lá rẻ trước (thứ tự khai báo = giá tăng dần)
   const k=order.find(x=>(S.tal[x]||0)>0);
-  if(!k){ toast("😱 Hết bùa rồi — không trấn áp được! Cố giữ niệm chờ ma qua cơn vùng thoát…",2200); return; }
+  if(!k){ toast("😱 Hết bùa — không trấn áp được!",2200); return; }
   S.tal[k]--; persist();
   CS.breakoutLeft=0;
   CS.calmT=cfg.calmS||3;
@@ -6724,7 +6733,7 @@ function suppressGhost(){
   $("breakout-warn").classList.add("hidden");
   if(navigator.vibrate) navigator.vibrate(40);
   sfx.chime();
-  toast("🧧 Đã trấn áp bằng bùa "+TALISMANS[k].name+"! Ma bị trấn "+(cfg.calmS||3)+"s · đồng hồ thoát đóng băng 3s · tiến trình giữ nguyên.",2400);
+  toast("🧧 Trấn áp bằng "+TALISMANS[k].name+"! Ma bị trấn "+(cfg.calmS||3)+"s · đóng băng đồng hồ 3s.",2400);
   paintSuppressBtn();
 }
 function sieuDoXong(){
