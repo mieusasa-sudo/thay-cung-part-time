@@ -578,9 +578,6 @@ function buildDecor() {
     scene.add(makeFloorCandle(-10.72 + j(0.2), zz + j(0.3), 0.2 + (a % 3) * 0.07));
     scene.add(makeFloorCandle(10.72 + j(0.2), zz + 0.6 + j(0.3), 0.34 - (a % 3) * 0.05));
   }
-  for (var b = 0; b < 9; b++) {
-    scene.add(makeFloorCandle(-7.6 + b * 1.9 + j(0.25), -5.35 + j(0.15), 0.22 + (b % 2) * 0.1));
-  }
   var cl = [[-9.9, 7.55], [-9.45, 7.9], [-10.3, 7.95], [9.9, 7.55], [9.45, 7.9], [10.3, 7.95]];
   for (var cix = 0; cix < cl.length; cix++) scene.add(makeFloorCandle(cl[cix][0], cl[cix][1], 0.24 + (cix % 3) * 0.06));
   /* chan nen cao hai ben vach */
