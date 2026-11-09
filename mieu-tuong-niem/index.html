@@ -194,6 +194,7 @@ function loadState() {
     if (s.shrines) U.shrines = s.shrines;
     if (s.litDay) U.litDay = s.litDay;
     if (s.incDay) U.incDay = s.incDay;
+    if (s.colors) U.colors = s.colors;
   } catch (e) {}
 }
 function saveState() { try { localStorage.setItem(STORE_KEY, JSON.stringify(U)); } catch (e) {} }
@@ -574,11 +575,23 @@ function refreshCell(i) {
   C.flowerS.material.opacity = sh.flowers > 0 ? 0.85 : 0;
 }
 /* ================= AVATAR ================= */
+var SHIRT_COLORS = [0x9fc6a5, 0x7d94b8, 0xc98a9a, 0xe0b45c, 0x9a86c8, 0x6fb3a6, 0xd98c5f, 0xb8c86b, 0xe58ea0, 0x7fb069];
+var HAIR_COLORS = [0x4a3220, 0x2f2a26, 0x8a5a30, 0x5d4037, 0xb08968, 0x704214, 0x3b2f2f];
+var SKIN_COLORS = [0xf2c79b, 0xeebd8d, 0xf6cf9f, 0xe0ac82, 0xc98d64];
+function pickC(a) { return a[Math.floor(Math.random() * a.length)]; }
+function myColors() {
+  if (!U.colors) {
+    U.colors = { shirt: pickC(SHIRT_COLORS), hair: pickC(HAIR_COLORS), skin: pickC(SKIN_COLORS) };
+    saveState();
+  }
+  return U.colors;
+}
 function buildAvatar() {
+  var MC = myColors();
   avatar = new THREE.Group();
-  var shirt = new THREE.MeshStandardMaterial({ color: 0x9fc6a5, roughness: 0.85 });
-  var skin = new THREE.MeshStandardMaterial({ color: 0xf2c79b, roughness: 0.7 });
-  var hairM = new THREE.MeshStandardMaterial({ color: 0x4a3220, roughness: 0.9 });
+  var shirt = new THREE.MeshStandardMaterial({ color: MC.shirt, roughness: 0.85 });
+  var skin = new THREE.MeshStandardMaterial({ color: MC.skin, roughness: 0.7 });
+  var hairM = new THREE.MeshStandardMaterial({ color: MC.hair, roughness: 0.9 });
   var body = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.4, 0.78, 14), shirt);
   body.position.y = 0.62; avatar.add(body);
   var head = new THREE.Mesh(new THREE.SphereGeometry(0.335, 20, 16), skin);
@@ -720,6 +733,7 @@ function animate() {
       sm.sprite.position.x = Math.sin(t * 1.4 + sm.seed) * 0.05;
     }
   }
+  if (typeof updateOthers === "function") updateOthers(dt);
   renderer.render(scene, camera);
 }
 /* ================= TUONG TAC: THEM BE / THAM GIAN ================= */
@@ -893,7 +907,8 @@ var FEED = [
 ];
 var feedIdx = 0;
 function tickFeed() {
-  document.getElementById("feed").textContent = "✦ " + FEED[feedIdx % FEED.length];
+  var list = (window.SYNC_FEED && window.SYNC_FEED.length) ? window.SYNC_FEED : FEED;
+  document.getElementById("feed").textContent = "✦ " + list[feedIdx % list.length];
   feedIdx++;
 }
 /* ================= KHOI DONG ================= */
@@ -901,6 +916,7 @@ loadState();
 tickFeed();
 setInterval(tickFeed, 8000);
 setInterval(function() {
+  if (window.SYNC_ONLINE) return;
   document.getElementById("onlineCount").textContent = 200 + Math.floor(Math.random() * 40);
 }, 20000);
 if (location.hash === "#fill1") {
@@ -910,7 +926,205 @@ if (typeof THREE === "undefined") {
   document.getElementById("bootMsg").innerHTML = "Không tải được thư viện 3D (THREE.js).<br>Kiểm tra kết nối mạng rồi tải lại trang nhé.";
 } else {
   init3D();
+  window.addEventListener("load", function() { try { syncInit(); } catch (e) {} });
 }
 </script>
+<script>
+/* ================= ONLINE THAT: Firebase Realtime Database qua REST (khong can SDK) =================
+   DB_URL de trong = che do local. Ban build se thay bang databaseURL that cua project Firebase. */
+var DB_URL = "";
+window.SYNC_ONLINE = false;
+window.SYNC_FEED = [];
+var CLIENT_ID = "c" + Math.random().toString(36).slice(2, 10);
+var others = {};
+var serverKnown = {};
+var lastPresenceSent = 0, lastSentPos = { x: 0, z: 0, r: 0 };
+
+function dbReq(method, path, body) {
+  if (!DB_URL) return Promise.resolve(null);
+  var ctrl = ("AbortController" in window) ? new AbortController() : null;
+  var to = ctrl ? setTimeout(function() { ctrl.abort(); }, 7000) : null;
+  var opts = { method: method, headers: { "Content-Type": "application/json" } };
+  if (ctrl) opts.signal = ctrl.signal;
+  if (body !== undefined) opts.body = JSON.stringify(body);
+  return fetch(DB_URL + path + ".json", opts)
+    .then(function(r) { if (to) clearTimeout(to); return r.ok ? r.json() : undefined; })
+    .catch(function() { if (to) clearTimeout(to); return undefined; });
+}
+function dbGet(p) { return dbReq("GET", p); }
+function dbPut(p, v) { return dbReq("PUT", p, v); }
+function dbPatch(p, v) { return dbReq("PATCH", p, v); }
+function dbPost(p, v) { return dbReq("POST", p, v); }
+function dbDel(p) { return dbReq("DELETE", p); }
+
+function normGB(gb) {
+  if (!gb) return [];
+  if (Object.prototype.toString.call(gb) === "[object Array]") return gb.filter(function(x) { return !!x; });
+  return Object.keys(gb).sort().map(function(k) { return gb[k]; });
+}
+function normShrine(sh) {
+  if (!sh) return null;
+  sh.gb = normGB(sh.gb);
+  sh.candles = sh.candles || 0; sh.flowers = sh.flowers || 0;
+  sh.incense = sh.incense || 0; sh.gifts = sh.gifts || 0;
+  return sh;
+}
+function pushFeed(text) { dbPost("/feed", { m: text, t: Date.now() }); }
+
+function applyServerShrines(data) {
+  var seen = {};
+  if (data) {
+    Object.keys(data).forEach(function(k) {
+      var idx = parseInt(k, 10);
+      if (isNaN(idx) || !data[k]) return;
+      seen[idx] = true; serverKnown[idx] = true;
+      var incoming = normShrine(data[k]);
+      var cur = U.shrines[idx];
+      if (!cur || JSON.stringify(cur) !== JSON.stringify(incoming)) {
+        U.shrines[idx] = incoming;
+        refreshCell(idx);
+        if (currentPos === idx && document.getElementById("detailPanel").style.display === "block") {
+          updateDetailCounts(); renderGB3D();
+        }
+      }
+    });
+  }
+  Object.keys(serverKnown).forEach(function(k) {
+    var idx = parseInt(k, 10);
+    if (!seen[idx]) {
+      if (U.shrines[idx]) { delete U.shrines[idx]; refreshCell(idx); }
+      delete serverKnown[idx];
+    }
+  });
+  saveState();
+}
+function syncInit() {
+  if (!DB_URL) return;
+  dbGet("/shrines").then(function(data) {
+    if (data === undefined) {
+      setTimeout(function() {
+        dbGet("/presence").then(function(d2) { if (d2 !== undefined) syncInit(); });
+      }, 5000);
+      return;
+    }
+    window.SYNC_ONLINE = true;
+    applyServerShrines(data || {});
+    Object.keys(U.shrines).forEach(function(k) {
+      if (!serverKnown[k]) { dbPut("/shrines/" + k, U.shrines[k]); serverKnown[k] = true; }
+    });
+    setInterval(function() { dbGet("/shrines").then(function(d) { if (d !== undefined) applyServerShrines(d); }); }, 6000);
+    setInterval(pollFeed, 9000); pollFeed();
+    setInterval(sendPresence, 2000);
+    setInterval(pollPresence, 3500);
+    sendPresence(); pollPresence();
+    window.addEventListener("beforeunload", function() {
+      try { fetch(DB_URL + "/presence/" + CLIENT_ID + ".json", { method: "DELETE", keepalive: true }); } catch (e) {}
+    });
+  });
+}
+function pollFeed() {
+  dbGet("/feed").then(function(d) {
+    if (!d) return;
+    var arr = Object.keys(d).sort().map(function(k) { return d[k]; }).filter(function(x) { return x && x.m; });
+    if (arr.length) window.SYNC_FEED = arr.slice(-8).map(function(x) { return x.m; });
+  });
+}
+/* ---------- hien dien: vi tri + mau ao cua tung khach ---------- */
+function sendPresence() {
+  if (!avatar) return;
+  var now = Date.now();
+  var p = avatar.position, r = avatar.rotation.y;
+  var moved = Math.hypot(p.x - lastSentPos.x, p.z - lastSentPos.z) > 0.05 || Math.abs(r - lastSentPos.r) > 0.08;
+  if (!moved && now - lastPresenceSent < 12000) return;
+  lastPresenceSent = now; lastSentPos = { x: p.x, z: p.z, r: r };
+  dbPut("/presence/" + CLIENT_ID, { n: "Trăng Lặng", x: +p.x.toFixed(2), z: +p.z.toFixed(2), r: +r.toFixed(2), c: myColors(), t: now });
+}
+function makeOtherAvatar(name, c) {
+  var grp = new THREE.Group();
+  var shirt = new THREE.MeshStandardMaterial({ color: c && c.shirt ? c.shirt : 0x9fc6a5, roughness: 0.85 });
+  var skin = new THREE.MeshStandardMaterial({ color: c && c.skin ? c.skin : 0xf2c79b, roughness: 0.7 });
+  var hairM = new THREE.MeshStandardMaterial({ color: c && c.hair ? c.hair : 0x4a3220, roughness: 0.9 });
+  var body = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.4, 0.78, 14), shirt); body.position.y = 0.62; grp.add(body);
+  var head = new THREE.Mesh(new THREE.SphereGeometry(0.335, 20, 16), skin); head.position.y = 1.32; grp.add(head);
+  var hair = new THREE.Mesh(new THREE.SphereGeometry(0.35, 20, 12, 0, Math.PI * 2, 0, Math.PI * 0.55), hairM); hair.position.y = 1.38; grp.add(hair);
+  var tag = new THREE.Sprite(new THREE.SpriteMaterial({ map: tagTexture(name || "Khách"), transparent: true, depthWrite: false }));
+  tag.scale.set(1.15, 0.29, 1); tag.position.y = 1.98; grp.add(tag);
+  grp.position.set(0, 0, 5);
+  scene.add(grp);
+  return grp;
+}
+function pollPresence() {
+  dbGet("/presence").then(function(d) {
+    var now = Date.now(), fresh = 0, alive = {};
+    if (d) {
+      Object.keys(d).forEach(function(id) {
+        var e = d[id];
+        if (!e || !e.t || now - e.t > 45000) return;
+        fresh++;
+        if (id === CLIENT_ID) return;
+        alive[id] = true;
+        var o = others[id];
+        if (!o) {
+          o = others[id] = { grp: makeOtherAvatar(e.n, e.c), tx: e.x || 0, tz: e.z || 0, tr: e.r || 0 };
+          o.grp.position.set(e.x || 0, 0, e.z || 0);
+        }
+        o.tx = e.x || 0; o.tz = e.z || 0; o.tr = e.r || 0;
+      });
+    }
+    Object.keys(others).forEach(function(id) {
+      if (!alive[id]) { scene.remove(others[id].grp); delete others[id]; }
+    });
+    if (window.SYNC_ONLINE) document.getElementById("onlineCount").textContent = Math.max(1, fresh);
+  });
+}
+function updateOthers(dt) {
+  Object.keys(others).forEach(function(id) {
+    var o = others[id];
+    o.grp.position.x += (o.tx - o.grp.position.x) * Math.min(1, dt * 4);
+    o.grp.position.z += (o.tz - o.grp.position.z) * Math.min(1, dt * 4);
+    var diff = o.tr - o.grp.rotation.y;
+    while (diff > Math.PI) diff -= Math.PI * 2;
+    while (diff < -Math.PI) diff += Math.PI * 2;
+    o.grp.rotation.y += diff * Math.min(1, dt * 6);
+  });
+}
+/* ---------- boc cac hanh dong de ghi len server ---------- */
+var _createShrine3D = createShrine3D;
+createShrine3D = function() {
+  var idx = addPos;
+  _createShrine3D();
+  if (DB_URL && idx !== null && U.shrines[idx]) {
+    dbPut("/shrines/" + idx, U.shrines[idx]);
+    serverKnown[idx] = true;
+    pushFeed("Một vị khách vừa đặt chỗ cho " + U.shrines[idx].name + " ở ô " + posLabel(idx));
+  }
+};
+var _actCandle = actCandle;
+actCandle = function() { var idx = currentPos; _actCandle(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { candles: U.shrines[idx].candles }); };
+var _actIncense = actIncense;
+actIncense = function() { var idx = currentPos; _actIncense(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { incense: U.shrines[idx].incense }); };
+var _actFlower = actFlower;
+actFlower = function() { var idx = currentPos; _actFlower(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { flowers: U.shrines[idx].flowers }); };
+var _actGift = actGift;
+actGift = function() { var idx = currentPos; _actGift(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { gifts: U.shrines[idx].gifts }); };
+var _actGuestbook = actGuestbook;
+actGuestbook = function() {
+  var idx = currentPos;
+  var inp = document.getElementById("gbText");
+  var t = inp ? inp.value.trim() : "";
+  _actGuestbook();
+  if (DB_URL && t && U.shrines[idx]) dbPost("/shrines/" + idx + "/gb", ["Bạn", t]);
+};
+var _removeShrine3D = removeShrine3D;
+removeShrine3D = function() {
+  var idx = currentPos;
+  _removeShrine3D();
+  if (DB_URL && idx !== null && idx !== undefined && !U.shrines[idx]) {
+    dbDel("/shrines/" + idx);
+    delete serverKnown[idx];
+  }
+};
+</script>
+
 </body>
 </html>
