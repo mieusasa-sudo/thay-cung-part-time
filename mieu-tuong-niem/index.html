@@ -405,7 +405,7 @@ var hitMeshes = [];
 var avatar, camYaw = 0, camPitch = 0.42, camDistMul = 1, camLookY = 1.25;
 var keys = {};
 var joyVec = { x: 0, y: 0 };
-var flames = [], smokes = [], lanterns = [], kois = [], waterfalls = [];
+var flames = [], smokes = [], lanterns = [], kois = [], waterfalls = [], ripples = [];
 
 function init3D() {
   var holder = document.getElementById("scene");
@@ -743,64 +743,300 @@ function makeKoi(main, patch) {
   g.userData.tail = tail;
   return g;
 }
+function makeLotusFlower(sc) {
+  var g = new THREE.Group();
+  var mOut = new THREE.MeshStandardMaterial({ color: 0xef9ec2, roughness: 0.5 });
+  var mIn = new THREE.MeshStandardMaterial({ color: 0xf7c9dd, roughness: 0.5 });
+  function ring(n, y, tilt, off, mat, seed) {
+    for (var i = 0; i < n; i++) {
+      var a = (i / n) * Math.PI * 2 + seed;
+      var pivot = new THREE.Group();
+      pivot.rotation.y = Math.PI / 2 - a;
+      var pt = new THREE.Mesh(new THREE.SphereGeometry(0.08, 10, 8), mat);
+      pt.scale.set(0.66, 0.3, 1.3);
+      pt.position.set(0, y, off);
+      pt.rotation.x = -tilt;
+      pivot.add(pt);
+      g.add(pivot);
+    }
+  }
+  ring(7, 0.005, 0.95, 0.05, mOut, 0);
+  ring(5, 0.04, 0.42, 0.03, mIn, 0.55);
+  var heart = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 8), new THREE.MeshStandardMaterial({ color: 0xf5c542, roughness: 0.6 }));
+  heart.scale.y = 0.7;
+  heart.position.y = 0.055;
+  g.add(heart);
+  g.scale.setScalar(sc || 1);
+  return g;
+}
+function makeLotusBud(sc) {
+  var g = new THREE.Group();
+  var pts = [];
+  [[0, 0], [0.045, 0.01], [0.068, 0.06], [0.062, 0.12], [0.035, 0.19], [0.012, 0.24], [0, 0.27]].forEach(function(q) { pts.push(new THREE.Vector2(q[0], q[1])); });
+  var bud = new THREE.Mesh(new THREE.LatheGeometry(pts, 12), new THREE.MeshStandardMaterial({ color: 0xef9ec2, roughness: 0.5 }));
+  g.add(bud);
+  var sep = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.1, 8), new THREE.MeshStandardMaterial({ color: 0x5d8a42, roughness: 0.8 }));
+  sep.rotation.x = Math.PI;
+  sep.position.y = 0.02;
+  g.add(sep);
+  var stem = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.16, 6), new THREE.MeshStandardMaterial({ color: 0x4e7d3a, roughness: 0.9 }));
+  stem.position.y = -0.07;
+  g.add(stem);
+  g.scale.setScalar(sc || 1);
+  return g;
+}
 function buildPond() {
   var CX = -6.4, CZ = 15.2, RX = 3.1, RZ = 2.5;
-  var basin = new THREE.Mesh(new THREE.CircleGeometry(1, 28), new THREE.MeshStandardMaterial({ color: 0x14333a, roughness: 1 }));
-  basin.rotation.x = -Math.PI / 2; basin.scale.set(RX, RZ, 1); basin.position.set(CX, 0.03, CZ); scene.add(basin);
-  var waterTex = makeTex(128, 128, function(g, w, h) {
-    g.fillStyle = "#3f7180"; g.fillRect(0, 0, w, h);
-    for (var i = 0; i < 40; i++) {
-      g.fillStyle = "rgba(255,255,255,.06)";
-      g.beginPath();
-      g.ellipse(Math.random() * w, Math.random() * h, 8 + Math.random() * 16, 3 + Math.random() * 5, Math.random() * 3, 0, Math.PI * 2);
-      g.fill();
-    }
-  });
-  waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping;
-  var water = new THREE.Mesh(new THREE.CircleGeometry(1, 28), new THREE.MeshStandardMaterial({ map: waterTex, transparent: true, opacity: 0.78, roughness: 0.2, metalness: 0.15 }));
-  water.rotation.x = -Math.PI / 2; water.scale.set(RX - 0.15, RZ - 0.15, 1); water.position.set(CX, 0.09, CZ); scene.add(water);
-  waterfalls.push({ tex: waterTex, speed: 0, drift: 0.02 });
-  var rockM = new THREE.MeshStandardMaterial({ color: 0x7d7668, roughness: 1, flatShading: true });
-  for (var i = 0; i < 16; i++) {
-    var a = (i / 16) * Math.PI * 2;
-    var rock = new THREE.Mesh(new THREE.IcosahedronGeometry(0.16 + Math.random() * 0.13, 0), rockM);
-    rock.position.set(CX + Math.cos(a) * RX, 0.06, CZ + Math.sin(a) * RZ);
-    rock.scale.y = 0.6;
-    rock.rotation.set(Math.random() * 3, Math.random() * 3, Math.random() * 3);
-    scene.add(rock);
+  var STYLE = 3;
+  var mm = /pond(\d)/.exec(location.hash || "");
+  if (mm) STYLE = +mm[1];
+  var outline = [];
+  for (var i = 0; i < 26; i++) {
+    var a0 = (i / 26) * Math.PI * 2;
+    var r0 = 1 + 0.055 * Math.sin(a0 * 3 + 1.7) + 0.04 * Math.sin(a0 * 5 + 0.6);
+    outline.push([Math.cos(a0) * RX * r0, Math.sin(a0) * RZ * r0]);
   }
-  var rockery = new THREE.Group();
-  var rocks = [[0, 0.25, 0, 0.55], [0.5, 0.2, 0.3, 0.42], [-0.45, 0.18, -0.25, 0.4], [0.15, 0.62, 0.05, 0.45], [-0.2, 0.55, -0.3, 0.34], [0.05, 0.95, 0, 0.36]];
-  rocks.forEach(function(r) {
-    var m = new THREE.Mesh(new THREE.IcosahedronGeometry(r[3], 0), rockM);
-    m.position.set(r[0], r[1], r[2]);
-    m.scale.y = 0.8;
-    m.rotation.set(Math.random() * 3, Math.random() * 3, 0);
-    rockery.add(m);
-  });
-  rockery.position.set(-9.35, 0, 15.1);
-  scene.add(rockery);
-  var miniTree = makeTree(0, 0, 0.42);
-  miniTree.position.set(-9.3, 1.0, 14.6);
-  scene.add(miniTree);
-  var fallTex = waterfallTexture();
-  fallTex.wrapS = fallTex.wrapT = THREE.RepeatWrapping;
-  fallTex.repeat.set(1, 2);
-  var fall = new THREE.Mesh(new THREE.PlaneGeometry(0.55, 1.5), new THREE.MeshBasicMaterial({ map: fallTex, transparent: true, opacity: 0.85, depthWrite: false, side: THREE.DoubleSide }));
-  fall.position.set(-8.35, 0.62, 15.1);
-  fall.rotation.set(-0.5, 0.35, 0);
-  scene.add(fall);
-  waterfalls.push({ tex: fallTex, speed: 0.9, drift: 0 });
-  var foam = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), color: 0xdff2f5, transparent: true, opacity: 0.7, depthWrite: false }));
-  foam.scale.set(0.9, 0.5, 1);
-  foam.position.set(-8.15, 0.16, 15.1);
-  scene.add(foam);
-  var defs = [[0xf2ede2, 0xd9534f], [0xe8853d, null], [0xf2ede2, 0xe8853d], [0xd9534f, null], [0xf5d76e, null]];
-  defs.forEach(function(d, i) {
-    var k = makeKoi(d[0], d[1]);
-    scene.add(k);
-    kois.push({ grp: k, tail: k.userData.tail, cx: CX, cz: CZ, rx: RX - 0.7 - (i % 2) * 0.4, rz: RZ - 0.6 - (i % 2) * 0.3, a: i * 1.35, speed: (0.25 + Math.random() * 0.15) * (i % 2 ? -1 : 1), seed: Math.random() * 10 });
-  });
+  function shapeGeo(scale) {
+    var sh = new THREE.Shape();
+    outline.forEach(function(pt, j) {
+      if (j === 0) sh.moveTo(pt[0] * scale, pt[1] * scale);
+      else sh.lineTo(pt[0] * scale, pt[1] * scale);
+    });
+    sh.closePath();
+    return new THREE.ShapeGeometry(sh);
+  }
+  var rockM = new THREE.MeshStandardMaterial({ color: 0x8a7d6b, roughness: 1, flatShading: true });
+  var rockM2 = new THREE.MeshStandardMaterial({ color: 0x6f6a5e, roughness: 1, flatShading: true });
+  function addRipple(x, z, ph) {
+    var ring = new THREE.Mesh(new THREE.RingGeometry(0.16, 0.21, 24), new THREE.MeshBasicMaterial({ color: 0xeafcff, transparent: true, opacity: 0.4, depthWrite: false, side: THREE.DoubleSide }));
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.set(x, 0.1, z);
+    scene.add(ring);
+    ripples.push({ m: ring, ph: ph });
+  }
+  function makeFall(x, y, z, w, h, tilt) {
+    var ft = waterfallTexture();
+    ft.wrapS = ft.wrapT = THREE.RepeatWrapping;
+    ft.repeat.set(1, 2);
+    var fall = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: ft, transparent: true, opacity: 0.85, depthWrite: false, side: THREE.DoubleSide }));
+    fall.position.set(x, y, z);
+    fall.rotation.set(tilt, 0.15, 0);
+    scene.add(fall);
+    waterfalls.push({ tex: ft, speed: 0.9, drift: 0 });
+    var foam = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), color: 0xdff2f5, transparent: true, opacity: 0.7, depthWrite: false }));
+    foam.scale.set(0.8, 0.42, 1);
+    foam.position.set(x + 0.1, 0.15, z);
+    scene.add(foam);
+  }
+  function makeRockery(withPine) {
+    var rockery = new THREE.Group();
+    var rdefs = [[0, 0.28, 0, 0.72], [0.55, 0.2, 0.35, 0.5], [-0.5, 0.22, -0.3, 0.52], [0.1, 0.78, 0.05, 0.55], [-0.35, 0.7, -0.15, 0.42], [0.05, 1.22, 0, 0.44], [0.42, 1.02, 0.22, 0.3]];
+    rdefs.forEach(function(r, ri) {
+      var m = new THREE.Mesh(new THREE.IcosahedronGeometry(r[3], 0), ri % 2 ? rockM2 : rockM);
+      m.position.set(r[0], r[1], r[2]);
+      m.scale.y = 0.82;
+      m.rotation.set(ri * 1.7, ri * 2.3, ri * 0.5);
+      rockery.add(m);
+    });
+    var mossM = new THREE.MeshStandardMaterial({ color: 0x56713a, roughness: 1 });
+    [[0.3, 0.6, 0.3, 0.3], [-0.3, 1.02, -0.18, 0.24], [0.16, 1.5, 0.08, 0.2]].forEach(function(mf) {
+      var moss = new THREE.Mesh(new THREE.SphereGeometry(mf[3], 10, 8), mossM);
+      moss.scale.set(1, 0.35, 1);
+      moss.position.set(mf[0], mf[1], mf[2]);
+      rockery.add(moss);
+    });
+    if (withPine) {
+      var trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.06, 0.4, 6), new THREE.MeshStandardMaterial({ color: 0x5d4630, roughness: 1 }));
+      trunk.position.set(0.52, 1.35, -0.25); trunk.rotation.z = 0.25; rockery.add(trunk);
+      var pineM = new THREE.MeshStandardMaterial({ color: 0x39543a, roughness: 1, flatShading: true });
+      var pineM2 = new THREE.MeshStandardMaterial({ color: 0x42663f, roughness: 1, flatShading: true });
+      [[0.62, 1.62, -0.25, 0.3], [0.45, 1.78, -0.2, 0.24], [0.58, 1.94, -0.25, 0.17]].forEach(function(pf, pi) {
+        var blob = new THREE.Mesh(new THREE.SphereGeometry(pf[3], 10, 8), pi % 2 ? pineM2 : pineM);
+        blob.scale.set(1.25, 0.45, 1.25);
+        blob.position.set(pf[0], pf[1], pf[2]);
+        rockery.add(blob);
+      });
+    }
+    rockery.position.set(-9.15, 0, 15.2);
+    scene.add(rockery);
+  }
+  function makeWater(cDeep, cMid, cEdge, basinColor, basinScale) {
+    var basin = new THREE.Mesh(shapeGeo(basinScale), new THREE.MeshStandardMaterial({ color: basinColor, roughness: 1 }));
+    basin.rotation.x = -Math.PI / 2; basin.position.set(CX, 0.025, CZ); scene.add(basin);
+    var wgeo = shapeGeo(0.97);
+    wgeo.computeBoundingBox();
+    var bb = wgeo.boundingBox, bsx = bb.max.x - bb.min.x, bsy = bb.max.y - bb.min.y;
+    var uvA = wgeo.attributes.uv, posA = wgeo.attributes.position;
+    for (var vi = 0; vi < uvA.count; vi++) uvA.setXY(vi, (posA.getX(vi) - bb.min.x) / bsx, (posA.getY(vi) - bb.min.y) / bsy);
+    var waterTex = makeTex(256, 256, function(g, w, h) {
+      var grad = g.createRadialGradient(w / 2, h / 2, 10, w / 2, h / 2, w / 2);
+      grad.addColorStop(0, cDeep);
+      grad.addColorStop(0.55, cMid);
+      grad.addColorStop(1, cEdge);
+      g.fillStyle = grad; g.fillRect(0, 0, w, h);
+      for (var i2 = 0; i2 < 26; i2++) {
+        g.fillStyle = "rgba(255,255,255,.10)";
+        g.beginPath();
+        g.ellipse(Math.random() * w, Math.random() * h, 4 + Math.random() * 10, 2 + Math.random() * 4, Math.random() * 3, 0, Math.PI * 2);
+        g.fill();
+      }
+    });
+    waterTex.wrapS = waterTex.wrapT = THREE.RepeatWrapping;
+    var water = new THREE.Mesh(wgeo, new THREE.MeshStandardMaterial({ map: waterTex, transparent: true, opacity: 0.88, roughness: 0.15, metalness: 0.1 }));
+    water.rotation.x = -Math.PI / 2; water.position.set(CX, 0.085, CZ); scene.add(water);
+    waterfalls.push({ tex: waterTex, speed: 0, drift: 0.015 });
+  }
+  function spawnKoi(n) {
+    var defs = [[0xf2ede2, 0xd9534f], [0xe8853d, null], [0xf2ede2, 0xe8853d], [0xd9534f, null], [0xf5d76e, null], [0xf2ede2, null], [0xe8853d, 0xf2ede2]];
+    for (var i = 0; i < n; i++) {
+      var d = defs[i % defs.length];
+      var k = makeKoi(d[0], d[1]);
+      scene.add(k);
+      kois.push({ grp: k, tail: k.userData.tail, cx: CX, cz: CZ, rx: RX - 0.7 - (i % 2) * 0.4, rz: RZ - 0.6 - (i % 2) * 0.3, a: i * 1.35, speed: (0.25 + (i % 3) * 0.05) * (i % 2 ? -1 : 1), seed: i * 2.7 });
+    }
+  }
+  if (STYLE === 2) {
+    /* MAU 2 - SUOI DA CUOI: nuoc sang, bo cat, soi tron, ong truc tha nuoc */
+    makeWater("#3d8fa3", "#63a894", "#b5d9bd", 0xc9b18a, 1.14);
+    var pebCols = [0xd8cfc0, 0xb9ac97, 0x9d968a, 0xc4b49c];
+    outline.forEach(function(pt, j) {
+      var peb = new THREE.Mesh(new THREE.SphereGeometry(0.13 + ((j * 29) % 10) / 10 * 0.08, 10, 8), new THREE.MeshStandardMaterial({ color: pebCols[j % 4], roughness: 0.9 }));
+      peb.position.set(CX + pt[0] * 1.08, 0.06, CZ - pt[1] * 1.08);
+      peb.scale.y = 0.55;
+      peb.rotation.y = j * 1.7;
+      scene.add(peb);
+    });
+    var bamM = new THREE.MeshStandardMaterial({ color: 0x9aa860, roughness: 0.8 });
+    var post1 = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.95, 8), bamM);
+    post1.position.set(-8.95, 0.47, 14.35); scene.add(post1);
+    var post2 = post1.clone(); post2.position.z = 15.05; scene.add(post2);
+    var spout = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 1.0, 8), bamM);
+    spout.rotation.z = Math.PI / 2 - 0.18;
+    spout.position.set(-8.55, 0.92, 14.7); scene.add(spout);
+    makeFall(-8.12, 0.45, 14.7, 0.15, 0.75, -0.1);
+    addRipple(-8.12, 14.7, 0);
+    var reedM = new THREE.MeshStandardMaterial({ color: 0x4d7a38, roughness: 1 });
+    [13.1, 17.3].forEach(function(rz) {
+      for (var qi = 0; qi < 5; qi++) {
+        var reed = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.6 + (qi % 3) * 0.18, 5), reedM);
+        reed.position.set(-8.9 + (qi % 3) * 0.14, 0.35, rz + (qi - 2) * 0.09);
+        reed.rotation.z = (qi - 2) * 0.06;
+        scene.add(reed);
+      }
+    });
+    var stepM = new THREE.MeshStandardMaterial({ color: 0xa9a294, roughness: 1, flatShading: true });
+    [[-5.6, 14.6, 0.32], [-6.7, 15.9, 0.26]].forEach(function(st) {
+      var stone = new THREE.Mesh(new THREE.CylinderGeometry(st[2], st[2] * 1.1, 0.07, 9), stepM);
+      stone.position.set(st[0], 0.09, st[1]);
+      scene.add(stone);
+    });
+    spawnKoi(6);
+  } else if (STYLE === 3) {
+    /* MAU 3 - VUON NHAT: da phien dam, den da giua ho, cay phong do */
+    makeWater("#1f4d4a", "#2f6b60", "#3f7d72", 0x14201e, 1.05);
+    var slabM = new THREE.MeshStandardMaterial({ color: 0x4c4a48, roughness: 1, flatShading: true });
+    outline.forEach(function(pt, j) {
+      if (j % 2 === 1) return;
+      var ang = Math.atan2(-(outline[(j + 1) % 26][1] - pt[1]), outline[(j + 1) % 26][0] - pt[0]);
+      var slab = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.09, 0.34), slabM);
+      slab.position.set(CX + pt[0] * 1.02, 0.06, CZ - pt[1] * 1.02);
+      slab.rotation.y = -ang;
+      scene.add(slab);
+    });
+    makeRockery(false);
+    makeFall(-8.42, 0.55, 15.2, 0.42, 1.15, -0.42);
+    addRipple(-8.3, 15.2, 0);
+    addRipple(-5.8, 16.2, 0.5);
+    var isl = new THREE.Mesh(new THREE.IcosahedronGeometry(0.42, 0), rockM2);
+    isl.position.set(-7.4, 0.05, 13.9); isl.scale.y = 0.6; scene.add(isl);
+    var isl2 = new THREE.Mesh(new THREE.IcosahedronGeometry(0.26, 0), rockM);
+    isl2.position.set(-7.15, 0.12, 14.15); isl2.scale.y = 0.6; scene.add(isl2);
+    var miniL = makeStoneLantern(0, 0);
+    miniL.scale.setScalar(0.55);
+    miniL.position.set(-7.35, 0.22, 13.95);
+    scene.add(miniL);
+    var mapTrunk = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.13, 1.5, 7), new THREE.MeshStandardMaterial({ color: 0x4c3a28, roughness: 1 }));
+    mapTrunk.position.set(-8.9, 0.75, 17.8); mapTrunk.rotation.z = -0.3; scene.add(mapTrunk);
+    var mapleCols = [0xb5533c, 0xc96f3f, 0xa03e2d];
+    [[-8.2, 1.85, 17.3, 0.62], [-8.7, 2.1, 16.8, 0.5], [-7.8, 1.6, 16.9, 0.45]].forEach(function(mf, mi) {
+      var blob = new THREE.Mesh(new THREE.SphereGeometry(mf[3], 10, 8), new THREE.MeshStandardMaterial({ color: mapleCols[mi % 3], roughness: 1, flatShading: true }));
+      blob.scale.set(1.2, 0.55, 1.2);
+      blob.position.set(mf[0], mf[1], mf[2]);
+      scene.add(blob);
+    });
+    var gravel = new THREE.Mesh(new THREE.CircleGeometry(1.15, 20), new THREE.MeshStandardMaterial({ color: 0xcfc4ab, roughness: 1 }));
+    gravel.rotation.x = -Math.PI / 2;
+    gravel.position.set(-4.6, 0.03, 18.6);
+    scene.add(gravel);
+    var padM3 = new THREE.MeshStandardMaterial({ color: 0x3f7048, roughness: 0.8 });
+    [[-5.4, 14.3, 0.27], [-6.15, 16.6, 0.21], [-4.95, 16.15, 0.16]].forEach(function(pd, pi3) {
+      var pad = new THREE.Mesh(new THREE.CircleGeometry(pd[2], 14), padM3);
+      pad.rotation.x = -Math.PI / 2;
+      pad.rotation.z = pi3 * 1.7;
+      pad.position.set(pd[0], 0.1 + pi3 * 0.002, pd[1]);
+      scene.add(pad);
+    });
+    var lotus1 = makeLotusFlower(1.15);
+    lotus1.position.set(-5.4, 0.1, 14.3);
+    scene.add(lotus1);
+    var lotus2 = makeLotusFlower(0.85);
+    lotus2.position.set(-4.95, 0.1, 16.15);
+    lotus2.rotation.y = 1.2;
+    scene.add(lotus2);
+    var bud1 = makeLotusBud(1.1);
+    bud1.position.set(-6.05, 0.1, 16.45);
+    scene.add(bud1);
+    spawnKoi(7);
+  } else {
+    /* MAU 1 - HO SEN TINH: non bo + thong bonsai + la beo hoa sen */
+    makeWater("#2c6579", "#3f8296", "#7fb7a9", 0x1d4048, 1.04);
+    outline.forEach(function(pt, j) {
+      if (j % 2 === 1 && j % 4 !== 1) return;
+      var rock = new THREE.Mesh(new THREE.IcosahedronGeometry(0.15 + ((j * 37) % 10) / 10 * 0.17, 0), j % 3 === 0 ? rockM2 : rockM);
+      rock.position.set(CX + pt[0] * 1.01, 0.07, CZ - pt[1] * 1.01);
+      rock.scale.y = 0.62;
+      rock.rotation.set(j * 1.3, j * 2.1, j * 0.7);
+      scene.add(rock);
+      if (j % 5 === 0) {
+        var rock2 = new THREE.Mesh(new THREE.IcosahedronGeometry(0.11, 0), rockM);
+        rock2.position.set(CX + pt[0] * 1.01, 0.2, CZ - pt[1] * 1.01);
+        rock2.scale.y = 0.7;
+        rock2.rotation.set(j, j * 3, 0);
+        scene.add(rock2);
+      }
+    });
+    var tuftM = new THREE.MeshStandardMaterial({ color: 0x55793c, roughness: 1, flatShading: true });
+    [0.4, 1.5, 2.6, 3.9, 5.3].forEach(function(ta) {
+      for (var ti = 0; ti < 3; ti++) {
+        var tuft = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.3, 5), tuftM);
+        tuft.position.set(CX + Math.cos(ta) * (RX + 0.25) + (ti - 1) * 0.09, 0.13, CZ + Math.sin(ta) * (RZ + 0.25));
+        tuft.rotation.set((ti - 1) * 0.25, 0, (ti - 1) * 0.2);
+        scene.add(tuft);
+      }
+    });
+    makeRockery(true);
+    makeFall(-8.42, 0.55, 15.2, 0.42, 1.15, -0.42);
+    addRipple(-8.3, 15.2, 0);
+    addRipple(-5.6, 14.6, 0.4);
+    addRipple(-6.9, 16.3, 0.75);
+    var padM = new THREE.MeshStandardMaterial({ color: 0x4e7d3a, roughness: 0.8 });
+    var padM2 = new THREE.MeshStandardMaterial({ color: 0x5d8a42, roughness: 0.8 });
+    var budM = new THREE.MeshStandardMaterial({ color: 0xe58bb1, roughness: 0.6 });
+    [[-5.2, 14.1, 0.26, true], [-7.3, 16.4, 0.2, false], [-5.9, 16.9, 0.17, true], [-7.6, 13.9, 0.15, false]].forEach(function(pd, pi2) {
+      var pad = new THREE.Mesh(new THREE.CircleGeometry(pd[2], 14), pi2 % 2 ? padM2 : padM);
+      pad.rotation.x = -Math.PI / 2;
+      pad.rotation.z = pi2 * 1.3;
+      pad.position.set(pd[0], 0.1 + pi2 * 0.002, pd[1]);
+      scene.add(pad);
+      if (pd[3]) {
+        var bud = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 8), budM);
+        bud.scale.set(1, 1.35, 1);
+        bud.position.set(pd[0] + 0.05, 0.17, pd[1]);
+        scene.add(bud);
+      }
+    });
+    spawnKoi(5);
+  }
 }
 function buildYard() {
   var panelMat = new THREE.MeshStandardMaterial({ map: panelTexture(), roughness: 0.9 });
@@ -1400,6 +1636,12 @@ function animate() {
     var WF = waterfalls[wi];
     if (WF.drift) WF.tex.offset.x += dt * WF.drift;
     else WF.tex.offset.y -= dt * WF.speed;
+  }
+  for (var ri3 = 0; ri3 < ripples.length; ri3++) {
+    var RP = ripples[ri3];
+    var rf = (t * 0.3 + RP.ph) % 1;
+    RP.m.scale.setScalar(0.4 + rf * 1.7);
+    RP.m.material.opacity = 0.42 * (1 - rf);
   }
   for (var li = 0; li < lanterns.length; li++) {
     var lg = lanterns[li];
