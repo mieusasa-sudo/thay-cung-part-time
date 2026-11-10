@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Still Near — Miếu Tưởng Niệm</title>
 <script src="three.min.js"></script>
+<script src="gltf-loader.js"></script>
+<script src="buddha-model.js"></script>
 <style>
   html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #150e08; }
   #wrap3d { position: relative; width: 100%; height: 100dvh; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #f3e7d3; }
@@ -30,6 +32,15 @@
   .setbtn.sel { background: #a05c2c; color: #fff; }
   .langb { margin-left: 4px; padding: 5px 9px; }
   .statrow { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14.5px; }
+  #dShrine { margin: 10px 0 2px; background: linear-gradient(180deg, #6d4c26, #54401f); border-radius: 12px; padding: 10px 12px 12px; box-shadow: inset 0 2px 8px rgba(0,0,0,.5); }
+  .d-shelf-title { color: #ffe9bb; font-size: 12px; letter-spacing: .4px; margin-bottom: 8px; text-align: center; }
+  #dItems { display: flex; justify-content: center; gap: 10px; }
+  .ditem { background: rgba(0,0,0,.28); border: 1px solid rgba(255,233,187,.25); border-radius: 10px; min-width: 56px; padding: 7px 6px 5px; text-align: center; font-size: 21px; color: #ffe9bb; opacity: .45; }
+  .ditem b { display: block; font-size: 12.5px; margin-top: 2px; }
+  .ditem.lit { opacity: 1; border-color: #f0c979; box-shadow: 0 0 12px rgba(240,201,121,.45); }
+  .sticks { display: inline-flex; gap: 2.5px; align-items: flex-end; height: 22px; vertical-align: bottom; }
+  .sticks i { display: block; width: 2.5px; height: 17px; background: #c0452f; border-radius: 2px; }
+  .sticks i:nth-child(2) { height: 21px; }
   .hintbar { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; z-index: 5; color: #d8c49a; font-size: 12.5px; text-shadow: 0 1px 6px rgba(0,0,0,.9); pointer-events: none; padding: 0 90px; }
   /* joystick */
   #joy { position: absolute; left: 18px; bottom: 44px; width: 104px; height: 104px; border-radius: 50%; background: rgba(43,29,18,.45); border: 1.5px solid rgba(240,201,121,.5); z-index: 6; display: none; }
@@ -198,6 +209,7 @@
       </div>
     </div>
     <div class="d-counts" id="dCounts"></div>
+    <div id="dShrine"><div class="d-shelf-title">🪔 Bàn thờ trong ô này — lễ vật hiện ở đây</div><div id="dItems"></div></div>
     <div class="d-actions">
       <button id="btnCandle" onclick="actCandle()">🕯️ Thắp nến</button>
       <button id="btnIncense" onclick="actIncense()">🙏 Thắp nhang</button>
@@ -287,7 +299,7 @@ function loadState() {
 function saveState() { try { localStorage.setItem(STORE_KEY, JSON.stringify(U)); } catch (e) {} }
 function esc(t) { return String(t == null ? "" : t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 function todayStr() { var d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); }
-function posLabel(i) { return "A-" + (i + 1 < 10 ? "0" : "") + (i + 1); }
+function posLabel(i) { var n = i >= 32 ? i - 31 : i + 1; return (i >= 32 ? "B-" : "A-") + (n < 10 ? "0" : "") + n; }
 function toast(msg) {
   var t = document.getElementById("toast");
   t.textContent = msg;
@@ -428,7 +440,7 @@ function tagTexture(text) {
 
 <script>
 /* ================= KHOI TAO 3D ================= */
-var COLS = 8, ROWS = 4, NCELLS = COLS * ROWS;
+var COLS = 8, ROWS = 4, NCELLS = 64;
 var scene, camera, renderer, clock;
 var cells = [];        // {group, hit, photoMesh, plaqueMesh, glow, candleG, incenseG, flowerS, giftM, flame}
 var hitMeshes = [];
@@ -480,21 +492,14 @@ function audioInit() {
   if (AC) { if (AC.state === "suspended") AC.resume(); return; }
   try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
   var st = settings();
-  musicBus = AC.createGain(); musicBus.gain.value = st.music ? 0.5 : 0; musicBus.connect(AC.destination);
+  musicBus = AC.createGain(); musicBus.gain.value = st.music ? 0.32 : 0; musicBus.connect(AC.destination);
   sfxBus = AC.createGain(); sfxBus.gain.value = st.sfx ? 0.85 : 0; sfxBus.connect(AC.destination);
-  var pg = AC.createGain(); pg.gain.value = 0.032;
-  var pf = AC.createBiquadFilter(); pf.type = "lowpass"; pf.frequency.value = 620;
-  [196, 261.63, 293.66].forEach(function(fr) { var o = AC.createOscillator(); o.type = "sine"; o.frequency.value = fr; o.connect(pf); o.start(); });
-  pf.connect(pg); pg.connect(musicBus);
-  var lfo = AC.createOscillator(); lfo.frequency.value = 0.07;
-  var lg = AC.createGain(); lg.gain.value = 0.014;
-  lfo.connect(lg); lg.connect(pg.gain); lfo.start();
   var nb = AC.createBuffer(1, AC.sampleRate * 2, AC.sampleRate);
   var nd = nb.getChannelData(0);
   for (var ni = 0; ni < nd.length; ni++) nd[ni] = Math.random() * 2 - 1;
   var ns = AC.createBufferSource(); ns.buffer = nb; ns.loop = true;
   var nf = AC.createBiquadFilter(); nf.type = "lowpass"; nf.frequency.value = 360;
-  var ng = AC.createGain(); ng.gain.value = 0.012;
+  var ng = AC.createGain(); ng.gain.value = 0.008;
   ns.connect(nf); nf.connect(ng); ng.connect(musicBus); ns.start();
 }
 function bellTone(freq, vol, dur) {
@@ -507,6 +512,22 @@ function bellTone(freq, vol, dur) {
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
     o.connect(g); g.connect(musicBus);
     o.start(t0); o.stop(t0 + dur + 0.1);
+  });
+}
+var MEL_I = 2;
+var MEL_SCALE = [220, 261.63, 293.66, 329.63, 392, 440];
+function pluckNote() {
+  if (!AC || !musicBus) return;
+  MEL_I = Math.max(0, Math.min(MEL_SCALE.length - 1, MEL_I + Math.floor(Math.random() * 5) - 2));
+  var f = MEL_SCALE[MEL_I];
+  var t0 = AC.currentTime;
+  [[1, 0.055, "triangle"], [2, 0.02, "sine"], [3, 0.008, "sine"]].forEach(function(h) {
+    var o = AC.createOscillator(); o.type = h[2]; o.frequency.value = f * h[0];
+    var g = AC.createGain();
+    g.gain.setValueAtTime(h[1], t0);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 2.4);
+    o.connect(g); g.connect(musicBus);
+    o.start(t0); o.stop(t0 + 2.5);
   });
 }
 function knockSfx() {
@@ -1636,6 +1657,42 @@ function setGiftToy(C, sh) {
 
 /* ================= TUONG PHAT + GOI QUY + MO ================= */
 function buildBuddha() {
+  var tierMat = new THREE.MeshStandardMaterial({ color: 0x4a3421, roughness: 0.85 });
+  var tierMat2 = new THREE.MeshStandardMaterial({ color: 0x5d4630, roughness: 0.85 });
+  [[6.4, 3.4, 0.14, -5.6, tierMat], [5.0, 2.7, 0.42, -5.75, tierMat2], [3.6, 2.0, 0.7, -5.9, tierMat]].forEach(function(td) {
+    var tier = new THREE.Mesh(new THREE.BoxGeometry(td[0], 0.28, td[1]), td[4]);
+    tier.position.set(0, td[2], td[3]);
+    scene.add(tier);
+  });
+  function altarCandle(x, z, baseY) {
+    var gm = new THREE.MeshStandardMaterial({ color: 0xc39a2e, metalness: 0.5, roughness: 0.45 });
+    var g = new THREE.Group();
+    var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.09, 0.85, 10), gm); pole.position.y = 0.42; g.add(pole);
+    var cup = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.07, 0.08, 10), gm); cup.position.y = 0.88; g.add(cup);
+    var wax = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.16, 10), new THREE.MeshStandardMaterial({ color: 0xf5ead0, roughness: 0.6 })); wax.position.y = 0.99; g.add(wax);
+    var fl = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), color: 0xffc46b, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    fl.scale.set(0.4, 0.52, 1); fl.position.y = 1.18; g.add(fl);
+    g.position.set(x, baseY, z);
+    scene.add(g);
+    flames.push({ sprite: fl, seed: Math.random() * 10, grp: g });
+  }
+  altarCandle(-1.9, -5.5, 0.56);
+  altarCandle(1.9, -5.5, 0.56);
+  function altarVase(x, z, baseY, colA, colB) {
+    var g = new THREE.Group();
+    var vase = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.14, 0.42, 10), new THREE.MeshStandardMaterial({ color: 0x7a8ba0, roughness: 0.4 }));
+    vase.position.y = 0.21; g.add(vase);
+    [[0, 0.62, 0, colA], [-0.12, 0.55, 0.05, colB], [0.12, 0.55, -0.04, colA]].forEach(function(f) {
+      var stem = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.3, 5), new THREE.MeshStandardMaterial({ color: 0x3f7048, roughness: 1 }));
+      stem.position.set(f[0] * 0.6, 0.5, f[2]); stem.rotation.z = f[0] * 1.2; g.add(stem);
+      var bl = new THREE.Mesh(new THREE.SphereGeometry(0.075, 8, 8), new THREE.MeshStandardMaterial({ color: f[3], roughness: 0.8 }));
+      bl.position.set(f[0], f[1], f[2]); g.add(bl);
+    });
+    g.position.set(x, baseY, z);
+    scene.add(g);
+  }
+  altarVase(-2.6, -5.15, 0.28, 0xf2b8d0, 0xffffff);
+  altarVase(2.6, -5.15, 0.28, 0xffffff, 0xf2b8d0);
   var gold = new THREE.MeshStandardMaterial({ color: 0xd8af37, metalness: 0.55, roughness: 0.35 });
   var gold2 = new THREE.MeshStandardMaterial({ color: 0xc39a2e, metalness: 0.5, roughness: 0.45 });
   var G = new THREE.Group();
@@ -1653,44 +1710,66 @@ function buildBuddha() {
   halo.position.set(0, 2.6, -0.55); G.add(halo);
   var haloGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), color: 0xffd873, transparent: true, opacity: 0.55, depthWrite: false }));
   haloGlow.scale.set(3.6, 3.6, 1); haloGlow.position.set(0, 2.4, -0.4); G.add(haloGlow);
-  G.position.set(0, 0, -5.35);
+  G.position.set(0, 0.84, -5.9);
   scene.add(G);
+  if (THREE.GLTFLoader && window.BUDDHA_B64) {
+    try {
+      var bin = atob(window.BUDDHA_B64);
+      var bytes = new Uint8Array(bin.length);
+      for (var bi2 = 0; bi2 < bin.length; bi2++) bytes[bi2] = bin.charCodeAt(bi2);
+      new THREE.GLTFLoader().parse(bytes.buffer, "", function(gltf) {
+        var o = gltf.scene;
+        var goldM = new THREE.MeshStandardMaterial({ color: 0xd8af37, metalness: 0.35, roughness: 0.42 });
+        o.traverse(function(c) { if (c.isMesh) c.material = goldM; });
+        o.scale.setScalar(2.6 / 88);
+        o.position.set(0, 0.84, -5.9);
+        scene.add(o);
+        G.visible = false;
+      }, function() {});
+    } catch (e) {}
+  }
   var bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.24, 0.3, 12), new THREE.MeshStandardMaterial({ color: 0x6e5636, metalness: 0.4, roughness: 0.5 }));
-  bowl.position.set(0, 0.15, -4.35); scene.add(bowl);
+  bowl.position.set(0, 0.43, -4.75); scene.add(bowl);
   [-0.12, 0, 0.12].forEach(function(ix) {
     var stick = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.55, 6), new THREE.MeshStandardMaterial({ color: 0xa33b2e, roughness: 0.8 }));
-    stick.position.set(ix, 0.55, -4.35); scene.add(stick);
+    stick.position.set(ix, 0.83, -4.75); scene.add(stick);
     var tip = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), color: 0xff9a3d, transparent: true, depthWrite: false }));
-    tip.scale.set(0.09, 0.09, 1); tip.position.set(ix, 0.84, -4.35); scene.add(tip);
+    tip.scale.set(0.09, 0.09, 1); tip.position.set(ix, 1.12, -4.75); scene.add(tip);
   });
-  [-1.3, 0, 1.3].forEach(function(cx) {
-    var cu = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.48, 0.14, 14), new THREE.MeshStandardMaterial({ color: 0x8a3324, roughness: 0.9 }));
-    cu.position.set(cx, 0.07, -3.55); scene.add(cu);
-    var cut = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.03, 14), new THREE.MeshStandardMaterial({ color: 0xb0512f, roughness: 0.9 }));
-    cut.position.set(cx, 0.15, -3.55); scene.add(cut);
-    INTERACT.push({ x: cx, z: -3.55, y: 0.05, r: Math.PI, type: "kneel" });
+  [-1.0, 0.9, 2.8].forEach(function(rz) {
+    [-3.4, -1.7, 0, 1.7, 3.4].forEach(function(cx) {
+      var cu = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.48, 0.14, 14), new THREE.MeshStandardMaterial({ color: 0x8a3324, roughness: 0.9 }));
+      cu.position.set(cx, 0.07, rz); scene.add(cu);
+      var cut = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.03, 14), new THREE.MeshStandardMaterial({ color: 0xb0512f, roughness: 0.9 }));
+      cut.position.set(cx, 0.15, rz); scene.add(cut);
+      INTERACT.push({ x: cx, z: rz, y: 0.05, r: Math.PI, type: "kneel" });
+    });
   });
   var stand = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.34, 0.52), new THREE.MeshStandardMaterial({ color: 0x5d4630, roughness: 1 }));
-  stand.position.set(2.05, 0.17, -4.1); scene.add(stand);
+  stand.position.set(4.1, 0.17, -4.3); scene.add(stand);
   MO_GROUP = new THREE.Group();
   var mo = new THREE.Mesh(new THREE.SphereGeometry(0.27, 14, 12), new THREE.MeshStandardMaterial({ color: 0x7a4a26, roughness: 0.7 }));
   mo.scale.set(1, 0.78, 0.85);
   MO_GROUP.add(mo);
   var slit = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.03, 0.07), new THREE.MeshStandardMaterial({ color: 0x3a2412, roughness: 1 }));
   slit.position.y = 0.14; MO_GROUP.add(slit);
-  MO_GROUP.position.set(2.05, 0.52, -4.1);
+  MO_GROUP.position.set(4.1, 0.52, -4.3);
   scene.add(MO_GROUP);
 }
 
 /* ================= VACH O THO ================= */
 var CELL_W = 2.06, CELL_H = 1.96, WALL_Z = -6.35;
 function cellCenter(i) {
-  var bank = i < 16 ? 0 : 1;
-  var j = bank ? i - 16 : i;
-  var col = j % 4, row = Math.floor(j / 4);
+  var south = i >= 32;
+  var j = south ? i - 32 : i;
+  var bank = j < 16 ? 0 : 1;
+  var k = bank ? j - 16 : j;
+  var col = k % 4, row = Math.floor(k / 4);
   return {
     x: (bank ? 6.6 : -6.6) + (col - 1.5) * CELL_W,
-    y: 4.15 + ((ROWS - 1) / 2 - row) * CELL_H
+    y: 4.15 + ((ROWS - 1) / 2 - row) * CELL_H,
+    z: south ? 8.5 : WALL_Z,
+    ry: south ? Math.PI : 0
   };
 }
 function buildWall() {
@@ -1707,6 +1786,17 @@ function buildWall() {
     botBar.position.set(bx, 4.15 - cabH / 2 - 0.18, WALL_Z - 0.45);
     scene.add(botBar);
   });
+  [-6.6, 6.6].forEach(function(bx) {
+    var cab2 = new THREE.Mesh(new THREE.BoxGeometry(cabW, cabH, 0.6), woodMat);
+    cab2.position.set(bx, 4.15, 8.8);
+    scene.add(cab2);
+    var topBar2 = new THREE.Mesh(new THREE.BoxGeometry(cabW + 0.4, 0.34, 0.7), woodMat);
+    topBar2.position.set(bx, 4.15 + cabH / 2 + 0.15, 8.8);
+    scene.add(topBar2);
+    var botBar2 = new THREE.Mesh(new THREE.BoxGeometry(cabW + 0.5, 0.42, 0.7), woodMat);
+    botBar2.position.set(bx, 4.15 - cabH / 2 - 0.18, 8.8);
+    scene.add(botBar2);
+  });
 
   var pawTex = pawTexture();
   var glowTex = glowTexture();
@@ -1716,7 +1806,8 @@ function buildWall() {
   for (var i = 0; i < NCELLS; i++) {
     var c = cellCenter(i);
     var grp = new THREE.Group();
-    grp.position.set(c.x, c.y, WALL_Z);
+    grp.position.set(c.x, c.y, c.z);
+    if (c.ry) grp.rotation.y = c.ry;
     scene.add(grp);
 
     var cavity = new THREE.Mesh(
@@ -1830,10 +1921,11 @@ function refreshCell(i) {
   C.plaque.material.opacity = 1;
   C.plaque.material.needsUpdate = true;
   C.glow.material.opacity = (sh.candles > 0 || sh.incense > 0) ? 0.55 : 0.22;
-  C.candleG.visible = sh.candles > 0;
-  C.incenseG.visible = sh.incense > 0;
+  C.candleG.visible = false;
+  C.incenseG.visible = false;
   setGiftToy(C, sh);
-  C.flowerS.material.opacity = sh.flowers > 0 ? 0.85 : 0;
+  C.giftG.visible = false;
+  C.flowerS.material.opacity = 0;
 }
 /* ================= AVATAR ================= */
 var SHIRT_COLORS = [0x9fc6a5, 0x7d94b8, 0xc98a9a, 0xe0b45c, 0x9a86c8, 0x6fb3a6, 0xd98c5f, 0xb8c86b, 0xe58ea0, 0x7fb069];
@@ -2032,9 +2124,9 @@ function animate() {
   if (uiTick > 0.2) { uiTick = 0; updateContextUI(); }
   if (AC && settings().music) {
     bellTimer -= dt;
-    if (bellTimer <= 0) { bellTimer = 5 + Math.random() * 6; bellTone([523.25, 587.33, 659.25, 783.99, 880][Math.floor(Math.random() * 5)], 0.1, 3.2); }
+    if (bellTimer <= 0) { bellTimer = 6 + Math.random() * 8; pluckNote(); }
     templeTimer -= dt;
-    if (templeTimer <= 0) { templeTimer = 42 + Math.random() * 20; bellTone(130.81, 0.16, 6); }
+    if (templeTimer <= 0) { templeTimer = 55 + Math.random() * 35; bellTone(98, 0.07, 7); }
   }
   if (MO_PULSE > 0 && MO_GROUP) {
     MO_PULSE = Math.max(0, MO_PULSE - dt * 2.6);
@@ -2226,7 +2318,7 @@ function openDetail3D(idx) {
     : '<div style="height:100%;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:44px;color:#f0c979;background:#4a3416">' + esc(sh.name.charAt(0).toUpperCase()) + '</div>';
   document.getElementById("dName").textContent = (sh.showFlag ? "🇻🇳 " : "") + sh.name;
   document.getElementById("dYears").textContent = sh.years + (sh.special ? " · ⭐ " + sh.special : "");
-  document.getElementById("dPos").textContent = "Vị trí: Dãy A · Ô " + posLabel(idx);
+  document.getElementById("dPos").textContent = "Vị trí: " + (idx >= 32 ? "Dãy B" : "Dãy A") + " · Ô " + posLabel(idx);
   document.getElementById("dMsg").textContent = "“" + sh.msg + "”";
   updateDetailCounts();
   document.querySelector("#detailPanel .danger").textContent = "Thu hồi ô này (gỡ di ảnh)";
@@ -2247,6 +2339,19 @@ function updateDetailCounts() {
   var inc = U.incDay[currentPos] === todayStr();
   bi.disabled = inc;
   bi.textContent = inc ? "🙏 Đã thắp nhang hôm nay" : "🙏 Thắp nhang";
+  refreshDetailPreview(sh);
+}
+function refreshDetailPreview(sh) {
+  var box = document.getElementById("dItems");
+  if (!box || !sh) return;
+  var lit = U.litDay[currentPos] === todayStr();
+  var inc = U.incDay[currentPos] === todayStr();
+  var toyIcon = (sh.giftToy && typeof TOYS !== "undefined" && TOYS[sh.giftToy]) ? TOYS[sh.giftToy].icon : "🎁";
+  box.innerHTML =
+    '<span class="ditem' + (lit ? " lit" : "") + '">🕯️<b>' + sh.candles + "</b></span>" +
+    '<span class="ditem' + (inc ? " lit" : "") + '"><span class="sticks"><i></i><i></i><i></i></span><b>' + sh.incense + "</b></span>" +
+    '<span class="ditem' + (sh.flowers > 0 ? " lit" : "") + '">🌸<b>' + sh.flowers + "</b></span>" +
+    '<span class="ditem' + (sh.gifts > 0 ? " lit" : "") + '">' + toyIcon + "<b>" + sh.gifts + "</b></span>";
 }
 function actCandle() {
   var sh = U.shrines[currentPos]; if (!sh) return;
@@ -2395,7 +2500,7 @@ function applySettingsFx() {
   var st = settings();
   if (renderer) renderer.setPixelRatio(st.gfx === "low" ? 1 : Math.min(window.devicePixelRatio || 1, 2));
   FX_ON = st.fx;
-  if (musicBus) musicBus.gain.value = st.music ? 0.5 : 0;
+  if (musicBus) musicBus.gain.value = st.music ? 0.32 : 0;
   if (sfxBus) sfxBus.gain.value = st.sfx ? 0.85 : 0;
 }
 function refreshStatsUI() {
@@ -2483,9 +2588,6 @@ setInterval(function() {
   if (window.SYNC_ONLINE) return;
   document.getElementById("onlineCount").textContent = 200 + Math.floor(Math.random() * 40);
 }, 20000);
-if (location.hash === "#fill1") {
-  U.shrines[11] = { name: "Bé Test", kind: "cat", years: "2020 – 2025", msg: "Gian kiểm tra render — chỉ hiện khi mở bằng #fill1.", special: "", email: "", showFlag: true, photo: null, candles: 3, flowers: 2, incense: 1, gifts: 1, gb: [["Kiểm tra", "Nến, hoa, quà đều hiện trên kệ."]] };
-}
 if (typeof THREE === "undefined") {
   document.getElementById("bootMsg").innerHTML = "Không tải được thư viện 3D (THREE.js).<br>Kiểm tra kết nối mạng rồi tải lại trang nhé.";
 } else {
