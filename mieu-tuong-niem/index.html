@@ -86,6 +86,15 @@
   .gb-form button { background: #dd8438; color: #fff7e6; border: none; border-radius: 8px; padding: 9px 15px; cursor: pointer; font-family: inherit; }
   .danger { background: none; border: none; color: #b0552f; font-size: 13px; cursor: pointer; margin-top: 14px; font-family: inherit; padding: 0; }
   .toast { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); background: #f0c979; color: #2b1d12; padding: 10px 18px; border-radius: 999px; font-size: 14px; display: none; z-index: 50; box-shadow: 0 4px 18px rgba(0,0,0,.5); max-width: 92vw; text-align: center; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  #giftPanel { position: absolute; inset: 0; background: rgba(20,12,6,.55); display: none; align-items: center; justify-content: center; z-index: 40; }
+  #giftPanel .gift-card { position: relative; background: #f8eeda; color: #43301b; border-radius: 18px; padding: 20px 20px 16px; width: min(430px, 92%); box-shadow: 0 18px 50px rgba(0,0,0,.6); font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  #giftPanel h3 { font-family: Georgia, serif; margin: 0 0 4px; font-size: 20px; }
+  #giftPanel .gift-sub { margin: 0 0 14px; font-size: 13.5px; color: #8a6f4d; }
+  .toy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .toy-card { background: #fffdf7; border: 2px solid #e3d2ae; border-radius: 14px; padding: 12px 4px 9px; font-size: 30px; cursor: pointer; color: #43301b; }
+  .toy-card span { display: block; font-size: 13px; margin-top: 5px; font-weight: 600; }
+  .toy-card:active { border-color: #d98a3d; background: #fdf1de; }
+  #giftPanel .back { margin-top: 14px; }
 </style>
 </head>
 <body>
@@ -168,7 +177,7 @@
       <button id="btnCandle" onclick="actCandle()">🕯️ Thắp nến</button>
       <button id="btnIncense" onclick="actIncense()">🙏 Thắp nhang</button>
       <button onclick="actFlower()">🌸 Dâng hoa</button>
-      <button onclick="actGift()">🎁 Tặng quà</button>
+      <button onclick="openGiftPanel()">🎁 Tặng quà</button>
     </div>
     <h4>📖 Sổ lưu niệm</h4>
     <ul id="gbList"></ul>
@@ -177,6 +186,17 @@
       <button onclick="actGuestbook()">Gửi</button>
     </div>
     <button class="danger" onclick="removeShrine3D()">Thu hồi ô này (gỡ di ảnh)</button>
+  </div>
+
+  <!-- GIFT: bang chon do choi -->
+  <div id="giftPanel">
+    <div class="gift-card">
+      <button class="modal-x" onclick="closeGiftPanel()">✕</button>
+      <h3>🎁 Chọn đồ chơi tặng bé</h3>
+      <p class="gift-sub">Món đồ sẽ nằm ở góc trái kệ thờ của bé.</p>
+      <div class="toy-grid" id="toyGrid"></div>
+      <button class="back" onclick="closeGiftPanel()">← Thôi, quay lại</button>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -726,6 +746,158 @@ function buildYard() {
   yardLight.position.set(0, 3.4, 14); scene.add(yardLight);
 }
 
+/* ================= DO CHOI TANG QUA ================= */
+function toyMat(c, r) { return new THREE.MeshStandardMaterial({ color: c, roughness: r == null ? 0.7 : r }); }
+function toyBall() {
+  var g = new THREE.Group();
+  var tex = makeTex(128, 128, function(cv, w, h) {
+    cv.fillStyle = "#f5f2ea"; cv.fillRect(0, 0, w, h);
+    var cols = ["#d9534f", "#5f8ac9", "#e0a45c", "#7fb069", "#9a86c8"];
+    for (var i = 0; i < 7; i++) {
+      cv.fillStyle = cols[i % cols.length];
+      cv.beginPath(); cv.arc(15 + (i * 37) % 105, 15 + (i * 53) % 100, 11, 0, Math.PI * 2); cv.fill();
+    }
+  });
+  var b = new THREE.Mesh(new THREE.SphereGeometry(0.15, 18, 14), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.45 }));
+  b.position.y = 0.15; g.add(b);
+  return g;
+}
+function toyBear() {
+  var g = new THREE.Group();
+  var fur = toyMat(0xb08954, 0.9), lite = toyMat(0xe8d3ae, 0.9);
+  var body = new THREE.Mesh(new THREE.SphereGeometry(0.145, 14, 12), fur);
+  body.scale.y = 1.1; body.position.y = 0.15; g.add(body);
+  var belly = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 10), lite);
+  belly.scale.set(1, 1.15, 0.55); belly.position.set(0, 0.14, 0.09); g.add(belly);
+  var head = new THREE.Mesh(new THREE.SphereGeometry(0.105, 14, 12), fur);
+  head.position.y = 0.37; g.add(head);
+  var earL = new THREE.Mesh(new THREE.SphereGeometry(0.042, 8, 8), fur); earL.position.set(-0.075, 0.455, 0); g.add(earL);
+  var earR = earL.clone(); earR.position.x = 0.075; g.add(earR);
+  var snout = new THREE.Mesh(new THREE.SphereGeometry(0.05, 10, 8), lite);
+  snout.scale.z = 0.7; snout.position.set(0, 0.345, 0.09); g.add(snout);
+  var armL = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 8), fur);
+  armL.scale.set(1, 1.5, 1); armL.position.set(-0.15, 0.19, 0.02); armL.rotation.z = 0.5; g.add(armL);
+  var armR = armL.clone(); armR.position.x = 0.15; armR.rotation.z = -0.5; g.add(armR);
+  return g;
+}
+function toyMouse() {
+  var g = new THREE.Group();
+  var gray = toyMat(0x9aa0a6, 0.85), pink = toyMat(0xd98a9a, 0.8);
+  var body = new THREE.Mesh(new THREE.SphereGeometry(0.13, 14, 12), gray);
+  body.scale.set(0.95, 0.8, 1.3); body.position.y = 0.105; g.add(body);
+  var earL = new THREE.Mesh(new THREE.SphereGeometry(0.05, 10, 8), gray);
+  earL.scale.z = 0.45; earL.position.set(-0.07, 0.225, 0.03); g.add(earL);
+  var earR = earL.clone(); earR.position.x = 0.07; g.add(earR);
+  var nose = new THREE.Mesh(new THREE.SphereGeometry(0.022, 8, 8), pink);
+  nose.position.set(0, 0.1, 0.175); g.add(nose);
+  var tail = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.013, 6, 14, 2.1), pink);
+  tail.position.set(0, 0.1, -0.15); tail.rotation.set(0.4, 0.5, 0); g.add(tail);
+  return g;
+}
+function toyFish() {
+  var g = new THREE.Group();
+  var org = toyMat(0xe8853d, 0.6);
+  var body = new THREE.Mesh(new THREE.SphereGeometry(0.14, 14, 12), org);
+  body.scale.set(1.3, 0.8, 0.4); body.position.y = 0.13; g.add(body);
+  var tail = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.17, 4), org);
+  tail.scale.z = 0.35; tail.rotation.z = Math.PI / 2; tail.position.set(-0.24, 0.13, 0); g.add(tail);
+  var eyeM = toyMat(0x2b2b2b, 0.4);
+  var e1 = new THREE.Mesh(new THREE.SphereGeometry(0.018, 6, 6), eyeM); e1.position.set(0.1, 0.17, 0.052); g.add(e1);
+  var e2 = e1.clone(); e2.position.z = -0.052; g.add(e2);
+  return g;
+}
+function toyBone() {
+  var g = new THREE.Group();
+  var m = toyMat(0xf2ede2, 0.5);
+  var shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.034, 0.034, 0.2, 10), m);
+  shaft.rotation.z = Math.PI / 2; shaft.position.y = 0.062; g.add(shaft);
+  [[-0.105, 0.098], [-0.105, 0.026], [0.105, 0.098], [0.105, 0.026]].forEach(function(o) {
+    var k = new THREE.Mesh(new THREE.SphereGeometry(0.052, 10, 8), m);
+    k.position.set(o[0], o[1], 0); g.add(k);
+  });
+  g.rotation.y = 0.5;
+  return g;
+}
+function toyYarn() {
+  var g = new THREE.Group();
+  var b = new THREE.Mesh(new THREE.SphereGeometry(0.135, 14, 12), toyMat(0xc95f7a, 0.95));
+  b.position.y = 0.135; g.add(b);
+  var wrapM = toyMat(0xb84f6a, 0.95);
+  [[0.4, 0.3, 0], [1.2, 0, 0.8], [0, 1.1, 0.5]].forEach(function(r) {
+    var t = new THREE.Mesh(new THREE.TorusGeometry(0.136, 0.011, 6, 22), wrapM);
+    t.position.y = 0.135; t.rotation.set(r[0], r[1], r[2]); g.add(t);
+  });
+  var strand = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 0.24, 5), wrapM);
+  strand.rotation.z = 1.15; strand.position.set(0.17, 0.03, 0.05); g.add(strand);
+  return g;
+}
+function toyRing() {
+  var g = new THREE.Group();
+  var t = new THREE.Mesh(new THREE.TorusGeometry(0.115, 0.048, 10, 20), toyMat(0x5f8ac9, 0.5));
+  t.position.y = 0.135; t.rotation.x = 0.5; g.add(t);
+  return g;
+}
+function toyFeather() {
+  var g = new THREE.Group();
+  if (!LEAF_GEO) LEAF_GEO = leafGeometry();
+  var stick = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 0.36, 6), toyMat(0x8a6b35, 0.7));
+  stick.rotation.z = 0.5; stick.position.set(-0.05, 0.16, 0); g.add(stick);
+  var cols = [0xd9739e, 0x9a86c8, 0xe0a45c];
+  for (var i = 0; i < 3; i++) {
+    var f = new THREE.Mesh(LEAF_GEO, toyMat(cols[i], 0.9));
+    f.material.side = THREE.DoubleSide;
+    f.position.set(0.06 + i * 0.03, 0.3, (i - 1) * 0.03);
+    f.rotation.set(0.5, i * 1.1, 0.3);
+    f.scale.setScalar(0.75);
+    g.add(f);
+  }
+  return g;
+}
+function toyBox() {
+  var g = new THREE.Group();
+  var base = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.2, 0.28), toyMat(0xb84a6e, 0.55));
+  base.position.y = 0.1; g.add(base);
+  var gold = toyMat(0xd9a83d, 0.4);
+  var lid = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.05, 0.3), toyMat(0xc95a7e, 0.55));
+  lid.position.y = 0.215; g.add(lid);
+  var r1 = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.052, 0.07), gold); r1.position.y = 0.217; g.add(r1);
+  var r2 = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.052, 0.3), gold); r2.position.y = 0.217; g.add(r2);
+  return g;
+}
+var TOYS = [
+  { id: "ball", name: "Bóng", emoji: "⚽", build: toyBall },
+  { id: "bear", name: "Gấu bông", emoji: "🧸", build: toyBear },
+  { id: "mouse", name: "Chuột nhồi", emoji: "🐭", build: toyMouse },
+  { id: "fish", name: "Cá nhồi", emoji: "🐟", build: toyFish },
+  { id: "bone", name: "Xương gặm", emoji: "🦴", build: toyBone },
+  { id: "yarn", name: "Cuộn len", emoji: "🧶", build: toyYarn },
+  { id: "ring", name: "Vòng gặm", emoji: "🍩", build: toyRing },
+  { id: "feather", name: "Gậy lông vũ", emoji: "🪶", build: toyFeather }
+];
+function toyById(id) {
+  for (var i = 0; i < TOYS.length; i++) if (TOYS[i].id === id) return TOYS[i];
+  return null;
+}
+var toyMasters = {};
+function buildGiftContent(id) {
+  if (!toyMasters[id]) {
+    var t = toyById(id);
+    toyMasters[id] = t ? t.build() : toyBox();
+  }
+  return toyMasters[id].clone();
+}
+function setGiftToy(C, sh) {
+  if (!C || !C.giftG) return;
+  if (!sh || !(sh.gifts > 0)) { C.giftG.visible = false; C.giftToyShown = null; return; }
+  var id = sh.giftToy || "box";
+  if (C.giftToyShown !== id) {
+    while (C.giftG.children.length) C.giftG.remove(C.giftG.children[0]);
+    C.giftG.add(buildGiftContent(id));
+    C.giftToyShown = id;
+  }
+  C.giftG.visible = true;
+}
+
 /* ================= VACH O THO ================= */
 var CELL_W = 2.06, CELL_H = 1.96, WALL_Z = -6.35;
 function cellCenter(i) {
@@ -819,10 +991,10 @@ function buildWall() {
     flowerS.position.set(-0.6, -0.68, 0.3);
     grp.add(flowerS);
 
-    var giftM = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.24, 0.3), new THREE.MeshStandardMaterial({ color: 0xb84a6e, roughness: 0.55 }));
-    giftM.position.set(0.02, -0.74, 0.3);
-    giftM.visible = false;
-    grp.add(giftM);
+    var giftG = new THREE.Group();
+    giftG.position.set(-0.62, -0.86, 0.3);
+    giftG.visible = false;
+    grp.add(giftG);
 
     var glass = new THREE.Mesh(new THREE.PlaneGeometry(CELL_W - 0.14, CELL_H - 0.14), glassMat);
     glass.position.z = 0.42;
@@ -834,7 +1006,7 @@ function buildWall() {
     grp.add(hit);
     hitMeshes.push(hit);
 
-    cells.push({ grp: grp, photo: photo, plaque: plaque, glow: glow, candleG: candleG, incenseG: incenseG, flowerS: flowerS, giftM: giftM });
+    cells.push({ grp: grp, photo: photo, plaque: plaque, glow: glow, candleG: candleG, incenseG: incenseG, flowerS: flowerS, giftG: giftG, giftToyShown: null });
   }
 }
 function refreshCell(i) {
@@ -845,7 +1017,7 @@ function refreshCell(i) {
     C.photo.material.map = null; C.photo.material.opacity = 0; C.photo.material.needsUpdate = true;
     C.plaque.material.map = null; C.plaque.material.opacity = 0; C.plaque.material.needsUpdate = true;
     C.glow.material.opacity = 0;
-    C.candleG.visible = false; C.incenseG.visible = false; C.giftM.visible = false;
+    C.candleG.visible = false; C.incenseG.visible = false; setGiftToy(C, null);
     C.flowerS.material.opacity = 0;
     return;
   }
@@ -872,7 +1044,7 @@ function refreshCell(i) {
   C.glow.material.opacity = (sh.candles > 0 || sh.incense > 0) ? 0.55 : 0.22;
   C.candleG.visible = sh.candles > 0;
   C.incenseG.visible = sh.incense > 0;
-  C.giftM.visible = sh.gifts > 0;
+  setGiftToy(C, sh);
   C.flowerS.material.opacity = sh.flowers > 0 ? 0.85 : 0;
 }
 /* ================= AVATAR ================= */
@@ -1163,11 +1335,28 @@ function actFlower() {
   sh.flowers++; saveState(); refreshCell(currentPos); updateDetailCounts();
   toast("Đã dâng một bông hoa cho " + sh.name + " 🌸");
 }
-function actGift() {
+function actGift(toyId) {
   var sh = U.shrines[currentPos]; if (!sh) return;
+  sh.giftToy = toyId || "box";
   sh.gifts++; saveState(); refreshCell(currentPos); updateDetailCounts();
-  toast("Đã gửi một món quà nhỏ cho " + sh.name + " 🎁");
+  var t = toyById(sh.giftToy);
+  toast("Đã tặng " + (t ? t.name.toLowerCase() : "quà") + " cho " + sh.name + " 🎁");
 }
+function openGiftPanel() {
+  var grid = document.getElementById("toyGrid");
+  if (!grid.children.length) {
+    TOYS.forEach(function(t) {
+      var b = document.createElement("button");
+      b.className = "toy-card";
+      b.innerHTML = t.emoji + "<span>" + t.name + "</span>";
+      b.onclick = function() { chooseGiftToy(t.id); };
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById("giftPanel").style.display = "flex";
+}
+function closeGiftPanel() { document.getElementById("giftPanel").style.display = "none"; }
+function chooseGiftToy(id) { closeGiftPanel(); actGift(id); }
 function renderGB3D() {
   var sh = U.shrines[currentPos];
   var ul = document.getElementById("gbList");
@@ -1417,7 +1606,7 @@ actIncense = function() { var idx = currentPos; _actIncense(); if (DB_URL && U.s
 var _actFlower = actFlower;
 actFlower = function() { var idx = currentPos; _actFlower(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { flowers: U.shrines[idx].flowers }); };
 var _actGift = actGift;
-actGift = function() { var idx = currentPos; _actGift(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { gifts: U.shrines[idx].gifts }); };
+actGift = function(toyId) { var idx = currentPos; _actGift(toyId); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { gifts: U.shrines[idx].gifts, giftToy: U.shrines[idx].giftToy }); };
 var _actGuestbook = actGuestbook;
 actGuestbook = function() {
   var idx = currentPos;
