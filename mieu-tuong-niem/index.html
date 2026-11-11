@@ -137,14 +137,29 @@
   .toast { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); background: #f0c979; color: #2b1d12; padding: 10px 18px; border-radius: 999px; font-size: 14px; display: none; z-index: 50; box-shadow: 0 4px 18px rgba(0,0,0,.5); max-width: 92vw; text-align: center; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
   #creatorPanel { z-index: 46 !important; align-items: flex-end !important; padding-bottom: 8px; }
   #creatorPanel .gift-card { max-height: 64%; overflow-y: auto; }
-  #giftPanel, #creatorPanel { position: absolute; inset: 0; background: rgba(20,12,6,.55); display: none; align-items: center; justify-content: center; z-index: 40; }
-  #giftPanel .gift-card, #creatorPanel .gift-card, #settingsPanel .gift-card { position: relative; background: #f8eeda; color: #43301b; border-radius: 18px; padding: 20px 20px 16px; width: min(430px, 92%); box-shadow: 0 18px 50px rgba(0,0,0,.6); font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
-  #giftPanel h3, #creatorPanel h3, #settingsPanel h3 { font-family: Georgia, serif; margin: 0 0 4px; font-size: 20px; }
-  #giftPanel .gift-sub, #creatorPanel .gift-sub { margin: 0 0 14px; font-size: 13.5px; color: #8a6f4d; }
+  #giftPanel, #creatorPanel, #flowerPanel { position: absolute; inset: 0; background: rgba(20,12,6,.55); display: none; align-items: center; justify-content: center; z-index: 40; }
+  #giftPanel .gift-card, #creatorPanel .gift-card, #settingsPanel .gift-card, #flowerPanel .gift-card { position: relative; background: #f8eeda; color: #43301b; border-radius: 18px; padding: 20px 20px 16px; width: min(430px, 92%); box-shadow: 0 18px 50px rgba(0,0,0,.6); font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  #giftPanel h3, #creatorPanel h3, #settingsPanel h3, #flowerPanel h3 { font-family: Georgia, serif; margin: 0 0 4px; font-size: 20px; }
+  #giftPanel .gift-sub, #creatorPanel .gift-sub, #flowerPanel .gift-sub { margin: 0 0 14px; font-size: 13.5px; color: #8a6f4d; }
   .toy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .toy-card { background: #fffdf7; border: 2px solid #e3d2ae; border-radius: 14px; padding: 12px 4px 9px; font-size: 30px; cursor: pointer; color: #43301b; }
   .toy-card span { display: block; font-size: 13px; margin-top: 5px; font-weight: 600; }
   .toy-card:active { border-color: #d98a3d; background: #fdf1de; }
+  .toy-card em { display: block; font-style: normal; font-size: 10.5px; font-weight: 700; margin-top: 4px; padding: 2px 6px; border-radius: 99px; }
+  .toy-card em.free { background: #e2f4d9; color: #3d7a2e; }
+  .toy-card em.ad { background: #fde8f1; color: #b03060; }
+  #adPanel { position: fixed; inset: 0; background: rgba(30,10,20,.72); display: none; align-items: center; justify-content: center; z-index: 60; }
+  .ad-card { position: relative; background: linear-gradient(160deg, #fff7fa, #ffe3ef); color: #5b2a3a; border-radius: 20px; padding: 26px 24px 18px; width: min(360px, 90%); text-align: center; box-shadow: 0 18px 50px rgba(0,0,0,.6); font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  .ad-tag { position: absolute; top: 12px; left: 14px; background: #f2a7c3; color: #fff; font-size: 10.5px; font-weight: 800; letter-spacing: 1px; padding: 3px 8px; border-radius: 6px; }
+  .ad-x { position: absolute; top: 8px; right: 10px; background: none; border: none; font-size: 16px; color: #b06a86; cursor: pointer; }
+  .ad-emoji { font-size: 52px; margin: 8px 0 4px; }
+  .ad-title { font-family: Georgia, serif; font-size: 21px; font-weight: 700; }
+  .ad-sub { font-size: 13.5px; color: #8a5a6d; margin: 4px 0 14px; }
+  .ad-bar { height: 8px; background: rgba(176,48,96,.15); border-radius: 99px; overflow: hidden; }
+  #adFill { height: 100%; width: 0%; background: linear-gradient(90deg, #f2a7c3, #b03060); border-radius: 99px; }
+  .ad-count { font-size: 12.5px; color: #b06a86; margin: 8px 0 10px; }
+  #adDone { background: #b03060; color: #fff; border: none; border-radius: 999px; padding: 11px 20px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; }
+  .ad-note { font-size: 11px; color: #b03060; opacity: .7; margin-top: 12px; }
   .creator-card { text-align: left; }
   .creator-card h3, .creator-card .gift-sub { text-align: left; }
   .f-label { display: block; font-size: 13px; font-weight: 700; color: #6d5327; margin: 10px 0 4px; }
@@ -155,7 +170,7 @@
   .sw.sel { border-color: #dd8438; box-shadow: 0 0 0 2px #fff8ea, 0 0 0 4.5px #dd8438; }
   .creator-card .big-btn { width: 100%; margin-top: 10px; box-sizing: border-box; }
   .creator-card .back { display: block; margin: 12px auto 0; background: none; border: none; color: #a33b2e; font-size: 13.5px; cursor: pointer; font-family: inherit; }
-  #giftPanel .back { margin-top: 14px; }
+  #giftPanel .back, #flowerPanel .back { margin-top: 14px; }
 </style>
 </head>
 <body>
@@ -234,7 +249,7 @@
     <div class="d-actions">
       <button id="btnCandle" onclick="actCandle()">🕯️ Thắp nến</button>
       <button id="btnIncense" onclick="actIncense()">🙏 Thắp nhang</button>
-      <button onclick="actFlower()">🌸 Dâng hoa</button>
+      <button onclick="openFlowerPanel()">🌸 Dâng hoa</button>
       <button onclick="openGiftPanel()">🎁 Tặng quà</button>
     </div>
     <h4>🧾 Những người đã ghé thăm bé</h4>
@@ -288,9 +303,33 @@
     <div class="gift-card">
       <button class="modal-x" onclick="closeGiftPanel()">✕</button>
       <h3>🎁 Chọn đồ chơi tặng bé</h3>
-      <p class="gift-sub">Món đồ sẽ nằm ở góc trái kệ thờ của bé.</p>
+      <p class="gift-sub">Bóng miễn phí — các món khác xem một đoạn quảng cáo ngắn là tặng được. Món đồ sẽ nằm ở góc trái kệ thờ của bé.</p>
       <div class="toy-grid" id="toyGrid"></div>
       <button class="back" onclick="closeGiftPanel()">← Thôi, quay lại</button>
+    </div>
+  </div>
+
+  <div id="flowerPanel">
+    <div class="gift-card">
+      <button class="modal-x" onclick="closeFlowerPanel()">✕</button>
+      <h3>🌸 Chọn hoa dâng bé</h3>
+      <p class="gift-sub">Hoa cúc miễn phí — các hoa khác xem một đoạn quảng cáo ngắn là dâng được.</p>
+      <div class="toy-grid" id="flowerGrid"></div>
+      <button class="back" onclick="closeFlowerPanel()">← Thôi, quay lại</button>
+    </div>
+  </div>
+
+  <div id="adPanel">
+    <div class="ad-card">
+      <div class="ad-tag">QUẢNG CÁO</div>
+      <button class="ad-x" onclick="cancelAd()">✕</button>
+      <div class="ad-emoji">🕯️✨</div>
+      <div class="ad-title">Nến thơm Still Near</div>
+      <p class="ad-sub">Một nén nhang thơm cho người thương ở xa…</p>
+      <div class="ad-bar"><div id="adFill"></div></div>
+      <div class="ad-count" id="adCount">Còn 5 giây</div>
+      <button id="adDone" onclick="finishAd()" style="display:none">🎁 Nhận &amp; dâng ngay</button>
+      <div class="ad-note">Quảng cáo mô phỏng — bản demo chưa nối mạng quảng cáo thật</div>
     </div>
   </div>
 
@@ -1732,8 +1771,7 @@ function toyBox() {
   return g;
 }
 var TOYS = [
-  { id: "ball", name: "Bóng", emoji: "⚽", build: toyBall },
-  { id: "bear", name: "Gấu bông", emoji: "🧸", build: toyBear },
+  { id: "ball", name: "Bóng", emoji: "⚽", free: true, build: toyBall },
   { id: "mouse", name: "Chuột nhồi", emoji: "🐭", build: toyMouse },
   { id: "fish", name: "Cá nhồi", emoji: "🐟", build: toyFish },
   { id: "bone", name: "Xương gặm", emoji: "🦴", build: toyBone },
@@ -1744,6 +1782,154 @@ var TOYS = [
 function toyById(id) {
   for (var i = 0; i < TOYS.length; i++) if (TOYS[i].id === id) return TOYS[i];
   return null;
+}
+function flVase(g, col) {
+  var v = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.06, 0.15, 8), new THREE.MeshStandardMaterial({ color: col || 0xfdf3f6, roughness: 0.5 }));
+  v.position.y = 0.075; g.add(v);
+}
+function flStem(g, x, h, tilt) {
+  var st = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.014, h, 6), new THREE.MeshStandardMaterial({ color: 0x4e9b47, roughness: 0.8 }));
+  st.position.set(x, 0.13 + h / 2, 0); st.rotation.z = tilt || 0; g.add(st);
+}
+function flLeaf(g, x, y, rz) {
+  var lf = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 8), new THREE.MeshStandardMaterial({ color: 0x5da653, roughness: 0.8 }));
+  lf.scale.set(1.7, 0.4, 0.9); lf.position.set(x, y, 0); lf.rotation.z = rz; g.add(lf);
+}
+function buildFlowerCuc() {
+  var g = new THREE.Group();
+  flVase(g);
+  flStem(g, -0.05, 0.24, 0.15); flStem(g, 0.02, 0.3, -0.05); flStem(g, 0.07, 0.22, -0.2);
+  flLeaf(g, -0.04, 0.24, 0.5);
+  [[-0.08, 0.42], [0.03, 0.48], [0.1, 0.4]].forEach(function(hp) {
+    var head = new THREE.Group();
+    var c = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 8), new THREE.MeshStandardMaterial({ color: 0xffc93c, roughness: 0.7 }));
+    head.add(c);
+    for (var i = 0; i < 8; i++) {
+      var a = i / 8 * Math.PI * 2;
+      var pt = new THREE.Mesh(new THREE.SphereGeometry(0.016, 6, 6), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.7 }));
+      pt.scale.set(1.5, 0.7, 0.4); pt.position.set(Math.cos(a) * 0.03, Math.sin(a) * 0.03, 0); pt.rotation.z = a;
+      head.add(pt);
+    }
+    head.position.set(hp[0], hp[1], 0); head.rotation.x = -0.2;
+    g.add(head);
+  });
+  return g;
+}
+function buildFlowerSun() {
+  var g = new THREE.Group();
+  var wrap = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.075, 0.16, 8), new THREE.MeshStandardMaterial({ color: 0xf2c184, roughness: 0.85 })); wrap.position.y = 0.08; g.add(wrap);
+  var stemM = new THREE.MeshStandardMaterial({ color: 0x4e9b47, roughness: 0.8 });
+  var stem = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.018, 0.4, 6), stemM);
+  stem.position.set(0.02, 0.32, 0); stem.rotation.z = -0.1; g.add(stem);
+  var leaf1 = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 8), stemM);
+  leaf1.scale.set(1.7, 0.4, 0.9); leaf1.position.set(-0.07, 0.26, 0); leaf1.rotation.z = 0.5; g.add(leaf1);
+  var leaf2 = leaf1.clone(); leaf2.position.set(0.08, 0.36, 0); leaf2.rotation.z = -0.6; g.add(leaf2);
+  var sun = new THREE.Group();
+  var center = new THREE.Mesh(new THREE.CylinderGeometry(0.068, 0.068, 0.035, 14), new THREE.MeshStandardMaterial({ color: 0x6b4423, roughness: 0.9 }));
+  center.rotation.x = Math.PI / 2; sun.add(center);
+  var face = new THREE.Mesh(new THREE.SphereGeometry(0.055, 10, 8), new THREE.MeshStandardMaterial({ color: 0x7d5230, roughness: 0.95 }));
+  face.scale.z = 0.45; face.position.z = 0.015; sun.add(face);
+  var petalM = new THREE.MeshStandardMaterial({ color: 0xffb52e, roughness: 0.6 });
+  var petalM2 = new THREE.MeshStandardMaterial({ color: 0xf59a16, roughness: 0.6 });
+  for (var pi2 = 0; pi2 < 12; pi2++) {
+    var pa = (pi2 / 12) * Math.PI * 2;
+    var pt2 = new THREE.Mesh(new THREE.SphereGeometry(0.042, 8, 8), pi2 % 2 ? petalM : petalM2);
+    pt2.scale.set(0.55, 1.35, 0.22);
+    pt2.position.set(Math.cos(pa) * 0.095, Math.sin(pa) * 0.095, -0.005);
+    pt2.rotation.z = pa - Math.PI / 2;
+    sun.add(pt2);
+  }
+  sun.position.set(0.06, 0.56, 0.02);
+  sun.rotation.x = -0.18;
+  g.add(sun);
+  return g;
+}
+function buildFlowerRose() {
+  var g = new THREE.Group();
+  flVase(g);
+  flStem(g, 0, 0.3, 0);
+  flLeaf(g, -0.05, 0.26, 0.5); flLeaf(g, 0.05, 0.32, -0.5);
+  var bud = new THREE.Mesh(new THREE.SphereGeometry(0.048, 10, 10), new THREE.MeshStandardMaterial({ color: 0xd63c4e, roughness: 0.55 }));
+  bud.scale.set(1, 1.05, 1); bud.position.set(0, 0.5, 0); g.add(bud);
+  var tip = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.038, 0.035, 8), new THREE.MeshStandardMaterial({ color: 0xa82336, roughness: 0.6 }));
+  tip.position.set(0, 0.545, 0); g.add(tip);
+  for (var i = 0; i < 4; i++) {
+    var a = i / 4 * Math.PI * 2 + 0.4;
+    var pb = new THREE.Mesh(new THREE.SphereGeometry(0.024, 8, 8), new THREE.MeshStandardMaterial({ color: 0xe3546a, roughness: 0.6 }));
+    pb.position.set(Math.cos(a) * 0.04, 0.47, Math.sin(a) * 0.04);
+    g.add(pb);
+  }
+  return g;
+}
+function buildFlowerLotus() {
+  var g = new THREE.Group();
+  var bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.05, 0.055, 10), new THREE.MeshStandardMaterial({ color: 0xfdf3f6, roughness: 0.5 }));
+  bowl.position.y = 0.028; g.add(bowl);
+  var pad = new THREE.Mesh(new THREE.CircleGeometry(0.085, 12), new THREE.MeshStandardMaterial({ color: 0x5da653, roughness: 0.9 }));
+  pad.rotation.x = -Math.PI / 2; pad.position.y = 0.058; g.add(pad);
+  for (var i = 0; i < 6; i++) {
+    var a = i / 6 * Math.PI * 2;
+    var pt = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), new THREE.MeshStandardMaterial({ color: 0xf7a8c4, roughness: 0.6 }));
+    pt.scale.set(0.55, 1.15, 0.3);
+    pt.position.set(Math.cos(a) * 0.042, 0.14, Math.sin(a) * 0.042);
+    pt.rotation.z = Math.cos(a) * 0.5; pt.rotation.x = -Math.sin(a) * 0.5;
+    g.add(pt);
+  }
+  var ctr = new THREE.Mesh(new THREE.SphereGeometry(0.022, 8, 8), new THREE.MeshStandardMaterial({ color: 0xffc93c, roughness: 0.7 }));
+  ctr.position.y = 0.13; g.add(ctr);
+  return g;
+}
+function buildFlowerTulip() {
+  var g = new THREE.Group();
+  flVase(g);
+  flStem(g, 0, 0.3, 0);
+  var lf = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), new THREE.MeshStandardMaterial({ color: 0x5da653, roughness: 0.8 }));
+  lf.scale.set(0.5, 2.4, 0.9); lf.position.set(-0.05, 0.3, 0); lf.rotation.z = 0.35; g.add(lf);
+  var cup = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.02, 0.1, 8), new THREE.MeshStandardMaterial({ color: 0xf26d9d, roughness: 0.55 }));
+  cup.position.set(0, 0.5, 0); g.add(cup);
+  for (var i = 0; i < 3; i++) {
+    var a = i / 3 * Math.PI * 2;
+    var tp = new THREE.Mesh(new THREE.SphereGeometry(0.016, 6, 6), new THREE.MeshStandardMaterial({ color: 0xf78fb4, roughness: 0.55 }));
+    tp.position.set(Math.cos(a) * 0.032, 0.56, Math.sin(a) * 0.032);
+    g.add(tp);
+  }
+  return g;
+}
+function buildFlowerLavender() {
+  var g = new THREE.Group();
+  flVase(g);
+  flStem(g, -0.03, 0.3, 0.12); flStem(g, 0.04, 0.24, -0.15);
+  [[-0.06, 0.44], [0.08, 0.38]].forEach(function(sp) {
+    for (var i = 0; i < 6; i++) {
+      var b = new THREE.Mesh(new THREE.SphereGeometry(0.016, 6, 6), new THREE.MeshStandardMaterial({ color: i % 2 ? 0x9a86c8 : 0xb3a3dd, roughness: 0.7 }));
+      b.position.set(sp[0] + (i % 2 ? 0.008 : -0.008), sp[1] + i * 0.027, 0);
+      g.add(b);
+    }
+  });
+  return g;
+}
+var FLOWERS = [
+  { id: "cuc", name: "Hoa cúc", emoji: "🌼", free: true, scale: 1.1, build: buildFlowerCuc },
+  { id: "sunflower", name: "Hướng dương", emoji: "🌻", scale: 1, build: buildFlowerSun },
+  { id: "rose", name: "Hoa hồng", emoji: "🌹", scale: 1.05, build: buildFlowerRose },
+  { id: "lotus", name: "Hoa sen", emoji: "🪷", scale: 1.9, build: buildFlowerLotus },
+  { id: "tulip", name: "Tulip", emoji: "🌷", scale: 1.05, build: buildFlowerTulip },
+  { id: "lavender", name: "Oải hương", emoji: "💜", scale: 1.2, build: buildFlowerLavender }
+];
+function flowerById(id) {
+  for (var i = 0; i < FLOWERS.length; i++) if (FLOWERS[i].id === id) return FLOWERS[i];
+  return null;
+}
+var flowerMasters = {};
+function buildFlowerContent(id) {
+  if (!flowerMasters[id]) {
+    var f = flowerById(id);
+    flowerMasters[id] = f ? f.build() : buildFlowerCuc();
+  }
+  var cl = flowerMasters[id].clone();
+  var f2 = flowerById(id);
+  if (f2 && f2.scale) cl.scale.setScalar(f2.scale);
+  return cl;
 }
 var toyMasters = {};
 function buildGiftContent(id) {
@@ -2520,31 +2706,6 @@ function initBox() {
   ig.position.set(-0.78, -0.53, 0.3); boxScene.add(ig);
   boxParts.incense = ig;
   var fg = new THREE.Group();
-  var wrap = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.075, 0.16, 8), new THREE.MeshStandardMaterial({ color: 0xf2c184, roughness: 0.85 })); wrap.position.y = 0.08; fg.add(wrap);
-  var stemM = new THREE.MeshStandardMaterial({ color: 0x4e9b47, roughness: 0.8 });
-  var stem = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.018, 0.4, 6), stemM);
-  stem.position.set(0.02, 0.32, 0); stem.rotation.z = -0.1; fg.add(stem);
-  var leaf1 = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 8), stemM);
-  leaf1.scale.set(1.7, 0.4, 0.9); leaf1.position.set(-0.07, 0.26, 0); leaf1.rotation.z = 0.5; fg.add(leaf1);
-  var leaf2 = leaf1.clone(); leaf2.position.set(0.08, 0.36, 0); leaf2.rotation.z = -0.6; fg.add(leaf2);
-  var sun = new THREE.Group();
-  var center = new THREE.Mesh(new THREE.CylinderGeometry(0.068, 0.068, 0.035, 14), new THREE.MeshStandardMaterial({ color: 0x6b4423, roughness: 0.9 }));
-  center.rotation.x = Math.PI / 2; sun.add(center);
-  var face = new THREE.Mesh(new THREE.SphereGeometry(0.055, 10, 8), new THREE.MeshStandardMaterial({ color: 0x7d5230, roughness: 0.95 }));
-  face.scale.z = 0.45; face.position.z = 0.015; sun.add(face);
-  var petalM = new THREE.MeshStandardMaterial({ color: 0xffb52e, roughness: 0.6 });
-  var petalM2 = new THREE.MeshStandardMaterial({ color: 0xf59a16, roughness: 0.6 });
-  for (var pi2 = 0; pi2 < 12; pi2++) {
-    var pa = (pi2 / 12) * Math.PI * 2;
-    var pt2 = new THREE.Mesh(new THREE.SphereGeometry(0.042, 8, 8), pi2 % 2 ? petalM : petalM2);
-    pt2.scale.set(0.55, 1.35, 0.22);
-    pt2.position.set(Math.cos(pa) * 0.095, Math.sin(pa) * 0.095, -0.005);
-    pt2.rotation.z = pa - Math.PI / 2;
-    sun.add(pt2);
-  }
-  sun.position.set(0.06, 0.56, 0.02);
-  sun.rotation.x = -0.18;
-  fg.add(sun);
   fg.position.set(-1.28, -0.46, 0.28); boxScene.add(fg);
   boxParts.flowers = fg;
   boxParts.gift = null;
@@ -2614,6 +2775,10 @@ function refreshBox() {
   boxParts.candle.visible = sh.candles > 0;
   boxParts.incense.visible = sh.incense > 0;
   boxParts.flowers.visible = sh.flowers > 0;
+  if (sh.flowers > 0) {
+    while (boxParts.flowers.children.length) boxParts.flowers.remove(boxParts.flowers.children[0]);
+    boxParts.flowers.add(buildFlowerContent(sh.flowerToy || "cuc"));
+  }
   if (boxParts.gift) { boxScene.remove(boxParts.gift); boxParts.gift = null; }
   if (sh.gifts > 0) {
     var gft = buildGiftContent(sh.giftToy || "box");
@@ -2675,7 +2840,10 @@ function renderVisitList() {
   ul.innerHTML = log.map(function(e) {
     var ic = icons[e.k] || "✨";
     if (e.k === "gift" && e.toy && typeof TOYS !== "undefined") { var tt = null; for (var q = 0; q < TOYS.length; q++) if (TOYS[q].id === e.toy) tt = TOYS[q]; if (tt) ic = tt.emoji; }
-    return "<li>" + ic + " <b>" + esc(e.n) + "</b> " + (VISIT_TXT[e.k] || "ghé thăm") + " cho bé · <span>" + relTime(e.t) + "</span></li>";
+    var what = VISIT_TXT[e.k] || "ghé thăm";
+    if (e.k === "flower" && e.toy) { var ff = flowerById(e.toy); if (ff) what = "dâng " + ff.name.toLowerCase(); }
+    if (e.k === "gift" && e.toy) { var tt = toyById(e.toy); if (tt) what = "tặng " + tt.name.toLowerCase(); }
+    return "<li>" + ic + " <b>" + esc(e.n) + "</b> " + what + " cho bé · <span>" + relTime(e.t) + "</span></li>";
   }).join("");
 }
 
@@ -2733,10 +2901,12 @@ function actIncense() {
   sh.incense++; logVisit("incense"); saveState(); refreshCell(currentPos); updateDetailCounts();
   toast("Khói nhang đã bay lên cho " + sh.name);
 }
-function actFlower() {
+function actFlower(flowerId) {
   var sh = U.shrines[currentPos]; if (!sh) return;
-  sh.flowers++; logVisit("flower"); saveState(); refreshCell(currentPos); updateDetailCounts();
-  toast("Đã dâng một bông hoa cho " + sh.name + " 🌸");
+  sh.flowerToy = flowerId || "cuc";
+  sh.flowers++; logVisit("flower", sh.flowerToy); saveState(); refreshCell(currentPos); updateDetailCounts();
+  var f = flowerById(sh.flowerToy);
+  toast("Đã dâng " + (f ? f.name.toLowerCase() : "hoa") + " cho " + sh.name + " 🌸");
 }
 function actGift(toyId) {
   var sh = U.shrines[currentPos]; if (!sh) return;
@@ -2744,6 +2914,52 @@ function actGift(toyId) {
   sh.gifts++; logVisit("gift", sh.giftToy); saveState(); refreshCell(currentPos); updateDetailCounts();
   var t = toyById(sh.giftToy);
   toast("Đã tặng " + (t ? t.name.toLowerCase() : "quà") + " cho " + sh.name + " 🎁");
+}
+function openFlowerPanel() {
+  var grid = document.getElementById("flowerGrid");
+  if (!grid.children.length) {
+    FLOWERS.forEach(function(f) {
+      var b = document.createElement("button");
+      b.className = "toy-card";
+      b.innerHTML = f.emoji + "<span>" + f.name + "</span>" + (f.free ? '<em class="free">Miễn phí</em>' : '<em class="ad">📺 Xem quảng cáo</em>');
+      b.onclick = function() { chooseFlower(f.id); };
+      grid.appendChild(b);
+    });
+  }
+  document.getElementById("flowerPanel").style.display = "flex";
+}
+function closeFlowerPanel() { document.getElementById("flowerPanel").style.display = "none"; }
+function chooseFlower(id) {
+  closeFlowerPanel();
+  var f = flowerById(id);
+  if (f && f.free) actFlower(id);
+  else watchAd({ kind: "flower", id: id });
+}
+var adPending = null, adInt = null;
+function watchAd(pending) {
+  adPending = pending;
+  document.getElementById("adPanel").style.display = "flex";
+  document.getElementById("adDone").style.display = "none";
+  var fill = document.getElementById("adFill"), cnt = document.getElementById("adCount");
+  var left = 50;
+  fill.style.width = "0%"; cnt.textContent = "Còn 5 giây";
+  clearInterval(adInt);
+  adInt = setInterval(function() {
+    left--;
+    fill.style.width = ((50 - left) * 2) + "%";
+    cnt.textContent = left > 0 ? "Còn " + Math.ceil(left / 10) + " giây" : "Đã xem xong!";
+    if (left <= 0) { clearInterval(adInt); document.getElementById("adDone").style.display = ""; }
+  }, 100);
+}
+function finishAd() {
+  document.getElementById("adPanel").style.display = "none";
+  var p = adPending; adPending = null;
+  if (!p) return;
+  if (p.kind === "flower") actFlower(p.id); else actGift(p.id);
+}
+function cancelAd() {
+  clearInterval(adInt); adPending = null;
+  document.getElementById("adPanel").style.display = "none";
 }
 var pfBackup = null;
 function pfHex(n) { return "#" + ("000000" + n.toString(16)).slice(-6); }
@@ -2899,7 +3115,7 @@ function openGiftPanel() {
     TOYS.forEach(function(t) {
       var b = document.createElement("button");
       b.className = "toy-card";
-      b.innerHTML = t.emoji + "<span>" + t.name + "</span>";
+      b.innerHTML = t.emoji + "<span>" + t.name + "</span>" + (t.free ? '<em class="free">Miễn phí</em>' : '<em class="ad">📺 Xem quảng cáo</em>');
       b.onclick = function() { chooseGiftToy(t.id); };
       grid.appendChild(b);
     });
@@ -2907,7 +3123,12 @@ function openGiftPanel() {
   document.getElementById("giftPanel").style.display = "flex";
 }
 function closeGiftPanel() { document.getElementById("giftPanel").style.display = "none"; }
-function chooseGiftToy(id) { closeGiftPanel(); actGift(id); }
+function chooseGiftToy(id) {
+  closeGiftPanel();
+  var t = toyById(id);
+  if (t && t.free) actGift(id);
+  else watchAd({ kind: "gift", id: id });
+}
 function renderGB3D() {
   var sh = U.shrines[currentPos];
   var ul = document.getElementById("gbList");
@@ -3163,7 +3384,7 @@ actCandle = function() { var idx = currentPos; _actCandle(); if (DB_URL && U.shr
 var _actIncense = actIncense;
 actIncense = function() { var idx = currentPos; _actIncense(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { incense: U.shrines[idx].incense, log: U.shrines[idx].log || [] }); };
 var _actFlower = actFlower;
-actFlower = function() { var idx = currentPos; _actFlower(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { flowers: U.shrines[idx].flowers, log: U.shrines[idx].log || [] }); };
+actFlower = function(flowerId) { var idx = currentPos; _actFlower(flowerId); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { flowers: U.shrines[idx].flowers, flowerToy: U.shrines[idx].flowerToy, log: U.shrines[idx].log || [] }); };
 var _actGift = actGift;
 actGift = function(toyId) { var idx = currentPos; _actGift(toyId); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { gifts: U.shrines[idx].gifts, giftToy: U.shrines[idx].giftToy, log: U.shrines[idx].log || [] }); };
 var _actGuestbook = actGuestbook;
