@@ -1656,16 +1656,27 @@ function buildYard() {
 function toyMat(c, r) { return new THREE.MeshStandardMaterial({ color: c, roughness: r == null ? 0.7 : r }); }
 function toyBall() {
   var g = new THREE.Group();
-  var tex = makeTex(128, 128, function(cv, w, h) {
-    cv.fillStyle = "#f5f2ea"; cv.fillRect(0, 0, w, h);
-    var cols = ["#d9534f", "#5f8ac9", "#e0a45c", "#7fb069", "#9a86c8"];
-    for (var i = 0; i < 7; i++) {
-      cv.fillStyle = cols[i % cols.length];
-      cv.beginPath(); cv.arc(15 + (i * 37) % 105, 15 + (i * 53) % 100, 11, 0, Math.PI * 2); cv.fill();
-    }
-  });
-  var b = new THREE.Mesh(new THREE.SphereGeometry(0.15, 18, 14), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.45 }));
-  b.position.y = 0.15; g.add(b);
+  var base = new THREE.Mesh(new THREE.SphereGeometry(0.137, 20, 16), toyMat(0xf1e9d8, 0.95));
+  base.position.y = 0.14; g.add(base);
+  function patch(dir, colHex, rot) {
+    var m = new THREE.Mesh(new THREE.CircleGeometry(0.062, 5), toyMat(colHex, 0.95));
+    var d = new THREE.Vector3(dir[0], dir[1], dir[2]).normalize();
+    m.position.set(d.x * 0.1385, 0.14 + d.y * 0.1385, d.z * 0.1385);
+    m.lookAt(d.x * 2, 0.14 + d.y * 2, d.z * 2);
+    m.rotateZ(rot || 0);
+    g.add(m);
+  }
+  var CAM = 0xe2703a, DO = 0xd23b2e, TRANG = 0xf8f5ee, XDUONG = 0x2e5fc7, VANG = 0xf2b53a, XLA = 0x57a95a;
+  patch([0, 1, 0], CAM, 0.3);
+  var ring1 = [DO, XDUONG, VANG, TRANG, XLA];
+  var ring2 = [TRANG, CAM, DO, XLA, XDUONG];
+  for (var i = 0; i < 5; i++) {
+    var a1 = i / 5 * Math.PI * 2;
+    patch([Math.sin(1.08) * Math.cos(a1), Math.cos(1.08), Math.sin(1.08) * Math.sin(a1)], ring1[i], i * 0.7);
+    var a2 = a1 + Math.PI / 5;
+    patch([Math.sin(2.05) * Math.cos(a2), Math.cos(2.05), Math.sin(2.05) * Math.sin(a2)], ring2[i], i * 1.1);
+  }
+  patch([0, -1, 0], VANG, 0.8);
   return g;
 }
 function toyBear() {
@@ -1686,17 +1697,34 @@ function toyBear() {
   var armR = armL.clone(); armR.position.x = 0.15; armR.rotation.z = -0.5; g.add(armR);
   return g;
 }
-function toyBell() {
+function toyFood() {
   var g = new THREE.Group();
-  var gold = toyMat(0xe8b93e, 0.35); gold.metalness = 0.65;
-  var bell = new THREE.Mesh(new THREE.SphereGeometry(0.13, 14, 12), gold);
-  bell.position.y = 0.13; g.add(bell);
-  var band = new THREE.Mesh(new THREE.TorusGeometry(0.128, 0.014, 8, 20), toyMat(0xc9932b, 0.4));
-  band.rotation.x = Math.PI / 2; band.position.y = 0.1; g.add(band);
-  var hole = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), toyMat(0x7a5a14, 0.6));
-  hole.position.set(0, 0.075, 0.115); g.add(hole);
-  var loop = new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.013, 8, 14), gold);
-  loop.position.y = 0.28; g.add(loop);
+  var red = toyMat(0xe2603f, 0.5), redD = toyMat(0xc94f31, 0.55);
+  var foot = new THREE.Mesh(new THREE.CylinderGeometry(0.168, 0.175, 0.03, 22), redD);
+  foot.position.y = 0.015; g.add(foot);
+  var body = new THREE.Mesh(new THREE.CylinderGeometry(0.168, 0.128, 0.115, 22), red);
+  body.position.y = 0.085; g.add(body);
+  var rim = new THREE.Mesh(new THREE.TorusGeometry(0.166, 0.017, 10, 24), red);
+  rim.rotation.x = Math.PI / 2; rim.position.y = 0.145; g.add(rim);
+  var kibCols = [0x9a6335, 0x8a5527, 0xa56c38];
+  var kibPos = [[0, 0.185, 0], [0.055, 0.165, 0.02], [-0.055, 0.165, 0.02], [0.02, 0.165, -0.055], [-0.02, 0.165, 0.055], [0.085, 0.15, -0.05], [-0.085, 0.15, 0.05], [0.03, 0.175, 0.07], [-0.07, 0.155, -0.07], [0.075, 0.158, 0.075], [0.028, 0.2, -0.028], [-0.03, 0.198, 0.03]];
+  for (var i = 0; i < kibPos.length; i++) {
+    var kp = kibPos[i];
+    var kb = new THREE.Mesh(new THREE.SphereGeometry(0.031 + (i % 3) * 0.004, 10, 8), toyMat(kibCols[i % 3], 0.8));
+    kb.position.set(kp[0], kp[1], kp[2]);
+    g.add(kb);
+  }
+  var cream = toyMat(0xf3d9b0, 0.6);
+  var pad = new THREE.Mesh(new THREE.SphereGeometry(0.042, 10, 8), cream);
+  pad.scale.set(1, 0.82, 0.35); pad.position.set(0, 0.055, 0.152); pad.rotation.x = -0.28; g.add(pad);
+  var toes = [[-0.048, 0.108], [-0.017, 0.122], [0.017, 0.122], [0.048, 0.108]];
+  for (var ti = 0; ti < 4; ti++) {
+    var tb = new THREE.Mesh(new THREE.SphereGeometry(0.016, 8, 8), cream);
+    tb.scale.set(0.8, 1.05, 0.35);
+    tb.position.set(toes[ti][0], toes[ti][1], 0.146);
+    tb.rotation.x = -0.28; tb.rotation.z = (ti - 1.5) * 0.25;
+    g.add(tb);
+  }
   return g;
 }
 function toyRope() {
@@ -1814,7 +1842,7 @@ var TOYS = [
   { id: "yarn", name: "Cuộn len", emoji: "🧶", build: toyYarn },
   { id: "ring", name: "Vòng gặm", emoji: "🍩", build: toyRing },
   { id: "feather", name: "Gậy lông vũ", emoji: "🪶", build: toyFeather },
-  { id: "bell", name: "Chuông leng keng", emoji: "🔔", build: toyBell },
+  { id: "food", name: "Hạt thức ăn", emoji: "🥣", build: toyFood },
   { id: "rope", name: "Dây thừng", emoji: "🪢", build: toyRope }
 ];
 function toyById(id) {
