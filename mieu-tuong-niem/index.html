@@ -2075,8 +2075,19 @@ function tapAt(e) {
   var hits = raycaster.intersectObjects(hitMeshes);
   if (hits.length) {
     var sitSpot = hits[0].object.userData.sit;
-    if (sitSpot) { if (sitSpot.type === "kneel") kneelOn(sitSpot); else sitOn(sitSpot); return; }
+    if (sitSpot) {
+      var sdx = avatar.position.x - sitSpot.x, sdz = avatar.position.z - sitSpot.z;
+      if (sdx * sdx + sdz * sdz > 10.2) return;
+      if (sitSpot.type === "kneel") kneelOn(sitSpot); else sitOn(sitSpot); return;
+    }
     var idx = hits[0].object.userData.cell;
+    if (idx === undefined || !cells[idx]) return;
+    var cg = cells[idx].grp.position;
+    var cdx = avatar.position.x - cg.x, cdz = avatar.position.z - cg.z;
+    var lim = idx >= 32 ? 10.2 : 18.5;
+    if (cdx * cdx + cdz * cdz > lim) return;
+    if (idx >= 32 && avatar.position.z > 8.6) return;
+    if (idx < 32 && avatar.position.z < -6.2) return;
     if (U.shrines[idx]) openDetail3D(idx); else openAdd3D(idx);
   }
 }
