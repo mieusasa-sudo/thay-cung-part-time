@@ -106,6 +106,8 @@
   #visitList li span { color: #8a6a45; font-size: 12px; }
   #detailPanel h4 { color: #b03060; }
   #detailPanel .d-counts { background: rgba(255,183,213,.3); border-radius: 10px; padding: 7px 10px; }
+  .d-quote { text-align: center; font-style: italic; font-size: 15.5px; color: #6d3549; margin: 12px 6px 2px; }
+  .d-meta { text-align: center; font-size: 12.5px; color: #b06a86; margin: 0 0 10px; }
   #detailPanel .d-actions button { background: #fff; border: 1.5px solid #f2a7c3; color: #8a2f4f; }
   #detailPanel .d-actions button:disabled { opacity: .55; }
   #detailPanel #visitList li { border-bottom-color: rgba(176,48,96,.18); }
@@ -225,15 +227,8 @@
   <div id="detailPanel">
     <button class="modal-x" onclick="closeDetail3D()">✕</button>
     <div id="boxWrap"><canvas id="boxCanvas"></canvas><button class="box-nav" id="boxPrev" onclick="boxNav(-1)">‹</button><button class="box-nav" id="boxNext" onclick="boxNav(1)">›</button><div class="box-zoom"><button onclick="boxZoom(0.8)">+</button><button onclick="boxZoom(1.25)">−</button></div><div id="boxPos"></div></div>
-    <div class="d-head">
-      <div class="d-photo" id="dPhoto"></div>
-      <div>
-        <h3 id="dName"></h3>
-        <div class="d-years" id="dYears"></div>
-        <div class="d-pos" id="dPos"></div>
-        <p class="d-msg" id="dMsg"></p>
-      </div>
-    </div>
+    <p class="d-quote" id="dMsg"></p>
+    <div class="d-meta" id="dMeta"></div>
     <div class="d-counts" id="dCounts"></div>
     <div class="d-actions">
       <button id="btnCandle" onclick="actCandle()">🕯️ Thắp nến</button>
@@ -434,8 +429,15 @@ function plaqueTexture(name, flag) {
     g.fillStyle = "#3a2a12";
     g.font = "700 52px Georgia, serif";
     g.textAlign = "center"; g.textBaseline = "middle";
-    var label = (flag ? "🇻🇳 " : "") + name;
-    g.fillText(label, w / 2, h / 2 + 3, w - 40);
+    g.fillText(name, w / 2 + (flag ? 30 : 0), h / 2 + 3, w - (flag ? 140 : 40));
+    if (flag) {
+      g.fillStyle = "#d32f2f"; g.fillRect(30, h / 2 - 18, 48, 36);
+      g.fillStyle = "#ffeb3b";
+      g.beginPath();
+      var cx = 54, cy = h / 2, R = 9, r2 = 3.8;
+      for (var k = 0; k < 10; k++) { var a = -Math.PI / 2 + k * Math.PI / 5, rad = k % 2 ? r2 : R, px = cx + Math.cos(a) * rad, py = cy + Math.sin(a) * rad; if (k) g.lineTo(px, py); else g.moveTo(px, py); }
+      g.closePath(); g.fill();
+    }
   });
 }
 function placeholderTexture(name, kind) {
@@ -2653,13 +2655,8 @@ function openDetail3D(idx) {
   currentPos = idx; removeArmed = false;
   var sh = U.shrines[idx];
   if (!sh) return;
-  var dp = document.getElementById("dPhoto");
-  dp.innerHTML = sh.photo ? '<img src="' + sh.photo + '" alt="">'
-    : '<div style="height:100%;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:44px;color:#f0c979;background:#4a3416">' + esc(sh.name.charAt(0).toUpperCase()) + '</div>';
-  document.getElementById("dName").textContent = (sh.showFlag ? "🇻🇳 " : "") + sh.name;
-  document.getElementById("dYears").textContent = sh.years + (sh.special ? " · ⭐ " + sh.special : "");
-  document.getElementById("dPos").textContent = "Vị trí: " + (idx >= 32 ? "Dãy B" : "Dãy A") + " · Ô " + posLabel(idx);
   document.getElementById("dMsg").textContent = "“" + sh.msg + "”";
+  document.getElementById("dMeta").textContent = sh.years + (sh.special ? " · ⭐ " + sh.special : "");
   updateDetailCounts();
   document.querySelector("#detailPanel .danger").textContent = "Thu hồi ô này (gỡ di ảnh)";
   renderGB3D();
