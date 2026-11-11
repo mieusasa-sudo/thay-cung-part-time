@@ -22,7 +22,7 @@
   button.pill { cursor: pointer; font-family: inherit; }
   button.pill.add { background: #dd8438; border-color: #dd8438; color: #fff7e6; font-weight: 700; }
   .feedbar { position: absolute; bottom: 118px; left: 12px; z-index: 5; color: #e6d5b3; font-size: 13px; font-style: italic; text-shadow: 0 1px 6px rgba(0,0,0,.9); pointer-events: none; max-width: 62vw; }
-  #actBtn, #knockBtn, #feedBtn { position: absolute; z-index: 6; border: none; cursor: pointer; font-family: inherit; font-weight: 700; border-radius: 999px; box-shadow: 0 4px 14px rgba(0,0,0,.45); }
+  #actBtn, #knockBtn, #feedBtn, #speedBtn { position: absolute; z-index: 6; border: none; cursor: pointer; font-family: inherit; font-weight: 700; border-radius: 999px; box-shadow: 0 4px 14px rgba(0,0,0,.45); }
   #actBtn { left: 50%; transform: translateX(-50%); bottom: 64px; background: #f0c979; color: #2b1d12; font-size: 15px; padding: 11px 22px; }
   #knockBtn { left: 50%; transform: translateX(-50%); bottom: 112px; background: #8a5a2b; color: #ffe9bb; font-size: 14px; padding: 10px 18px; }
   #knockBtn.pop { animation: kbPop .25s ease-out; }
@@ -31,6 +31,7 @@
   .fx-chip { background: rgba(43,29,14,.88); color: #ffe9bb; border: 1px solid rgba(240,201,121,.65); padding: 6px 14px; border-radius: 999px; font-size: 14.5px; font-weight: 600; box-shadow: 0 4px 18px rgba(0,0,0,.45); animation: fxUp 1.7s ease-out forwards; white-space: nowrap; }
   @keyframes fxUp { 0% { opacity: 0; transform: translateY(10px) scale(.9); } 14% { opacity: 1; transform: translateY(0) scale(1); } 70% { opacity: 1; } 100% { opacity: 0; transform: translateY(-24px) scale(.98); } }
   #feedBtn { right: 12px; bottom: 170px; background: #2e6f8e; color: #eaf7ff; font-size: 14px; padding: 10px 16px; }
+  #speedBtn { right: 12px; bottom: 118px; background: #6d4c26; color: #ffe9bb; font-size: 14px; padding: 10px 16px; }
   #settingsPanel { position: absolute; inset: 0; background: rgba(20,12,6,.55); display: none; align-items: center; justify-content: center; z-index: 47; }
   .setrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px dashed #d9c39a; font-size: 14.5px; }
   .setbtn { border: 1.5px solid #a97e4f; background: #fff7e8; color: #6d4c26; border-radius: 999px; padding: 5px 14px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 13px; }
@@ -279,6 +280,7 @@
       <button class="gx" onclick="closeSettings()">✕</button>
       <h3>⚙️ <span data-i18n="settings">Cài đặt</span></h3>
       <div class="setrow"><span data-i18n="music">🎵 Nhạc nền chữa lành</span><button class="setbtn" id="setMusic" onclick="toggleSetting('music')"></button></div>
+      <div class="setrow"><span>🏃 Tốc độ đi bộ</span><span><button class="setbtn spd" data-spd="1" onclick="setSpeed(1)">x1</button> <button class="setbtn spd" data-spd="2" onclick="setSpeed(2)">x2</button> <button class="setbtn spd" data-spd="4" onclick="setSpeed(4)">x4</button></span></div>
       <div class="setrow"><span data-i18n="sfx">🔔 Âm thanh hiệu ứng</span><button class="setbtn" id="setSfx" onclick="toggleSetting('sfx')"></button></div>
       <div class="setrow"><span data-i18n="gfx">🎨 Đồ họa</span><button class="setbtn" id="setGfx" onclick="toggleGfx()"></button></div>
       <div class="setrow"><span data-i18n="others">🧑‍🤝‍🧑 Hiện người chơi khác</span><button class="setbtn" id="setOthers" onclick="toggleSetting('others')"></button></div>
@@ -299,6 +301,7 @@
   <button id="actBtn" onclick="onActBtn()" style="display:none"></button>
   <button id="knockBtn" onclick="knockMo()" style="display:none">🔔 Gõ mõ</button>
   <button id="feedBtn" onclick="feedFish()" style="display:none"></button>
+  <button id="speedBtn" onclick="cycleSpeed()">🚶 x1</button>
   <div class="toast" id="toast"></div>
   <div id="fxFloat"></div>
   <div id="boot"><div class="big">🕯️</div><p id="bootMsg">Đang dựng miếu…<br>Nếu đợi lâu quá, kiểm tra mạng rồi tải lại trang nhé.</p></div>
@@ -1458,6 +1461,51 @@ function buildSkyExtras() {
   petalPts = new THREE.Points(pgeo, new THREE.PointsMaterial({ map: petalTexture(), size: 0.3, transparent: true, opacity: 0.9, depthWrite: false, fog: false }));
   scene.add(petalPts);
 }
+function buildTempleRoof() {
+  var tile = new THREE.MeshStandardMaterial({ color: 0x74513c, roughness: 0.95 });
+  var tileD = new THREE.MeshStandardMaterial({ color: 0x4c3421, roughness: 1 });
+  var gold = new THREE.MeshStandardMaterial({ color: 0xc9a24d, roughness: 0.35, metalness: 0.6 });
+  var wallM = new THREE.MeshStandardMaterial({ map: panelTexture(), roughness: 0.9 });
+  var tileP = new THREE.MeshStandardMaterial({ color: 0x8a6547, roughness: 0.95, emissive: 0x201209, emissiveIntensity: 1 });
+  function pyramid(w, d, h) {
+    var m = new THREE.Mesh(new THREE.ConeGeometry(1.4142, h, 4), tileP);
+    m.rotation.y = Math.PI / 4;
+    m.scale.set(w, 1, d);
+    return m;
+  }
+  var cz = 1.25;
+  var lip = new THREE.Mesh(new THREE.BoxGeometry(26.4, 0.2, 19.4), tileD);
+  lip.position.set(0, 9.82, cz); scene.add(lip);
+  var eave = new THREE.Mesh(new THREE.BoxGeometry(25.6, 0.22, 18.6), tile);
+  eave.position.set(0, 10.05, cz); scene.add(eave);
+  var p1 = pyramid(12.75, 9.25, 4.3); p1.position.set(0, 12.36, cz); scene.add(p1);
+  var neck = new THREE.Mesh(new THREE.BoxGeometry(5.6, 1.5, 4.4), wallM);
+  neck.position.set(0, 14.4, cz); scene.add(neck);
+  var eave2 = new THREE.Mesh(new THREE.BoxGeometry(10.4, 0.28, 7.6), tile);
+  eave2.position.set(0, 15.25, cz); scene.add(eave2);
+  var p2 = pyramid(5.4, 4.1, 2.5); p2.position.set(0, 16.62, cz); scene.add(p2);
+  var finBase = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.42, 0.3, 8), gold);
+  finBase.position.set(0, 18.0, cz); scene.add(finBase);
+  var orb = new THREE.Mesh(new THREE.SphereGeometry(0.17, 10, 10), gold);
+  orb.position.set(0, 18.2, cz); scene.add(orb);
+  var fin = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.85, 8), gold);
+  fin.position.set(0, 18.55, cz); scene.add(fin);
+  [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function(c) {
+    var tip = new THREE.Mesh(new THREE.ConeGeometry(0.17, 0.85, 4), tileD);
+    tip.position.set(c[0] * 12.7, 10.55, cz + c[1] * 9.2);
+    tip.rotation.z = -c[0] * 0.5;
+    tip.rotation.x = c[1] * 0.5;
+    scene.add(tip);
+  });
+  var canLip = new THREE.Mesh(new THREE.BoxGeometry(5.6, 0.16, 3.1), tile);
+  canLip.position.set(0, 4.35, 9.75); scene.add(canLip);
+  var canopy = pyramid(2.7, 1.5, 0.95);
+  canopy.position.set(0, 4.9, 9.75); scene.add(canopy);
+  [-1.6, 1.6].forEach(function(px) {
+    var post = new THREE.Mesh(new THREE.BoxGeometry(0.14, 4.3, 0.14), tileD);
+    post.position.set(px, 2.15, 10.35); scene.add(post);
+  });
+}
 function buildYard() {
   var panelMat = new THREE.MeshStandardMaterial({ map: panelTexture(), roughness: 0.9 });
   var woodMat = new THREE.MeshStandardMaterial({ map: woodDarkTexture(), roughness: 0.75 });
@@ -1489,6 +1537,7 @@ function buildYard() {
   }
   scene.add(doorPanel(-1));
   scene.add(doorPanel(1));
+  buildTempleRoof();
   /* nen san: loi da giua + co hai ben */
   var pathTex = stoneTexture();
   pathTex.wrapS = pathTex.wrapT = THREE.RepeatWrapping; pathTex.repeat.set(1, 6);
@@ -1551,14 +1600,14 @@ function buildYard() {
   scene.add(makeBlossomTree(5.3, 25.6, 1.2));
   scene.add(makeBamboo(-4.6, 20.6, 1.15));
   scene.add(makeBamboo(4.6, 20.6, 1.0));
-  scene.add(makeStoneLantern(-2.3, 11.8));
-  scene.add(makeStoneLantern(2.3, 11.8));
-  scene.add(makeStoneLantern(-2.3, 16.8));
-  scene.add(makeStoneLantern(2.3, 16.8));
+  scene.add(makeStoneLantern(-2.4, 22.7));
+  scene.add(makeStoneLantern(2.4, 22.7));
+  scene.add(makeStoneLantern(-2.3, 10.1));
+  scene.add(makeStoneLantern(2.3, 10.1));
   buildPond();
   buildCampArea();
   buildSkyExtras();
-  var yardLight = new THREE.PointLight(0xffc37a, 0.5, 30);
+  var yardLight = new THREE.PointLight(0xffc37a, 0.8, 48);
   yardLight.position.set(0, 3.4, 14); scene.add(yardLight);
 }
 
@@ -2020,7 +2069,7 @@ function myGender() {
   return "nu";
 }
 function settings() {
-  if (!U.settings) U.settings = { music: true, sfx: true, gfx: "high", others: true, fx: true, lang: "vi" };
+  if (!U.settings) U.settings = { music: true, sfx: true, gfx: "high", others: true, fx: true, lang: "vi", speed: 1 };
   return U.settings;
 }
 function getStats() {
@@ -2170,7 +2219,7 @@ function animate() {
     else move.set(0, 0, 0);
   }
   if (moving) {
-    move.normalize().multiplyScalar(3.4 * Math.min(dt, 0.033) * (Math.abs(fwd) + Math.abs(str) > 1.4 ? 0.75 : 1));
+    move.normalize().multiplyScalar(3.4 * (settings().speed || 1) * Math.min(dt, 0.033) * (Math.abs(fwd) + Math.abs(str) > 1.4 ? 0.75 : 1));
     var pz = avatar.position.z;
     avatar.position.add(move);
     var inLane = Math.abs(avatar.position.x) < 1.35;
@@ -2189,7 +2238,7 @@ function animate() {
     while (diff > Math.PI) diff -= Math.PI * 2;
     while (diff < -Math.PI) diff += Math.PI * 2;
     avatar.rotation.y += diff * Math.min(1, dt * 12);
-    walkPhase += dt * 9;
+    walkPhase += dt * 9 * (0.6 + 0.4 * (settings().speed || 1));
     avatar.position.y = Math.abs(Math.sin(walkPhase)) * 0.05;
   } else {
     var restNow = SITTING || KNEELING;
@@ -2768,12 +2817,26 @@ function applyLang() {
   refreshSettings();
   refreshStatsUI();
 }
+function setSpeed(n) {
+  var st = settings(); st.speed = n; saveState(); refreshSpeedUI();
+}
+function cycleSpeed() {
+  var cur = settings().speed || 1;
+  setSpeed(cur === 1 ? 2 : cur === 2 ? 4 : 1);
+}
+function refreshSpeedUI() {
+  var n = settings().speed || 1;
+  var b = document.getElementById("speedBtn");
+  if (b) b.textContent = (n === 1 ? "🚶 x1" : n === 2 ? "🏃 x2" : "💨 x4");
+  var btns = document.querySelectorAll(".setbtn.spd");
+  for (var i = 0; i < btns.length; i++) btns[i].classList.toggle("sel", Number(btns[i].getAttribute("data-spd")) === n);
+}
 function openSettings() { document.getElementById("settingsPanel").style.display = "flex"; refreshSettings(); refreshStatsUI(); }
 function closeSettings() { document.getElementById("settingsPanel").style.display = "none"; }
 function setBtnTxt(id, on) { var b = document.getElementById(id); if (b) { b.textContent = on ? L("on") : L("off"); b.classList.toggle("sel", !!on); } }
 function refreshSettings() {
   var st = settings();
-  setBtnTxt("setMusic", st.music); setBtnTxt("setSfx", st.sfx); setBtnTxt("setOthers", st.others); setBtnTxt("setFx", st.fx);
+  refreshSpeedUI(); setBtnTxt("setMusic", st.music); setBtnTxt("setSfx", st.sfx); setBtnTxt("setOthers", st.others); setBtnTxt("setFx", st.fx);
   var g = document.getElementById("setGfx"); if (g) g.textContent = st.gfx === "low" ? L("gfxLow") : L("gfxHigh");
   var lb = document.getElementById("langBtns");
   if (lb) {
