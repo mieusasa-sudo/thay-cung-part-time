@@ -1686,6 +1686,42 @@ function toyBear() {
   var armR = armL.clone(); armR.position.x = 0.15; armR.rotation.z = -0.5; g.add(armR);
   return g;
 }
+function toyBell() {
+  var g = new THREE.Group();
+  var gold = toyMat(0xe8b93e, 0.35); gold.metalness = 0.65;
+  var bell = new THREE.Mesh(new THREE.SphereGeometry(0.13, 14, 12), gold);
+  bell.position.y = 0.13; g.add(bell);
+  var band = new THREE.Mesh(new THREE.TorusGeometry(0.128, 0.014, 8, 20), toyMat(0xc9932b, 0.4));
+  band.rotation.x = Math.PI / 2; band.position.y = 0.1; g.add(band);
+  var hole = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), toyMat(0x7a5a14, 0.6));
+  hole.position.set(0, 0.075, 0.115); g.add(hole);
+  var loop = new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.013, 8, 14), gold);
+  loop.position.y = 0.28; g.add(loop);
+  return g;
+}
+function toyRope() {
+  var g = new THREE.Group();
+  var c1 = toyMat(0xe2703a, 0.85), c2 = toyMat(0x5f8ac9, 0.85);
+  function knot(x, col) {
+    var k = new THREE.Mesh(new THREE.SphereGeometry(0.08, 10, 8), col);
+    k.scale.set(1.15, 0.85, 0.85); k.position.set(x, 0.1, 0); g.add(k);
+    for (var i = 0; i < 4; i++) {
+      var a = i / 4 * Math.PI * 2;
+      var fr = new THREE.Mesh(new THREE.ConeGeometry(0.015, 0.08, 5), col);
+      fr.position.set(x + (x < 0 ? -0.085 : 0.085), 0.1 + Math.sin(a) * 0.04, Math.cos(a) * 0.04);
+      fr.rotation.z = x < 0 ? 1.9 : -1.9;
+      g.add(fr);
+    }
+  }
+  knot(-0.16, c1); knot(0.16, c2);
+  for (var j = 0; j < 3; j++) {
+    var seg = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.13, 8), j % 2 ? c1 : c2);
+    seg.rotation.z = Math.PI / 2;
+    seg.position.set(-0.055 + j * 0.055, 0.1, 0);
+    g.add(seg);
+  }
+  return g;
+}
 function toyMouse() {
   var g = new THREE.Group();
   var gray = toyMat(0x9aa0a6, 0.85), pink = toyMat(0xd98a9a, 0.8);
@@ -1777,7 +1813,9 @@ var TOYS = [
   { id: "bone", name: "Xương gặm", emoji: "🦴", build: toyBone },
   { id: "yarn", name: "Cuộn len", emoji: "🧶", build: toyYarn },
   { id: "ring", name: "Vòng gặm", emoji: "🍩", build: toyRing },
-  { id: "feather", name: "Gậy lông vũ", emoji: "🪶", build: toyFeather }
+  { id: "feather", name: "Gậy lông vũ", emoji: "🪶", build: toyFeather },
+  { id: "bell", name: "Chuông leng keng", emoji: "🔔", build: toyBell },
+  { id: "rope", name: "Dây thừng", emoji: "🪢", build: toyRope }
 ];
 function toyById(id) {
   for (var i = 0; i < TOYS.length; i++) if (TOYS[i].id === id) return TOYS[i];
