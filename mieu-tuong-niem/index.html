@@ -86,7 +86,18 @@
   .modal .back { background: none; border: none; color: #8a6f4d; cursor: pointer; font-size: 14px; margin-top: 12px; font-family: inherit; }
   .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   /* detail sheet */
-  #detailPanel { position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; width: min(480px, 100%); max-height: 82%; overflow-y: auto; background: #f8eeda; color: #43301b; border-radius: 18px 18px 0 0; z-index: 30; display: none; padding: 18px 20px 20px; box-shadow: 0 -12px 40px rgba(0,0,0,.6); font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  #detailPanel { position: fixed; inset: 0; width: 100%; max-height: none; overflow-y: auto; background: #f8eeda; color: #43301b; z-index: 30; display: none; padding: 14px 16px 24px; box-shadow: 0 -12px 40px rgba(0,0,0,.6); font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  #boxWrap { position: relative; height: 300px; border-radius: 14px; overflow: hidden; background: #241708; box-shadow: inset 0 0 40px rgba(0,0,0,.6); margin-bottom: 10px; }
+  #boxCanvas { width: 100%; height: 100%; display: block; touch-action: none; }
+  .box-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%; border: none; background: rgba(20,12,4,.55); color: #ffe9bb; font-size: 22px; z-index: 3; cursor: pointer; }
+  #boxPrev { left: 8px; }
+  #boxNext { right: 8px; }
+  .box-zoom { position: absolute; right: 8px; bottom: 8px; display: flex; flex-direction: column; gap: 6px; z-index: 3; }
+  .box-zoom button { width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(20,12,4,.55); color: #ffe9bb; font-size: 18px; cursor: pointer; }
+  #boxPos { position: absolute; left: 50%; transform: translateX(-50%); bottom: 8px; background: rgba(248,238,218,.92); color: #43301b; font-size: 12px; padding: 3px 12px; border-radius: 999px; z-index: 3; white-space: nowrap; }
+  #visitList { list-style: none; margin: 6px 0 10px; padding: 0; max-height: 180px; overflow-y: auto; }
+  #visitList li { padding: 6px 8px; border-bottom: 1px dashed rgba(67,48,27,.18); font-size: 13.5px; }
+  #visitList li span { color: #8a6a45; font-size: 12px; }
   #detailPanel .d-head { display: flex; gap: 14px; }
   #detailPanel .d-photo { width: 104px; height: 128px; border-radius: 8px; overflow: hidden; flex: none; background: #2c2012; box-shadow: 0 0 16px rgba(221,132,56,.35); }
   #detailPanel .d-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -199,6 +210,7 @@
   <!-- DETAIL -->
   <div id="detailPanel">
     <button class="modal-x" onclick="closeDetail3D()">✕</button>
+    <div id="boxWrap"><canvas id="boxCanvas"></canvas><button class="box-nav" id="boxPrev" onclick="boxNav(-1)">‹</button><button class="box-nav" id="boxNext" onclick="boxNav(1)">›</button><div class="box-zoom"><button onclick="boxZoom(0.8)">+</button><button onclick="boxZoom(1.25)">−</button></div><div id="boxPos"></div></div>
     <div class="d-head">
       <div class="d-photo" id="dPhoto"></div>
       <div>
@@ -209,13 +221,14 @@
       </div>
     </div>
     <div class="d-counts" id="dCounts"></div>
-    <div id="dShrine"><div class="d-shelf-title">🪔 Bàn thờ trong ô này — lễ vật hiện ở đây</div><div id="dItems"></div></div>
     <div class="d-actions">
       <button id="btnCandle" onclick="actCandle()">🕯️ Thắp nến</button>
       <button id="btnIncense" onclick="actIncense()">🙏 Thắp nhang</button>
       <button onclick="actFlower()">🌸 Dâng hoa</button>
       <button onclick="openGiftPanel()">🎁 Tặng quà</button>
     </div>
+    <h4>🧾 Những người đã ghé thăm bé</h4>
+    <ul id="visitList"></ul>
     <h4>📖 Sổ lưu niệm</h4>
     <ul id="gbList"></ul>
     <div class="gb-form">
@@ -2337,6 +2350,147 @@ function createShrine3D() {
   toast("Đã đặt chỗ cho " + name + " ở ô " + posLabel(addPos) + " 🕯️");
   openDetail3D(addPos);
 }
+
+/* ===== Hop gian 3D trong cua so chi tiet (phong cach Light a Paw) ===== */
+var boxR = null, boxScene = null, boxCam = null, boxAnim = 0, boxYaw = 0, boxPitch = 0, boxDist = 4.8, boxParts = {};
+function initBox() {
+  if (boxR) return;
+  var cv = document.getElementById("boxCanvas");
+  boxR = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  boxScene = new THREE.Scene();
+  boxScene.background = new THREE.Color(0x2a1a0c);
+  boxCam = new THREE.PerspectiveCamera(38, 1.5, 0.1, 50);
+  boxScene.add(new THREE.AmbientLight(0xffe2b0, 0.9));
+  var key = new THREE.PointLight(0xffc98a, 1.15, 12); key.position.set(0, 2.2, 2.4); boxScene.add(key);
+  var wood = new THREE.MeshStandardMaterial({ color: 0x74522c, roughness: 0.9 });
+  var woodD = new THREE.MeshStandardMaterial({ color: 0x5d4020, roughness: 0.95 });
+  var back = new THREE.Mesh(new THREE.BoxGeometry(3.4, 2.9, 0.12), wood); back.position.set(0, 0.45, -0.55); boxScene.add(back);
+  [-0.35, 0.45, 1.25].forEach(function(py) { var strip = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.045, 0.03), woodD); strip.position.set(0, py, -0.47); boxScene.add(strip); });
+  var shelf = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.09, 1.15), new THREE.MeshStandardMaterial({ color: 0xf3e8d2, roughness: 0.6 }));
+  shelf.position.set(0, -0.62, 0); boxScene.add(shelf);
+  var bot = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.5, 1.15), wood); bot.position.set(0, -1.05, 0); boxScene.add(bot);
+  [-1.72, 1.72].forEach(function(sx) {
+    var side = new THREE.Mesh(new THREE.BoxGeometry(0.06, 2.9, 1.15), woodD); side.position.set(sx, 0.45, 0); boxScene.add(side);
+    var glass = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 2.6), new THREE.MeshBasicMaterial({ color: 0xcfe4ef, transparent: true, opacity: 0.13, side: THREE.DoubleSide }));
+    glass.rotation.y = Math.PI / 2; glass.position.set(sx * 0.985, 0.45, 0); boxScene.add(glass);
+  });
+  var top = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.1, 1.25), woodD); top.position.set(0, 1.95, 0); boxScene.add(top);
+  var frame = new THREE.Mesh(new THREE.BoxGeometry(1.14, 1.42, 0.06), new THREE.MeshStandardMaterial({ color: 0x1d150c, roughness: 0.5 }));
+  frame.position.set(0, 0.62, -0.44); boxScene.add(frame);
+  var photo = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 1.28), new THREE.MeshBasicMaterial({ color: 0x333333 }));
+  photo.position.set(0, 0.62, -0.4); boxScene.add(photo);
+  boxParts.photo = photo;
+  var plaque = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 0.34), new THREE.MeshBasicMaterial({ transparent: true }));
+  plaque.position.set(0, -0.36, 0.585); boxScene.add(plaque);
+  boxParts.plaque = plaque;
+  var cg = new THREE.Group();
+  var wax = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.065, 0.17, 10), new THREE.MeshStandardMaterial({ color: 0xf7f1de, roughness: 0.5 })); cg.add(wax);
+  var fl = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), color: 0xffb45e, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+  fl.scale.set(0.22, 0.3, 1); fl.position.y = 0.17; cg.add(fl);
+  cg.position.set(1.28, -0.49, 0.28); boxScene.add(cg);
+  boxParts.candle = cg; boxParts.flame = fl;
+  var ig = new THREE.Group();
+  var bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.08, 0.09, 10), new THREE.MeshStandardMaterial({ color: 0x7a5c2e, metalness: 0.5, roughness: 0.45 })); ig.add(bowl);
+  [-0.03, 0, 0.03].forEach(function(dx) { var st = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.3, 5), new THREE.MeshStandardMaterial({ color: 0x8a4a26, roughness: 0.85 })); st.position.set(dx, 0.18, 0); st.rotation.z = dx * 2; ig.add(st); });
+  ig.position.set(-0.78, -0.53, 0.3); boxScene.add(ig);
+  boxParts.incense = ig;
+  var fg = new THREE.Group();
+  var wrap = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.09, 0.24, 8), new THREE.MeshStandardMaterial({ color: 0xd9c9a8, roughness: 0.9 })); fg.add(wrap);
+  [[0, 0.2, 0, 0xf28bb4], [-0.09, 0.15, 0.03, 0xffffff], [0.09, 0.16, -0.02, 0xf7c9dd], [0.03, 0.24, 0.05, 0xf28bb4]].forEach(function(f) { var bl = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 8), new THREE.MeshStandardMaterial({ color: f[3], roughness: 0.8 })); bl.position.set(f[0], f[1], f[2]); fg.add(bl); });
+  fg.position.set(-1.28, -0.46, 0.28); boxScene.add(fg);
+  boxParts.flowers = fg;
+  boxParts.gift = null;
+  var drag = null;
+  cv.addEventListener("pointerdown", function(e) { drag = { x: e.clientX, y: e.clientY }; });
+  window.addEventListener("pointermove", function(e) {
+    if (!drag) return;
+    boxYaw = Math.max(-0.55, Math.min(0.55, boxYaw - (e.clientX - drag.x) * 0.005));
+    boxPitch = Math.max(-0.2, Math.min(0.3, boxPitch + (e.clientY - drag.y) * 0.004));
+    drag = { x: e.clientX, y: e.clientY };
+  });
+  window.addEventListener("pointerup", function() { drag = null; });
+}
+function refreshBox() {
+  if (!boxR) return;
+  var sh = U.shrines[currentPos];
+  if (!sh) return;
+  if (sh.photo) {
+    var img = new Image();
+    img.onload = function() { var tx = new THREE.Texture(img); tx.needsUpdate = true; tx.encoding = THREE.sRGBEncoding; boxParts.photo.material.map = tx; boxParts.photo.material.color.set(0xffffff); boxParts.photo.material.needsUpdate = true; };
+    img.src = sh.photo;
+  } else {
+    boxParts.photo.material.map = placeholderTexture(sh.name, sh.kind);
+    boxParts.photo.material.color.set(0xffffff);
+    boxParts.photo.material.needsUpdate = true;
+  }
+  boxParts.plaque.material.map = plaqueTexture(sh.name, sh.showFlag);
+  boxParts.plaque.material.needsUpdate = true;
+  boxParts.candle.visible = sh.candles > 0;
+  boxParts.incense.visible = sh.incense > 0;
+  boxParts.flowers.visible = sh.flowers > 0;
+  if (boxParts.gift) { boxScene.remove(boxParts.gift); boxParts.gift = null; }
+  if (sh.gifts > 0) {
+    var gft = buildGiftContent(sh.giftToy || "box");
+    gft.scale.setScalar(1.6);
+    gft.position.set(0.78, -0.56, 0.3);
+    boxScene.add(gft);
+    boxParts.gift = gft;
+  }
+  document.getElementById("boxPos").textContent = posLabel(currentPos) + " · vị trí của " + sh.name;
+  var two = occupiedIdx().length > 1;
+  document.getElementById("boxPrev").style.display = two ? "block" : "none";
+  document.getElementById("boxNext").style.display = two ? "block" : "none";
+}
+function boxLoop() {
+  if (!boxR || document.getElementById("detailPanel").style.display === "none") { boxAnim = 0; return; }
+  boxAnim = requestAnimationFrame(boxLoop);
+  var wrap = document.getElementById("boxWrap");
+  var w = wrap.clientWidth, h = wrap.clientHeight;
+  var tw = Math.floor(w * Math.min(window.devicePixelRatio || 1, 2));
+  if (w && boxR.domElement.width !== tw) { boxR.setSize(w, h, false); boxCam.aspect = w / h; boxCam.updateProjectionMatrix(); }
+  var t = performance.now() * 0.001;
+  boxCam.position.set(Math.sin(boxYaw) * boxDist, 0.35 + boxPitch * 2 + Math.sin(t * 0.5) * 0.02, Math.cos(boxYaw) * boxDist);
+  boxCam.lookAt(0, 0.3, 0);
+  if (boxParts.flame) { var f = 0.9 + Math.sin(t * 11) * 0.08 + Math.sin(t * 23) * 0.05; boxParts.flame.scale.set(0.22 * f, 0.32 - 0.04 * f, 1); }
+  boxR.render(boxScene, boxCam);
+}
+function boxZoom(f) { boxDist = Math.max(3.4, Math.min(6.2, boxDist * f)); }
+function occupiedIdx() { var out = []; for (var i = 0; i < NCELLS; i++) if (U.shrines[i]) out.push(i); return out; }
+function boxNav(d) {
+  var occ = occupiedIdx(); if (occ.length < 2) return;
+  var k = occ.indexOf(currentPos);
+  openDetail3D(occ[(k + d + occ.length) % occ.length]);
+}
+function myName() { return (U.profile && U.profile.name) || "Trăng Lặng"; }
+function logVisit(type, toyId) {
+  var sh = U.shrines[currentPos]; if (!sh) return;
+  if (!sh.log) sh.log = [];
+  sh.log.unshift({ n: myName(), k: type, toy: toyId || null, t: Date.now() });
+  if (sh.log.length > 30) sh.log.length = 30;
+}
+function relTime(t) {
+  var m = Math.floor((Date.now() - t) / 60000);
+  if (m < 1) return "vừa xong";
+  if (m < 60) return m + " phút trước";
+  var hh = Math.floor(m / 60);
+  if (hh < 24) return hh + " giờ trước";
+  return Math.floor(hh / 24) + " ngày trước";
+}
+var VISIT_TXT = { candle: "thắp nến", incense: "thắp nhang", flower: "dâng hoa", gift: "tặng quà" };
+function renderVisitList() {
+  var ul = document.getElementById("visitList");
+  if (!ul) return;
+  var sh = U.shrines[currentPos];
+  var log = (sh && sh.log) || [];
+  if (!log.length) { ul.innerHTML = '<li style="border:none;color:#8a6a45">Chưa có ai ghé thăm — bạn là người đầu tiên đến với bé.</li>'; return; }
+  var icons = { candle: "🕯️", incense: "🙏", flower: "🌸", gift: "🎁" };
+  ul.innerHTML = log.map(function(e) {
+    var ic = icons[e.k] || "✨";
+    if (e.k === "gift" && e.toy && typeof TOYS !== "undefined") { var tt = null; for (var q = 0; q < TOYS.length; q++) if (TOYS[q].id === e.toy) tt = TOYS[q]; if (tt) ic = tt.emoji; }
+    return "<li>" + ic + " <b>" + esc(e.n) + "</b> " + (VISIT_TXT[e.k] || "ghé thăm") + " cho bé · <span>" + relTime(e.t) + "</span></li>";
+  }).join("");
+}
+
 function openDetail3D(idx) {
   currentPos = idx; removeArmed = false;
   var sh = U.shrines[idx];
@@ -2352,6 +2506,8 @@ function openDetail3D(idx) {
   document.querySelector("#detailPanel .danger").textContent = "Thu hồi ô này (gỡ di ảnh)";
   renderGB3D();
   document.getElementById("detailPanel").style.display = "block";
+  initBox(); refreshBox(); renderVisitList();
+  if (!boxAnim) boxLoop();
 }
 function closeDetail3D() { document.getElementById("detailPanel").style.display = "none"; }
 function updateDetailCounts() {
@@ -2367,7 +2523,8 @@ function updateDetailCounts() {
   var inc = U.incDay[currentPos] === todayStr();
   bi.disabled = inc;
   bi.textContent = inc ? "🙏 Đã thắp nhang hôm nay" : "🙏 Thắp nhang";
-  refreshDetailPreview(sh);
+  if (boxR) refreshBox();
+  renderVisitList();
 }
 function refreshDetailPreview(sh) {
   var box = document.getElementById("dItems");
@@ -2384,24 +2541,24 @@ function refreshDetailPreview(sh) {
 function actCandle() {
   var sh = U.shrines[currentPos]; if (!sh) return;
   U.litDay[currentPos] = todayStr();
-  sh.candles++; saveState(); refreshCell(currentPos); updateDetailCounts();
+  sh.candles++; logVisit("candle"); saveState(); refreshCell(currentPos); updateDetailCounts();
   toast("Đã thắp một ngọn nến cho " + sh.name + " 🕯️");
 }
 function actIncense() {
   var sh = U.shrines[currentPos]; if (!sh) return;
   U.incDay[currentPos] = todayStr();
-  sh.incense++; saveState(); refreshCell(currentPos); updateDetailCounts();
+  sh.incense++; logVisit("incense"); saveState(); refreshCell(currentPos); updateDetailCounts();
   toast("Khói nhang đã bay lên cho " + sh.name);
 }
 function actFlower() {
   var sh = U.shrines[currentPos]; if (!sh) return;
-  sh.flowers++; saveState(); refreshCell(currentPos); updateDetailCounts();
+  sh.flowers++; logVisit("flower"); saveState(); refreshCell(currentPos); updateDetailCounts();
   toast("Đã dâng một bông hoa cho " + sh.name + " 🌸");
 }
 function actGift(toyId) {
   var sh = U.shrines[currentPos]; if (!sh) return;
   sh.giftToy = toyId || "box";
-  sh.gifts++; saveState(); refreshCell(currentPos); updateDetailCounts();
+  sh.gifts++; logVisit("gift", sh.giftToy); saveState(); refreshCell(currentPos); updateDetailCounts();
   var t = toyById(sh.giftToy);
   toast("Đã tặng " + (t ? t.name.toLowerCase() : "quà") + " cho " + sh.name + " 🎁");
 }
@@ -2805,13 +2962,13 @@ createShrine3D = function() {
   }
 };
 var _actCandle = actCandle;
-actCandle = function() { var idx = currentPos; _actCandle(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { candles: U.shrines[idx].candles }); };
+actCandle = function() { var idx = currentPos; _actCandle(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { candles: U.shrines[idx].candles, log: U.shrines[idx].log || [] }); };
 var _actIncense = actIncense;
-actIncense = function() { var idx = currentPos; _actIncense(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { incense: U.shrines[idx].incense }); };
+actIncense = function() { var idx = currentPos; _actIncense(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { incense: U.shrines[idx].incense, log: U.shrines[idx].log || [] }); };
 var _actFlower = actFlower;
-actFlower = function() { var idx = currentPos; _actFlower(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { flowers: U.shrines[idx].flowers }); };
+actFlower = function() { var idx = currentPos; _actFlower(); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { flowers: U.shrines[idx].flowers, log: U.shrines[idx].log || [] }); };
 var _actGift = actGift;
-actGift = function(toyId) { var idx = currentPos; _actGift(toyId); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { gifts: U.shrines[idx].gifts, giftToy: U.shrines[idx].giftToy }); };
+actGift = function(toyId) { var idx = currentPos; _actGift(toyId); if (DB_URL && U.shrines[idx]) dbPatch("/shrines/" + idx, { gifts: U.shrines[idx].gifts, giftToy: U.shrines[idx].giftToy, log: U.shrines[idx].log || [] }); };
 var _actGuestbook = actGuestbook;
 actGuestbook = function() {
   var idx = currentPos;
