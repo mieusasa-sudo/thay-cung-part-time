@@ -68,6 +68,7 @@
   .modal { background: #f8eeda; color: #43301b; border-radius: 18px; max-width: 430px; width: 100%; padding: 22px 20px 18px; position: relative; box-shadow: 0 18px 50px rgba(0,0,0,.6); font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
   .modal h3 { font-family: Georgia, serif; font-size: 23px; text-align: center; margin: 0; }
   .modal-sub { text-align: center; color: #8a6f4d; font-size: 13.5px; margin-top: 6px; line-height: 1.5; }
+  #backBtn { position: fixed; top: 10px; left: 10px; z-index: 40; background: rgba(255,255,255,.94); color: #8a2f4f; border: 1.5px solid #f2a7c3; border-radius: 999px; padding: 8px 15px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.25); font-family: inherit; }
   .modal-x { position: absolute; top: 10px; right: 12px; background: #efe0c6; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; color: #7a5c33; font-size: 14px; }
   .f-label { display: block; color: #7a5c33; font-size: 13px; margin: 13px 0 5px; }
   .f-input { width: 100%; background: #fffdf7; border: 1px solid #d9c49c; color: #43301b; border-radius: 8px; padding: 10px 12px; font-size: 14.5px; font-family: inherit; }
@@ -225,7 +226,7 @@
 
   <!-- DETAIL -->
   <div id="detailPanel">
-    <button class="modal-x" onclick="closeDetail3D()">✕</button>
+    <button id="backBtn" onclick="closeDetail3D()">← Quay lại</button>
     <div id="boxWrap"><canvas id="boxCanvas"></canvas><button class="box-nav" id="boxPrev" onclick="boxNav(-1)">‹</button><button class="box-nav" id="boxNext" onclick="boxNav(1)">›</button><div class="box-zoom"><button onclick="boxZoom(0.8)">+</button><button onclick="boxZoom(1.25)">−</button></div><div id="boxPos"></div></div>
     <p class="d-quote" id="dMsg"></p>
     <div class="d-meta" id="dMeta"></div>
