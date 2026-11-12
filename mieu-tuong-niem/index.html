@@ -793,11 +793,11 @@ function knockMo() {
   saveState();
   MO_PULSE = 1;
   knockSfx();
-  var chips = [];
-  if (st.sad < bSad) chips.push("😔 Buồn −1");
-  if (st.anx < bAnx) chips.push("😟 Lo âu −1");
-  chips.push("🕊️ Bình an +1", "🍀 May mắn +1", "🙏 Hồi hướng +1");
-  chips.forEach(function(txt, i) { setTimeout(function() { spawnFloat(txt); }, i * 420); });
+  var one = null;
+  if (st.sad < bSad) one = "😔 Buồn −1";
+  else if (st.anx < bAnx) one = "😟 Lo âu −1";
+  else one = "🕊️ Bình an +1";
+  if (one) spawnFloat(one);
   var kb = document.getElementById("knockBtn");
   if (kb) { kb.classList.remove("pop"); void kb.offsetWidth; kb.classList.add("pop"); }
   if (MO_GROUP) {
